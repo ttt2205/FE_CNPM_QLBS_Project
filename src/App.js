@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { login } from "./services/authServices";
+import Home from "./routes/Home";
 
 function App() {
   let [user, setUser] = useState();
@@ -14,11 +15,12 @@ function App() {
     (async () => {
       const email = window.localStorage.getItem("email");
       const password = window.localStorage.getItem("password");
+      if (!email || !password) return;
       //REST API respone
       const response = await login(email, password);
       console.log(response);
       if (response.status === 200) {
-        setUser(response.data.username);
+        setUser(response.username);
         window.localStorage.setItem("email", email);
         window.localStorage.setItem("password", password);
       }
@@ -37,6 +39,10 @@ function App() {
             )}
             <Route path="*" element={<div>No page</div>} />
           </Route>
+          <Route path="/" element={<Home />}>
+          
+          </Route>
+
         </Routes>
       </BrowserRouter>
       <ToastContainer />

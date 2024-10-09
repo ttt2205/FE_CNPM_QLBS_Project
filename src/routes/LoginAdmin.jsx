@@ -15,7 +15,7 @@ const LoginAdmin = ({setUser}) => {
         //toast 
         if (response.status === 200) {
             toast.success(response.message);
-            setUser(response.data.username);
+            setUser(response.username);
             window.localStorage.setItem("email", email);
             window.localStorage.setItem("password", password);
         } else {
