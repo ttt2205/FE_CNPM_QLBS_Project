@@ -8,7 +8,6 @@ const Login = () => {
   });
 
   const auth = useAuth();
-  console.log("auth", auth);
   const handleSubmitEvent = (e) => {
     e.preventDefault();
     if (input.username !== "" && input.password !== "") {

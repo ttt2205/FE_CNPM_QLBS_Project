@@ -1,25 +1,49 @@
-import React from "react";
-import "../../assets/scss/loginadmin.scss";
-import { login } from "../../services/authServices";
+import { useState } from "react";
+import { login } from "../services/authServices";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 const LoginAdmin = ({ setUser }) => {
-  const handleSubmit = async (e) => {
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const email = e.target[0].value;
+  //   const password = e.target[1].value;
+  //   //REST API respone
+  //   const response = await login(email, password);
+  //   console.log(response);
+  //   //toast
+  //   if (response.status === 200) {
+  //     toast.success(response.message);
+  //     setUser(response.data.username);
+  //     window.localStorage.setItem("email", email);
+  //     window.localStorage.setItem("password", password);
+  //   } else {
+  //     toast.error(response.message);
+  //   }
+  // };
+  const [input, setInput] = useState({
+    username: "",
+    password: "",
+  });
+
+  const auth = useAuth();
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const email = e.target[0].value;
-    const password = e.target[1].value;
-    //REST API respone
-    const response = await login(email, password);
-    console.log(response);
-    //toast
-    if (response.status === 200) {
-      toast.success(response.message);
-      setUser(response.data.username);
-      window.localStorage.setItem("email", email);
-      window.localStorage.setItem("password", password);
-    } else {
-      toast.error(response.message);
+    if (input.username !== "" && input.password !== "") {
+      console.log(input);
+      auth.loginAction(input);
+      return;
     }
+    console.log(input);
+    alert("please provide a valid input");
+  };
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -41,7 +65,9 @@ const LoginAdmin = ({ setUser }) => {
               className="form-control"
               id="floatingInput"
               placeholder="name@example.com"
-              name="email"
+              name="username"
+              onChange={handleInput}
+              autoComplete="true"
             />
             <label htmlFor="floatingInput">Email address</label>
           </div>
@@ -52,6 +78,7 @@ const LoginAdmin = ({ setUser }) => {
               id="floatingPassword"
               placeholder="Password"
               name="password"
+              onChange={handleInput}
             />
             <label htmlFor="floatingPassword">Password</label>
           </div>

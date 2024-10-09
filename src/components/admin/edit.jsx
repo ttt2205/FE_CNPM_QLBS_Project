@@ -6,7 +6,7 @@ export async function action({ request, params }) {
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
   await updateContact(params.contactId, updates);
-  return redirect(`/admin/dashboard/contacts/${params.contactId}`);
+  return redirect(`/dashboard/contacts/${params.contactId}`);
 }
 
 export default function EditContact() {

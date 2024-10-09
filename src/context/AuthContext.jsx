@@ -11,6 +11,15 @@ const users = [
     id: "123",
     token:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImlkIjoiMTIzIiwiaWF0IjoxNTE2MjM5MDIyfQ.TEDz5eMTTXgm6qRhgVxDHw3P9yyp7fgSwG78eIlHgrQ",
+    role: "user",
+  },
+  {
+    username: "admin@gmail.com",
+    password: "123",
+    id: "123",
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcm5hbWUiOiJKb2huIERvZSIsImlkIjoiMTIzIiwiaWF0IjoxNTE2MjM5MDIyfQ.TEDz5eMTTXgm6qRhgVxDHw3P9yyp7fgSwG78eIlHgrQ",
+    role: "admin",
   },
 ];
 
@@ -43,6 +52,7 @@ const AuthProvider = () => {
             user: {
               username: user.username,
               id: user.id,
+              role: user.role,
             },
           },
           token: user.token,
@@ -60,7 +70,7 @@ const AuthProvider = () => {
         setToken(res.token);
         localStorage.setItem("site", res.token);
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        navigate("/admin");
+        navigate("/dashboard");
         return;
       }
       throw new Error(res.message);
@@ -75,7 +85,7 @@ const AuthProvider = () => {
     setToken("");
     localStorage.removeItem("site");
     localStorage.removeItem("user");
-    navigate("/admin/login");
+    navigate("/login");
   };
 
   useEffect(() => {

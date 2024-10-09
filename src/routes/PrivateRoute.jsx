@@ -1,10 +1,23 @@
 import { useAuth } from "../context/AuthContext";
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, Route } from "react-router-dom";
+import ErrorPage from "../components/admin/error-page";
+import LogoutButton from "../components/LogoutButton";
 
-const PrivateRoute = () => {
-  const user = useAuth();
-  if (!user.token) return <Navigate to="login" />;
+export const PrivateRoute = ({ children }) => {
+  const { token, user } = useAuth();
+  if (!token) {
+    // user is not authenticated
+    return <Navigate to="/login" />;
+  }
+  if (!user || user.role != "admin") {
+    return (
+      <ErrorPage
+        otherError={{ message: "You are not admin!" }}
+        children={<LogoutButton />}
+      />
+    );
+  }
   return <Outlet />;
 };
 

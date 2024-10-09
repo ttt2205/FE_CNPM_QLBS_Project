@@ -1,3 +1,8 @@
+/*
+ *Admin Dashboard
+ *
+ */
+
 import {
   Outlet,
   NavLink,
@@ -10,21 +15,41 @@ import {
 } from "react-router-dom";
 import { getContacts, createContact } from "../../services/contacts";
 import { useEffect, useState } from "react";
+import "../../assets/scss/admin.scss";
+import LogoutButton from "../LogoutButton";
 
 export async function loader({ request }) {
-  const url = new URL(request.url);
-  const q = url.searchParams.get("q");
-  const contacts = await getContacts(q);
-  return { contacts, q };
+  // const url = new URL(request.url);
+  // const q = url.searchParams.get("q");
+  // const contacts = await getContacts(q);
+  // return { contacts, q };
 }
 
 export async function action() {
   const contact = await createContact();
-  return redirect(`/admin/dashboard/contacts/${contact.id}/edit`);
+  return redirect(`/dashboard/contacts/${contact.id}/edit`);
 }
 
 export default function Root() {
-  const { contacts, q } = useLoaderData();
+  // const { contacts, q } = useLoaderData();
+  const navs = [
+    {
+      name: "Products",
+      link: "products",
+    },
+    {
+      name: "Sales",
+      link: "sales",
+    },
+    {
+      name: "Purchase",
+      link: "purchase",
+    },
+    {
+      name: "Analytics",
+      link: "analytics",
+    },
+  ];
   const navigation = useNavigation();
   const submit = useSubmit();
   const location = useLocation();
@@ -33,16 +58,16 @@ export default function Root() {
     navigation.location &&
     new URLSearchParams(navigation.location.search).has("q");
 
-  useEffect(() => {
-    document.getElementById("q").value = q;
-  }, [q]);
+  // useEffect(() => {
+  //   document.getElementById("q").value = q;
+  // }, [q]);
 
   return (
     <>
       <div id="sidebar">
         <h1>React Router Contacts</h1>
         <div>
-          <Form id="search-form" role="search">
+          {/* <Form id="search-form" role="search">
             <input
               id="q"
               className={searching ? "loading" : ""}
@@ -63,27 +88,21 @@ export default function Root() {
           </Form>
           <Form method="post">
             <button type="submit">New</button>
-          </Form>
+          </Form> */}
+          <LogoutButton />
         </div>
         <nav>
-          {contacts.length ? (
+          {navs.length ? (
             <ul>
-              {contacts.map((contact) => (
-                <li key={contact.id}>
+              {navs.map((nav) => (
+                <li key={nav.name}>
                   <NavLink
-                    to={`contacts/${contact.id}${location.search}`}
+                    to={`${nav.link}${location.search}`}
                     className={({ isActive, isPending }) =>
                       isActive ? "active" : isPending ? "pending" : ""
                     }
                   >
-                    {contact.first || contact.last ? (
-                      <>
-                        {contact.first} {contact.last}
-                      </>
-                    ) : (
-                      <i>No Name</i>
-                    )}{" "}
-                    {contact.favorite && <span>★</span>}
+                    {nav.name}
                   </NavLink>
                 </li>
               ))}
