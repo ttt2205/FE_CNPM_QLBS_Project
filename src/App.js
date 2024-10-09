@@ -7,6 +7,7 @@ import { RouterProvider } from "react-router-dom";
 import Router from "./routes";
 import AuthProvider from "./context/AuthContext";
 import router from "./routes";
+import Home from "./routes/Home";
 
 export default function App() {
   // let [user, setUser] = useState();
