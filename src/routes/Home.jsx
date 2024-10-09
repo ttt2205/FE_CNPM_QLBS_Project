@@ -2,14 +2,13 @@ import React from "react";
 import Header from "components/user/Header";
 import Footer from "components/user/Footer";
 import HomePage from "components/user/HomePageUser";
+import { Outlet } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <div className="page-wrapper ">
+      <div className="page-wrapper m-auto">
         <Header />
-        <main className="flex-fill">
-          <HomePage />
-        </main>
+        <Outlet />
         <Footer />
       </div>
     </>

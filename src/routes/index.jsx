@@ -17,6 +17,9 @@ import PrivateRoute from "./PrivateRoute";
 import AuthProvider from "../context/AuthContext";
 import Login from "../components/login";
 import LoginAdmin from "./LoginAdmin";
+import Home from "./Home";
+import HomePage from "components/user/HomePageUser";
+import UserProfile from "components/admin/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -68,12 +71,22 @@ const router = createBrowserRouter([
         path: "/login",
         element: <LoginAdmin />,
       },
+      {
+        path: "/",
+        element: <Home />,
+        children: [
+          {
+            index: true,
+            element: <HomePage />,
+          },
+          {
+            path: "profile",
+            //dang xai tam cua admin, sau nay thi tao cai khac va dung loader de tai du lieu
+            element: <UserProfile />,
+          },
+        ],
+      },
     ],
-  },
-
-  {
-    path: "/",
-    element: <div>Home page</div>,
   },
 ]);
 
