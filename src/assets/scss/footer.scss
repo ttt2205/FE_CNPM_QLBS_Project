@@ -1,0 +1,79 @@
+.footer {
+    
+    .border_right {
+        border-right: 1px solid #000000; 
+        padding-right: 20px; 
+    }
+    .empty_space {
+        margin-bottom: 30px; 
+        background-color: #ffffff;
+        padding: 10px;
+    }
+    background-color: #979797;
+    color: #979797; /* Màu chữ */
+    .social-icons a {
+        
+        color: #333;
+        background: #fff;
+        padding: 10px 5px;
+    }
+    
+    .d-flex {
+        display: flex;
+        align-items: center; 
+        flex-wrap: nowrap;
+    }
+
+    .input-group {
+        display: flex;
+        flex-wrap: nowrap; 
+        
+        .form-control {
+            border-radius: 4px 0 0 4px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border: none;
+            margin-bottom: 15px;
+            flex-grow: 1; 
+        }
+
+        .btn-warning {
+            background-color: #FFFF00;
+            border: none;
+            color: #000;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 0 4px 4px 0;
+        }
+    }
+
+    label {
+        font-weight: bold;
+        color: #ffffff;
+        font-size: 1.2rem;
+        margin-bottom: 0;
+        white-space: nowrap; 
+        margin-right: 15px; 
+    }
+
+    .mr-2 {
+        margin-right: 10px;
+    }
+    h5 {
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #FFA500;
+    }
+    a {
+        color: #333;
+        text-decoration: none;
+        font-size: 18px;
+        &:hover {
+            color: #FFFF00;
+        }
+    }
+}
+.border_top {
+    border-radius: 10px;
+    
+}

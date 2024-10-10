@@ -9,8 +9,22 @@ export const login = async (email, password) => {
       password,
     });
     // console.log(response);
-    return { status: response.status, ...response.data };
+    return response;
   } catch (error) {
-    return error.response.data;
+    return error.message;
   }
+};
+
+export const loginWithToken = async (token) => {
+  //add token to request header
+  const response = await axios.post(
+    "http://localhost:8080/api/auth/login",
+    {},
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  return response;
 };
