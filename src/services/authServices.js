@@ -8,7 +8,7 @@ export const login = async (email, password) => {
       email,
       password,
     });
-    console.log(response);
+    // console.log(response);
     return response;
   } catch (error) {
     return error.message;
@@ -16,16 +16,15 @@ export const login = async (email, password) => {
 };
 
 export const loginWithToken = async (token) => {
-  try {
-    const response = await axios.post(
-      "http://localhost:8080/api/auth/login/token",
-      {
-        token,
-      }
-    );
-    return response;
-  } catch (error) {
-    localStorage.removeItem("token"); // Xóa token nếu không hợp lệ
-    return error.response.data;
-  }
+  //add token to request header
+  const response = await axios.post(
+    "http://localhost:8080/api/auth/login",
+    {},
+    {
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  return response;
 };

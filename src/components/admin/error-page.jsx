@@ -1,7 +1,7 @@
 import { useRouteError } from "react-router-dom";
 
 export default function ErrorPage({ children, otherError }) {
-  console.log(otherError);
+  // console.log(otherError);
   const routerError = useRouteError();
   let error = routerError || otherError;
   // console.error(error);

@@ -1,6 +1,6 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import { login } from "services/authServices";
+import { login, loginWithToken } from "services/authServices";
 import { toast } from "react-toastify";
 
 const AuthContext = createContext({});
@@ -13,7 +13,7 @@ const AuthProvider = () => {
   const loginAction = async (data) => {
     try {
       const response = await login(data.username, data.password);
-      console.log(response);
+      // console.log(response);
       if (response.data) {
         if (response.data.user) {
           toast.success(response.data.message);
@@ -40,15 +40,46 @@ const AuthProvider = () => {
     navigate("/login");
   };
 
-  useEffect(() => {
+  const loginUsingToken = async (token) => {
     try {
-      let user = JSON.parse(localStorage.getItem("user"));
-      if (user) {
-        setUser(user);
+      const response = await loginWithToken(token);
+      if (response.data) {
+        if (response.data.user) {
+          setUser(response.data.user);
+          setToken(response.data.token);
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          return;
+        } else {
+          console.log(1);
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+        }
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(2);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
+  };
+
+  useEffect(() => {
+    let isEffectRan = false; //ngan chay nhieu lan
+
+    if (!isEffectRan) {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          loginUsingToken(token);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    return () => {
+      isEffectRan = true;
+    };
   }, []);
 
   return (

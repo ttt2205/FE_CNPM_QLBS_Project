@@ -18,6 +18,10 @@ import LoginAdmin from "./LoginAdmin";
 import Home from "./Home";
 import HomePage from "components/user/HomePageUser";
 import UserProfile from "components/admin/UserProfile";
+import Dashboard from "components/admin/Dashboard";
+import ProductPanel, {
+  loader as productLoader,
+} from "components/admin/ProductPanel";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +34,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
           {
-            element: <Root />,
+            element: <Dashboard />,
             errorElement: <ErrorPage />,
             loader: rootLoader,
             action: rootAction,
@@ -43,21 +47,25 @@ const router = createBrowserRouter([
                     element: <Index />,
                   },
                   {
-                    path: "contacts/:contactId",
-                    element: <Contact />,
-                    loader: contactLoader,
-                    action: contactAction,
+                    path: "products",
+                    element: <ProductPanel />,
+                    errorElement: <ErrorPage />,
+                    loader: productLoader,
                   },
                   {
-                    path: "contacts/:contactId/edit",
-                    element: <EditContact />,
-                    loader: contactLoader, //editLoader same as contactLoader
-                    action: editAction,
+                    path: "sales",
+                    element: <div>Sales</div>,
+                    errorElement: <ErrorPage />,
                   },
                   {
-                    path: "contacts/:contactId/destroy",
-                    action: destroyAction,
-                    errorElement: <div>Oops! There was an error.</div>,
+                    path: "purchase",
+                    element: <div>Purchase</div>,
+                    errorElement: <ErrorPage />,
+                  },
+                  {
+                    path: "analytics",
+                    element: <div>Analytic</div>,
+                    errorElement: <ErrorPage />,
                   },
                 ],
               },

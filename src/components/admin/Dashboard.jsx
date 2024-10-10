@@ -16,6 +16,7 @@ import { getContacts, createContact } from "../../services/contacts";
 import { useEffect, useState } from "react";
 import "../../assets/scss/admin.scss";
 import LogoutButton from "../LogoutButton";
+import UserProfile from "./UserProfile";
 
 export async function loader({ request }) {
   // const url = new URL(request.url);
@@ -29,27 +30,28 @@ export async function action() {
   return redirect(`/dashboard/contacts/${contact.id}/edit`);
 }
 
+const navs = [
+  {
+    name: "Products",
+    link: "products",
+  },
+  {
+    name: "Sales",
+    link: "sales",
+  },
+  {
+    name: "Purchase",
+    link: "purchase",
+  },
+  {
+    name: "Analytics",
+    link: "analytics",
+  },
+];
+
 export default function Root() {
   // const { contacts, q } = useLoaderData();
-  const navs = [
-    {
-      name: "Products",
-      link: "products",
-    },
-    {
-      name: "Sales",
-      link: "sales",
-    },
-    {
-      name: "Purchase",
-      link: "purchase",
-    },
-    {
-      name: "Analytics",
-      link: "analytics",
-    },
-  ];
-  const navigation = useNavigation();
+  const navigation = useNavigation(); //use to get location and state
   const submit = useSubmit();
   const location = useLocation();
 
@@ -65,29 +67,8 @@ export default function Root() {
     <>
       <div id="sidebar">
         <h1>React Router Contacts</h1>
-        <div>
-          {/* <Form id="search-form" role="search">
-            <input
-              id="q"
-              className={searching ? "loading" : ""}
-              aria-label="Search contacts"
-              placeholder="Search"
-              type="search"
-              name="q"
-              defaultValue={q}
-              onChange={(event) => {
-                const isFirstSearch = q == null;
-                submit(event.currentTarget.form, {
-                  replace: !isFirstSearch, // thay the url moi nhat trong lich su thanh duong dan moi
-                });
-              }}
-            />
-            <div id="search-spinner" hidden={!searching} aria-hidden />
-            <div className="sr-only" aria-live="polite"></div>
-          </Form>
-          <Form method="post">
-            <button type="submit">New</button>
-          </Form> */}
+        <div className="d-flex justify-content-between">
+          <UserProfile />
           <LogoutButton />
         </div>
         <nav>
@@ -117,6 +98,7 @@ export default function Root() {
         id="detail"
         className={navigation.state === "loading" ? "loading" : ""}
       >
+        <div className="loader"></div>
         <Outlet />
       </div>
     </>

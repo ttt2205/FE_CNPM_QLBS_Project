@@ -26,7 +26,7 @@ const LoginAdmin = ({ setUser }) => {
       auth.loginAction(input);
       return;
     }
-    console.log("submit", input);
+    // console.log("submit", input);
   };
 
   const handleInput = (e) => {
