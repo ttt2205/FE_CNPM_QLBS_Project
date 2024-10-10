@@ -12,10 +12,8 @@ import Root, {
 import EditContact, { action as editAction } from "../components/admin/edit";
 import { action as destroyAction } from "../components/admin/destroy";
 import Index from "../components/admin/index";
-// import LoginAdmin from "./admin/LoginAdmin";
 import PrivateRoute from "./PrivateRoute";
 import AuthProvider from "../context/AuthContext";
-import Login from "../components/login";
 import LoginAdmin from "./LoginAdmin";
 import Home from "./Home";
 import HomePage from "components/user/HomePageUser";

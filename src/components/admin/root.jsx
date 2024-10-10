@@ -49,7 +49,7 @@ export default function Root() {
     <>
       <div id="sidebar">
         <h1>React Router Contacts</h1>
-        <div>
+        <div className="d-flex justify-content-between">
           {/* <Form id="search-form" role="search">
             <input
               id="q"

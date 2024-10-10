@@ -10,7 +10,7 @@ export const PrivateRoute = ({ children }) => {
     // user is not authenticated
     return <Navigate to="/login" />;
   }
-  if (!user || user.role != "admin") {
+  if (!user?.role?.role_name || user.role.role_name !== "Admin") {
     return (
       <ErrorPage
         otherError={{ message: "You are not admin!" }}

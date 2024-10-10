@@ -2,7 +2,6 @@
  *Admin Dashboard
  *
  */
-
 import {
   Outlet,
   NavLink,
