@@ -6,12 +6,17 @@ const instance = axios.create({
     // withCredentials: true
 });
 
+// Alter defaults after instance has been created
+instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+
 instance.interceptors.response.use(
     (response) => {
         // Thrown error for request with OK status code
-        const { data } = response;
-        return response.data;
+        if (response && response.data) return response.data;
+        return response;
     }
-);
+), function (error) {
+    return Promise.reject(error);
+};
 
 export default instance;
