@@ -1,0 +1,104 @@
+.shopping-trend-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f15e5e;
+}
+.trend-header {
+    background-color: #FCDDEF;
+  }
+  
+.custom-breadcrumb {
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+      content: ">";
+      padding: 0 8px;
+    }
+  
+    .breadcrumb-item a {
+      color: black; 
+      text-decoration: none;
+    }
+  
+    .breadcrumb-item.active {
+      color: #F7941E; 
+    }
+  }
+  
+  
+.book-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; 
+    text-align: left;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease-in-out;
+    max-width: 100%;
+    margin-right: 0px;
+    &:hover {
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 150px; 
+        margin-bottom: 10px;
+    }
+
+    .product-img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .book-title {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .book-price {
+        .old-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-right: 10px;
+        }
+
+        .new-price {
+            font-weight: bold;
+            color: #f15e5e;
+        }
+
+        .discount-rate {
+            background-color: #f15e5e;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+    }
+
+    .sold-amount {
+        color: #999;
+        font-size: 12px;
+        margin-top: auto;
+    }
+    .book-price {
+        margin-bottom: 5px;
+    }
+}

@@ -1,4 +1,3 @@
-import { people } from "config/databaseConfig";
 import banner1 from "assets/images/banner1.png";
 import banner2 from "assets/images/banner2.png";
 import banner3 from "assets/images/banner3.png";
@@ -8,13 +7,16 @@ import sgkImg from "assets/images/sgk.png";
 import vanhocImg from "assets/images/vanhoc.png";
 import thieunhiImg from "assets/images/thieunhi.png";
 import ngoaivanImg from "assets/images/ngoaivan.png";
-
+import { useNavigate } from "react-router-dom";
 import "assets/scss/homePageUser.scss";
+import RenderContent from "context/RenderContent";
+import { useFetchBooks } from "config/useFetchBook";
 export default function HomePage() {
-  function getImageUrl(person) {
-    return "https://i.imgur.com/" + person.imageId + "s.jpg";
-  }
-
+  const navigate = useNavigate();
+  const { books } = useFetchBooks(1, 4);
+  const handleNavigate = () => {
+    navigate("/shopping-trends");
+  };
   return (
     <main className="flex-fill">
       <div className="container mb-4 p-0">
@@ -54,29 +56,15 @@ export default function HomePage() {
         <h3 className="section-title">Xu hướng mua sắm</h3>
 
         <div className="row text-center d-flex">
-          {people.map((person, index) => (
-            <div className="col-3" key={index}>
-              <img
-                src={getImageUrl(person)}
-                alt={person.name}
-                className="product-img"
-              />
-              <p>
-                <b>{person.name}</b>
-              </p>
-              <p>
-                <b className="price">{person.price} Đ</b>
-              </p>
-            </div>
-          ))}
+          <RenderContent books={books}/>
         </div>
-
         <div className="text-center mt-4">
-          <button className="btn btn-danger">Xem thêm</button>
+          <button className="btn btn-danger" onClick={handleNavigate} >Xem thêm</button>
         </div>
       </div>
       <div className="container-fluid mt-4">
-        <h3 className="border-footer"></h3>
+      <div className="border-footer"></div>
+
       </div>
     </main>
   );

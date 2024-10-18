@@ -20,7 +20,7 @@ import LoginAdmin from "./LoginAdmin";
 import Home from "./Home";
 import HomePage from "components/user/HomePageUser";
 import UserProfile from "components/admin/UserProfile";
-
+import ShoppingTrends from "components/user/ShoppingTrends";
 const router = createBrowserRouter([
   {
     element: <AuthProvider />,
@@ -84,6 +84,10 @@ const router = createBrowserRouter([
             //dang xai tam cua admin, sau nay thi tao cai khac va dung loader de tai du lieu
             element: <UserProfile />,
           },
+          {
+            path: "shopping-trends",
+            element: <ShoppingTrends />,
+          }
         ],
       },
     ],

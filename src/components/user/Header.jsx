@@ -42,7 +42,7 @@ const Header = () => {
         timeoutRef.current = setTimeout(() => {
             setShowDropdown(false);
             setHoveredCategory('');
-        }, 70000);
+        }, 700);
     };
 
     const handleMouseEnterCategory = (category) => {
