@@ -27,13 +27,14 @@ export async function loader({ request }) {
 }
 
 export async function action() {
+  //create contact
   const contact = await createContact();
   return redirect(`/dashboard/contacts/${contact.id}/edit`);
 }
 
 export default function Root() {
   const { contacts, q } = useLoaderData();
-  const navigation = useNavigation();
+  const navigation = useNavigation(); //use to get state and location of navigation
   const submit = useSubmit();
   const location = useLocation();
 
@@ -49,8 +50,8 @@ export default function Root() {
     <>
       <div id="sidebar">
         <h1>React Router Contacts</h1>
-        <div>
-          {/* <Form id="search-form" role="search">
+        <div className="d-flex justify-content-between">
+          <Form id="search-form" role="search">
             <input
               id="q"
               className={searching ? "loading" : ""}
@@ -71,8 +72,8 @@ export default function Root() {
           </Form>
           <Form method="post">
             <button type="submit">New</button>
-          </Form> */}
-          <UserProfile />
+          </Form>
+          {/* <UserProfile /> */}
           <LogoutButton />
         </div>
         <nav>

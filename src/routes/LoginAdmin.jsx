@@ -4,38 +4,29 @@ import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 
 const LoginAdmin = ({ setUser }) => {
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const email = e.target[0].value;
-  //   const password = e.target[1].value;
-  //   //REST API respone
-  //   const response = await login(email, password);
-  //   console.log(response);
-  //   //toast
-  //   if (response.status === 200) {
-  //     toast.success(response.message);
-  //     setUser(response.data.username);
-  //     window.localStorage.setItem("email", email);
-  //     window.localStorage.setItem("password", password);
-  //   } else {
-  //     toast.error(response.message);
-  //   }
-  // };
   const [input, setInput] = useState({
     username: "",
     password: "",
   });
 
   const auth = useAuth();
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (input.username !== "" && input.password !== "") {
+  //     console.log(input);
+  //     auth.loginAction(input);
+  //     return;
+  //   }
+  //   console.log(input);
+  //   alert("please provide a valid input");
+  // };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (input.username !== "" && input.password !== "") {
-      console.log(input);
       auth.loginAction(input);
       return;
     }
-    console.log(input);
-    alert("please provide a valid input");
+    // console.log("submit", input);
   };
 
   const handleInput = (e) => {
@@ -66,7 +57,7 @@ const LoginAdmin = ({ setUser }) => {
               id="floatingInput"
               placeholder="name@example.com"
               name="username"
-              onChange={handleInput}
+              onInput={handleInput}
               autoComplete="true"
             />
             <label htmlFor="floatingInput">Email address</label>
@@ -78,7 +69,7 @@ const LoginAdmin = ({ setUser }) => {
               id="floatingPassword"
               placeholder="Password"
               name="password"
-              onChange={handleInput}
+              onInput={handleInput}
             />
             <label htmlFor="floatingPassword">Password</label>
           </div>
