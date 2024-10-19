@@ -40,26 +40,22 @@ const AuthProvider = () => {
     navigate("/login");
   };
 
-  const loginUsingToken = async (token) => {
+  const loadUserFromLocal = async (token) => {
     try {
-      const response = await loginWithToken(token);
-      if (response.data) {
-        if (response.data.user) {
-          setUser(response.data.user);
-          setToken(response.data.token);
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          return;
-        } else {
-          console.log(1);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-        }
+      //get user from local storage
+      const json = localStorage.getItem("user") || "";
+      const token = localStorage.getItem("token") || "";
+      const user = JSON.parse(json);
+      if (user && token) {
+        setUser(user);
+        setToken(token);
+      } else {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/login");
       }
     } catch (err) {
-      console.log(2);
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      console.log("Error: ", err);
     }
   };
 
@@ -68,10 +64,7 @@ const AuthProvider = () => {
 
     if (!isEffectRan) {
       try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          loginUsingToken(token);
-        }
+        loadUserFromLocal();
       } catch (error) {
         console.log(error);
       }

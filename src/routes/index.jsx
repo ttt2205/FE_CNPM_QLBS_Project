@@ -1,16 +1,6 @@
 import * as React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "../components/admin/error-page";
-import Contact, {
-  loader as contactLoader,
-  action as contactAction,
-} from "../components/admin/contact";
-import Root, {
-  loader as rootLoader,
-  action as rootAction,
-} from "../components/admin/root";
-import EditContact, { action as editAction } from "../components/admin/edit";
-import { action as destroyAction } from "../components/admin/destroy";
 import Index from "../components/admin/index";
 import PrivateRoute from "./PrivateRoute";
 import AuthProvider from "../context/AuthContext";
@@ -18,10 +8,21 @@ import LoginAdmin from "./LoginAdmin";
 import Home from "./Home";
 import HomePage from "components/user/HomePageUser";
 import UserProfile from "components/admin/UserProfile";
-import Dashboard from "components/admin/Dashboard";
+import Dashboard, {
+  loader as rootLoader,
+  action as rootAction,
+} from "components/admin/Dashboard";
 import ProductPanel, {
   loader as productLoader,
 } from "components/admin/ProductPanel";
+import EditProduct, {
+  loader as editProductLoader,
+  action as editProductAction,
+} from "components/admin/EditProduct";
+import AddProduct, {
+  loader as addProductLoader,
+  action as addProductAction,
+} from "components/admin/AddProduct";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,6 @@ const router = createBrowserRouter([
             element: <Dashboard />,
             errorElement: <ErrorPage />,
             loader: rootLoader,
-            action: rootAction,
             children: [
               {
                 errorElement: <ErrorPage />,
@@ -51,6 +51,20 @@ const router = createBrowserRouter([
                     element: <ProductPanel />,
                     errorElement: <ErrorPage />,
                     loader: productLoader,
+                  },
+                  {
+                    path: "products/edit/:productId",
+                    element: <EditProduct />,
+                    errorElement: <ErrorPage />,
+                    loader: editProductLoader,
+                    action: editProductAction,
+                  },
+                  {
+                    path: "products/add",
+                    element: <AddProduct />,
+                    errorElement: <ErrorPage />,
+                    loader: addProductLoader,
+                    action: addProductAction,
                   },
                   {
                     path: "sales",

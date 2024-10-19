@@ -22,7 +22,7 @@ export async function loader({ request }) {
   // const url = new URL(request.url);
   // const q = url.searchParams.get("q");
   // const contacts = await getContacts(q);
-  // return { contacts, q };
+  return null;
 }
 
 export async function action() {
@@ -97,6 +97,7 @@ export default function Root() {
       <div
         id="detail"
         className={navigation.state === "loading" ? "loading" : ""}
+        style={{ overflow: "auto" }}
       >
         <div className="loader"></div>
         <Outlet />
