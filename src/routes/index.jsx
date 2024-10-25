@@ -23,6 +23,7 @@ import ProductPanel, {
   loader as productLoader,
 } from "components/admin/ProductPanel";
 import ShoppingTrends from "components/user/ShoppingTrends";
+import AdvancedSearch from "context/advancedSearch";
 const router = createBrowserRouter([
   {
     element: <AuthProvider />,
@@ -93,9 +94,14 @@ const router = createBrowserRouter([
           {
             path: "shopping-trends",
             element: <ShoppingTrends />,
-          }
+          },
+          {
+            path: "products",
+            element: <AdvancedSearch />,
+          },
         ],
       },
+      
     ],
   },
 ]);
