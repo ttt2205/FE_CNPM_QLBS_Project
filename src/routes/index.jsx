@@ -22,7 +22,8 @@ import Dashboard from "components/admin/Dashboard";
 import ProductPanel, {
   loader as productLoader,
 } from "components/admin/ProductPanel";
-
+import ShoppingTrends from "components/user/ShoppingTrends";
+import AdvancedSearch from "context/advancedSearch";
 const router = createBrowserRouter([
   {
     element: <AuthProvider />,
@@ -90,8 +91,17 @@ const router = createBrowserRouter([
             //dang xai tam cua admin, sau nay thi tao cai khac va dung loader de tai du lieu
             element: <UserProfile />,
           },
+          {
+            path: "shopping-trends",
+            element: <ShoppingTrends />,
+          },
+          {
+            path: "products",
+            element: <AdvancedSearch />,
+          },
         ],
       },
+      
     ],
   },
 ]);
