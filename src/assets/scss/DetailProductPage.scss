@@ -26,6 +26,8 @@ body {
     position: relative;
     height: 4vh;
     background-color: var(--main-color);
+    width: 96%;
+    margin: 0 auto;
 
     .breadscumb-content {
         position: absolute;
@@ -57,11 +59,12 @@ body {
 
 .product-essential {
     background-color: var(--main-color);
-    width: 100%;
+    width: 95%;
     min-height: 100vh;
     height: auto;
     display: flex;
     position: relative;
+    margin: 0 auto;
 
     .product-essential-content-media-parent {
         background-color: var(--main-color);
@@ -669,12 +672,13 @@ body {
 
 .tabslider-relatedproduct-container {
     position: relative;
-    width: 100%;
+    width: 94%;
     height: auto;
     min-height: 60vh;
     background-color: white;
     border-radius: 10px;
     margin-top: 20px;
+    margin: 10px auto;
 
     .tabslier-relatedproduct-title {
         position: absolute;

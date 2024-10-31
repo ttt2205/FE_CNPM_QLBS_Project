@@ -1,6 +1,4 @@
 .container {
-    padding: 0;
-
     &.d-flex {
         display: flex;
         justify-content: space-between;
@@ -15,6 +13,10 @@
         margin-bottom: 10px;
         width: 100%;
         height: auto;
+        max-height: 300px;
+        margin: 0 auto;
+        padding: 0 12px;
+        border-radius: 15px;
     }
 
     .small-banner {
@@ -63,4 +65,8 @@
     border-top: 1px solid #000000;
     padding-top: 10px;
     margin-top: 20px;
+}
+
+.content {
+    flex: 1;
 }
