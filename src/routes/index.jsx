@@ -19,6 +19,9 @@ import Home from "./Home";
 import HomePage from "components/user/HomePageUser";
 import UserProfile from "components/admin/UserProfile";
 import Dashboard from "components/admin/Dashboard";
+import DetailProductPage from "./DetailProductPage";
+import ShoppingCart from "./ShoppingCart";
+
 import ProductPanel, {
   loader as productLoader,
 } from "components/admin/ProductPanel";
@@ -92,6 +95,12 @@ const router = createBrowserRouter([
             element: <UserProfile />,
           },
           {
+            path: "detail-product/:productId/:productName",
+            element: <DetailProductPage />,
+          },
+          {
+            path: "shopping-cart",
+            element: <ShoppingCart />,
             path: "shopping-trends",
             element: <ShoppingTrends />,
           },

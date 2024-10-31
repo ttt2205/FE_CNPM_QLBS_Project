@@ -7,6 +7,8 @@ import sgkImg from "assets/images/sgk.png";
 import vanhocImg from "assets/images/vanhoc.png";
 import thieunhiImg from "assets/images/thieunhi.png";
 import ngoaivanImg from "assets/images/ngoaivan.png";
+import "assets/scss/homePageUser.scss";
+
 import { useNavigate } from "react-router-dom";
 import "assets/scss/homePageUser.scss";
 import RenderContent from "context/RenderContent";
@@ -37,7 +39,10 @@ export default function HomePage() {
             <img src={boardgameImg} alt="Boardgame" className="img-fluid" />
             <p>Boardgame</p>
           </div>
-          <div className="col" onClick={() => handleCategoryClick("Sách giáo khoa")}>
+          <div
+            className="col"
+            onClick={() => handleCategoryClick("Sách giáo khoa")}
+          >
             <img src={sgkImg} alt="SGK 2024" className="img-fluid" />
             <p>SGK 2024</p>
           </div>
@@ -62,12 +67,13 @@ export default function HomePage() {
           <RenderContent books={books} />
         </div>
         <div className="text-center mt-4">
-          <button className="btn btn-danger" onClick={handleNavigate} >Xem thêm</button>
+          <button className="btn btn-danger" onClick={handleNavigate}>
+            Xem thêm
+          </button>
         </div>
       </div>
       <div className="container-fluid mt-4">
         <div className="border-footer"></div>
-
       </div>
     </main>
   );
