@@ -8,8 +8,8 @@ import sgkImg from "assets/images/sgk.png";
 import vanhocImg from "assets/images/vanhoc.png";
 import thieunhiImg from "assets/images/thieunhi.png";
 import ngoaivanImg from "assets/images/ngoaivan.png";
-
 import "assets/scss/homePageUser.scss";
+
 export default function HomePage() {
   function getImageUrl(person) {
     return "https://i.imgur.com/" + person.imageId + "s.jpg";
