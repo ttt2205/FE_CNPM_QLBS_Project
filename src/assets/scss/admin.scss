@@ -417,3 +417,12 @@ i {
   width: 300px;
   max-width: 100%;
 }
+
+.bold-label-form {
+  label {
+    font-weight: 600;
+  }
+  .form-group {
+    margin-bottom: 1rem;
+  }
+}

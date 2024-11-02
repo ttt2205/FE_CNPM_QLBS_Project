@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import "../../assets/scss/carousel.scss";
 
-export default function ImageCarousel({
-  product,
-  deletedImages,
-  setDeletedImages,
-}) {
+export default function ImageCarousel({ product, setDeletedImages }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [images, setImages] = useState(
-    [product.image, ...product.alt_images].filter((img) => img !== null)
+  let initialImages = product
+    ? [product.image, ...product.alt_images].filter((img) => img !== null)
+    : [];
+  const [images, setImages] = useState(initialImages);
+  const [mainIndex, setMainIndex] = useState(
+    images.findIndex((img) => img.is_main === 1)
   );
-  const [mainIndex, setMainIndex] = useState(0);
   const [fileList, setFileList] = useState([]);
   // const [dataTransfer, setDataTransfer] = useState(new DataTransfer());
 
@@ -23,6 +22,9 @@ export default function ImageCarousel({
       const newImages = images.filter((img, i) => i !== index);
       setDeletedImages((prevImages) => [...prevImages, images[index]]);
       setImages(newImages);
+      if (index === mainIndex) {
+        setMainIndex(-1);
+      }
     } else {
       const newFileList = fileList.filter(
         (file, i) => i !== index - images.length
@@ -74,7 +76,7 @@ export default function ImageCarousel({
           style={{
             width: "40px",
             height: "40px",
-            backgroundImage: image ? `url(${image.url})` : "unset",
+            backgroundImage: image ? `url('${image.url}')` : "unset",
             backgroundSize: "cover",
             border: "none",
             marginLeft: "5px",
@@ -112,7 +114,7 @@ export default function ImageCarousel({
         key={index}
         className={`carousel-item ${index === activeIndex ? "active" : ""}`}
         style={{
-          backgroundImage: image ? `url(${image.url})` : "unset",
+          backgroundImage: image ? `url('${image.url}')` : "unset",
           backgroundSize: "cover",
           backgroundPosition: "center",
           height: "400px",
@@ -154,7 +156,12 @@ export default function ImageCarousel({
       <input
         type="hidden"
         name="main_image_id"
-        value={images[mainIndex].bookImage_id}
+        value={
+          images.length > 0 && mainIndex >= 0
+            ? images[mainIndex].bookImage_id
+            : ""
+        }
+        disabled={images.length === 0}
       />
       <div
         id="carouselImage"

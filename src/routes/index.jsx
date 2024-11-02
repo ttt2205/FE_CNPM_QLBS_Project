@@ -12,9 +12,7 @@ import Dashboard, {
   loader as rootLoader,
   action as rootAction,
 } from "components/admin/Dashboard";
-import ProductPanel, {
-  loader as productLoader,
-} from "components/admin/ProductPanel";
+import ProductPanel from "components/admin/ProductPanel"; // loader as productLoader,
 import EditProduct, {
   loader as editProductLoader,
   action as editProductAction,
@@ -23,6 +21,16 @@ import AddProduct, {
   loader as addProductLoader,
   action as addProductAction,
 } from "components/admin/AddProduct";
+import NhapHangPanel, {
+  loader as nhapHangLoader,
+} from "components/admin/NhapHangPanel";
+import ChiTietPhieuNhap, {
+  loader as phieuNhapLoader,
+} from "components/admin/ChiTietPhieuNhap";
+import ThemPhieuNhap, {
+  loader as themPhieuNhapLoader,
+  action as createPhieuNhapAction,
+} from "components/admin/ThemPhieuNhap";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +58,6 @@ const router = createBrowserRouter([
                     path: "products",
                     element: <ProductPanel />,
                     errorElement: <ErrorPage />,
-                    loader: productLoader,
                   },
                   {
                     path: "products/edit/:productId",
@@ -68,7 +75,21 @@ const router = createBrowserRouter([
                   },
                   {
                     path: "sales",
-                    element: <div>Sales</div>,
+                    element: <NhapHangPanel />,
+                    loader: nhapHangLoader,
+                    errorElement: <ErrorPage />,
+                  },
+                  {
+                    path: "sales/read/:receiptId",
+                    element: <ChiTietPhieuNhap />,
+                    loader: phieuNhapLoader,
+                    errorElement: <ErrorPage />,
+                  },
+                  {
+                    path: "sales/create",
+                    loader: themPhieuNhapLoader,
+                    action: createPhieuNhapAction,
+                    element: <ThemPhieuNhap />,
                     errorElement: <ErrorPage />,
                   },
                   {

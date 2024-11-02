@@ -1,5 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { login, loginWithToken } from "services/authServices";
 import { toast } from "react-toastify";
 
@@ -9,6 +9,7 @@ const AuthProvider = () => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const loginAction = async (data) => {
     try {
@@ -40,19 +41,24 @@ const AuthProvider = () => {
     navigate("/login");
   };
 
-  const loadUserFromLocal = async (token) => {
+  const loadUserFromLocal = async () => {
     try {
       //get user from local storage
-      const json = localStorage.getItem("user") || "";
       const token = localStorage.getItem("token") || "";
-      const user = JSON.parse(json);
-      if (user && token) {
-        setUser(user);
-        setToken(token);
+      let data = await loginWithToken(token);
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setUser(data.user);
+        setToken(data.token);
       } else {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        navigate("/login");
+        // navigate("/login");
+        //neu location la dashboard thi moi chuyen ve login
+        if (location.pathname.includes("/dashboard")) {
+          navigate("/login");
+        }
       }
     } catch (err) {
       console.log("Error: ", err);
@@ -60,19 +66,11 @@ const AuthProvider = () => {
   };
 
   useEffect(() => {
-    let isEffectRan = false; //ngan chay nhieu lan
-
-    if (!isEffectRan) {
-      try {
-        loadUserFromLocal();
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      loadUserFromLocal();
+    } catch (error) {
+      console.log(error);
     }
-
-    return () => {
-      isEffectRan = true;
-    };
   }, []);
 
   return (

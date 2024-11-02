@@ -77,7 +77,7 @@ export default function Root() {
               {navs.map((nav) => (
                 <li key={nav.name}>
                   <NavLink
-                    to={`${nav.link}${location.search}`}
+                    to={`${nav.link}`}
                     className={({ isActive, isPending }) =>
                       isActive ? "active" : isPending ? "pending" : ""
                     }
