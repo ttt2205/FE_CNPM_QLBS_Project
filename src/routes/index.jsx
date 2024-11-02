@@ -32,6 +32,10 @@ import ThemPhieuNhap, {
   action as createPhieuNhapAction,
 } from "components/admin/ThemPhieuNhap";
 
+import DetailProductPage from "./DetailProductPage";
+import ShoppingCart from "./ShoppingCart";
+import ShoppingTrends from "components/user/ShoppingTrends";
+import AdvancedSearch from "context/advancedSearch";
 const router = createBrowserRouter([
   {
     element: <AuthProvider />,
@@ -124,6 +128,20 @@ const router = createBrowserRouter([
             path: "profile",
             //dang xai tam cua admin, sau nay thi tao cai khac va dung loader de tai du lieu
             element: <UserProfile />,
+          },
+          {
+            path: "detail-product/:productId/:productName",
+            element: <DetailProductPage />,
+          },
+          {
+            path: "shopping-cart",
+            element: <ShoppingCart />,
+            path: "shopping-trends",
+            element: <ShoppingTrends />,
+          },
+          {
+            path: "products",
+            element: <AdvancedSearch />,
           },
         ],
       },
