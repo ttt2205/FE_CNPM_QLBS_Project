@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FiChevronRight } from "react-icons/fi";
 import { FiChevronLeft } from "react-icons/fi";
 import { CiStar } from "react-icons/ci";
+import { Link } from "react-router-dom";
 
 function TabsliderTabRelatedProduct({ relatedProducts }) {
   const [tabsRelatedProduct, setTabsRelatedProduct] = useState([]);
@@ -67,7 +68,10 @@ function TabsliderTabRelatedProduct({ relatedProducts }) {
                             <div className="relatedproduct-image-box">
                               <div className="relatedproduct-image-container">
                                 <div className="relatedproduct-image-content">
-                                  <a href="#" title={related.title}>
+                                  <a
+                                    href="/detail-product/27/anh-trang-chieu-roi-con-duong-lac-loi"
+                                    title={related.title}
+                                  >
                                     <div className="image">
                                       <img
                                         src={getPathImage(
