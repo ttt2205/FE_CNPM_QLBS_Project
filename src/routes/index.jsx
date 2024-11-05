@@ -8,10 +8,7 @@ import LoginAdmin from "./LoginAdmin";
 import Home from "./Home";
 import HomePage from "components/user/HomePageUser";
 import UserProfile from "components/admin/UserProfile";
-import Dashboard, {
-  loader as rootLoader,
-  action as rootAction,
-} from "components/admin/Dashboard";
+import Dashboard from "components/admin/Dashboard";
 import ProductPanel from "components/admin/ProductPanel"; // loader as productLoader,
 import EditProduct, {
   loader as editProductLoader,
@@ -36,6 +33,11 @@ import DetailProductPage from "./DetailProductPage";
 import ShoppingCart from "./ShoppingCart";
 import ShoppingTrends from "components/user/ShoppingTrends";
 import AdvancedSearch from "context/advancedSearch";
+import AccountPanel, {
+  loader as accountsLoader,
+} from "components/admin/AccountPanel";
+import ThongKe from "components/admin/ThongKe";
+
 const router = createBrowserRouter([
   {
     element: <AuthProvider />,
@@ -49,7 +51,6 @@ const router = createBrowserRouter([
           {
             element: <Dashboard />,
             errorElement: <ErrorPage />,
-            loader: rootLoader,
             children: [
               {
                 errorElement: <ErrorPage />,
@@ -103,7 +104,13 @@ const router = createBrowserRouter([
                   },
                   {
                     path: "analytics",
-                    element: <div>Analytic</div>,
+                    element: <ThongKe />,
+                    errorElement: <ErrorPage />,
+                  },
+                  {
+                    path: "accounts",
+                    element: <AccountPanel />,
+                    loader: accountsLoader,
                     errorElement: <ErrorPage />,
                   },
                 ],

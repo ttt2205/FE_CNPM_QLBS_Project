@@ -29,14 +29,17 @@ export async function action({ request }) {
 
 const ThemPhieuNhap = () => {
   const { providers } = useLoaderData();
-  const [productPageData, setProductPageData] = useState({
+  const [responseData, setResponseData] = useState({
     books: [],
     total_page: 1,
+  });
+  const [formData, setFormData] = useState({
     q: "",
-    type: "all",
+    searchType: "all",
     page: 1,
     limit: 6,
-    sort_type: "asc",
+    sortBy: "book_id",
+    sortType: "asc",
   });
   const [selectedBooks, setSelectedBooks] = useState([]);
   const submit = useSubmit();
@@ -96,11 +99,10 @@ const ThemPhieuNhap = () => {
   };
 
   useEffect(() => {
-    let { page, limit, q } = productPageData;
-    getPage(page, limit, { q }).then((res) => {
-      setProductPageData({ ...productPageData, ...res });
+    getPage(formData).then((data) => {
+      setResponseData(data);
     });
-  }, [productPageData.page, productPageData.q]);
+  }, [formData]);
 
   return (
     <>
@@ -128,10 +130,7 @@ const ThemPhieuNhap = () => {
             name="q"
             defaultValue={""}
             onChange={(event) => {
-              setProductPageData({
-                ...productPageData,
-                q: event.target.value,
-              });
+              setFormData({ ...formData, q: event.target.value, page: 1 });
             }}
           />
           {/* <div id="search-spinner" hidden={!searching} aria-hidden /> */}
@@ -152,7 +151,7 @@ const ThemPhieuNhap = () => {
             </tr>
           </thead>
           <tbody>
-            {productPageData.books.map((book) => (
+            {responseData.books.map((book) => (
               <tr key={book.book_id}>
                 <th scope="row">{book.book_id}</th>
                 <td>{book.title}</td>
@@ -186,8 +185,11 @@ const ThemPhieuNhap = () => {
           </tbody>
         </table>
         <ProductPagination
-          data={productPageData}
-          setData={setProductPageData}
+          page={formData.page}
+          setPage={(page) => {
+            setFormData({ ...formData, page });
+          }}
+          total_page={responseData.total_page}
         />
       </div>
       <Form

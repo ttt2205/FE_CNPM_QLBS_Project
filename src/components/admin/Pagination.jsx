@@ -1,4 +1,4 @@
-export default function ProductPagination({ page, setPage, total_page }) {
+export default function Pagination({ page, setPage, total_page }) {
   const maxPages = 5; // Số trang tối đa hiển thị
   const pages = Array.from({ length: total_page }, (_, i) => i + 1);
 

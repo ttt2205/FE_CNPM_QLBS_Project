@@ -28,16 +28,13 @@ export async function loader({ params }) {
 }
 
 export async function action({ request, params }) {
-  //gan deletedImages vao form data
-  //...
-
   const formData = await request.formData();
   // Lấy tất cả các file từ input file (giả sử input có tên "images")
   const newImages = formData.getAll("new_images"); // Thay "images" bằng tên của input file
   const deletedImages = formData.getAll("deletedImages");
-  console.log(newImages);
-  console.log(deletedImages);
+  const discountIds = formData.getAll("discount_id");
   const updates = Object.fromEntries(formData);
+  updates.discount_id = discountIds;
   console.log(updates);
   // return null;
   try {
@@ -99,7 +96,6 @@ export default function EditProduct() {
     const formData = new FormData(event.currentTarget);
     //them deletedImages vao form data
     formData.append("deletedImages", JSON.stringify(deletedImages));
-
     let newErrors = validate(event.currentTarget);
     // Nếu có lỗi, hiển thị thông báo lỗi
     if (Object.keys(newErrors).length > 0) {
@@ -107,7 +103,10 @@ export default function EditProduct() {
       toast.error("Lỗi nhập liệu, vui lòng kiểm tra lại");
     } else {
       setErrors({});
-      submit(formData, { method: "post", encType: "multipart/form-data" });
+      submit(event.currentTarget, {
+        method: "post",
+        encType: "multipart/form-data",
+      });
     }
   };
 
@@ -244,16 +243,17 @@ export default function EditProduct() {
               <label className="form-label">Discount</label>
               <select
                 className="form-select"
+                multiple={true}
+                size={3}
                 name="discount_id"
-                defaultValue={product.discount_id || ""}
+                defaultValue={product.discounts.map((d) => d.discount_id)}
               >
-                <option value="">No discount</option>
                 {allReferences.discounts.map((discount) => (
                   <option
                     key={discount.discount_id}
                     value={discount.discount_id}
                   >
-                    {discount.discount_name}
+                    {`${discount.name} (${discount.percent_value}%)`}
                   </option>
                 ))}
               </select>
@@ -314,7 +314,7 @@ export default function EditProduct() {
           >
             Lãi suất:{" "}
             {percentDiff.toFixed(2) === NaN ? 0 : percentDiff.toFixed(2)}% so
-            với giá trung bình {priceMean}
+            với giá trung bình {priceMean.toFixed(0)} VNĐ
           </span>
         )}
       </div>

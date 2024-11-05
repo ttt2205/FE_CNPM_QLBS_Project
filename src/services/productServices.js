@@ -1,14 +1,11 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export async function getPage(page, limit, { type, q, sort_type }) {
+export async function getPage(formData) {
   try {
-    if (!type) type = "all";
-    if (!q) q = "";
-    if (!sort_type) sort_type = "asc";
-    let response = await axios.get(
-      `http://localhost:8080/api/book?page=${page}&limit=${limit}&type=${type}&q=${q}&sort_type=${sort_type}`
-    );
+    let response = await axios.get(`http://localhost:8080/api/book`, {
+      params: formData,
+    });
     // console.log(response.data.books);
     return { books: response.data.books, total_page: response.data.total_page };
   } catch (error) {

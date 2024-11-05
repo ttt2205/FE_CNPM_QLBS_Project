@@ -58,9 +58,9 @@ export default function NhapHangPanel() {
       </Link>
       {/* thanh tim kiem */}
       <div className="row">
-        <div class="input-group mb-3 col">
-          <span class="input-group-text">
-            <i class="fa-solid fa-magnifying-glass"></i>
+        <div className="input-group mb-3 col">
+          <span className="input-group-text">
+            <i className="fa-solid fa-magnifying-glass"></i>
           </span>
           <input
             type="text"
@@ -91,7 +91,7 @@ export default function NhapHangPanel() {
           }}
         />
       </div>
-      <div className="row">
+      <div className="row mb-3">
         <div className="col">
           <select
             name="provider_id"
@@ -149,7 +149,7 @@ export default function NhapHangPanel() {
                 })
               }
             >
-              Mã phiếu <i class="fa-solid fa-sort"></i>
+              Mã phiếu <i className="fa-solid fa-sort"></i>
             </th>
             <th
               onClick={() => {
@@ -164,7 +164,7 @@ export default function NhapHangPanel() {
                 });
               }}
             >
-              Ngày tạo <i class="fa-solid fa-sort"></i>
+              Ngày tạo <i className="fa-solid fa-sort"></i>
             </th>
             <th>Nhà cung cấp</th>
             <th
@@ -179,7 +179,7 @@ export default function NhapHangPanel() {
                 });
               }}
             >
-              Tổng tiền <i class="fa-solid fa-sort"></i>
+              Tổng tiền <i className="fa-solid fa-sort"></i>
             </th>
             <th>Chi tiết</th>
           </tr>

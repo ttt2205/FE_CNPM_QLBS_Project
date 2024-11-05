@@ -17,6 +17,7 @@ import ImageCarousel from "components/admin/ImageCarousel";
 
 export async function loader({ params }) {
   const allReferences = await getAllReferences();
+  console.log(allReferences);
   return { allReferences };
 }
 
@@ -184,14 +185,18 @@ export default function EditProduct() {
           <div className="row">
             <div className="col form-group">
               <label className="form-label">Discount</label>
-              <select className="form-select" name="discount_id">
-                <option value="">No discount</option>
+              <select
+                className="form-select"
+                name="discount_id"
+                multiple={true}
+                size={3}
+              >
                 {allReferences.discounts.map((discount) => (
                   <option
                     key={discount.discount_id}
                     value={discount.discount_id}
                   >
-                    {discount.discount_name}
+                    {`${discount.name} (${discount.percent_value}%)`}
                   </option>
                 ))}
               </select>
