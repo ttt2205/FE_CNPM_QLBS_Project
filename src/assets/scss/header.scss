@@ -2,11 +2,13 @@
     width: 100%;
     background-color: white;
     padding-bottom: 10px;
+    
 }
 
 .banner_header {
     img {
-        width: 100vw; /* Full chiều ngang màn hình */
+        width: 100vw;
+        /* Full chiều ngang màn hình */
         height: auto;
     }
 }
@@ -15,26 +17,31 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    justify-content: space-between; 
-    padding: 10px 0px;
+    justify-content: space-between;
+    padding: 10px 10px;
     border-bottom: 1px solid #ccc;
+
     .logo-img {
-        max-width: 150px; 
+        max-width: 150px;
         height: auto;
         margin-left: 0px;
-        flex-shrink: 0; /* Đảm bảo logo không co lại quá nhỏ */
-        margin-right: 15px; 
+        flex-shrink: 0;
+        /* Đảm bảo logo không co lại quá nhỏ */
+        margin-right: 15px;
     }
+
     .search-box {
-        flex-grow: 1; /* Thanh tìm kiếm chiếm nhiều không gian hơn */
-        margin: 0 20px;
+        flex-grow: 1;
+        /* Thanh tìm kiếm chiếm nhiều không gian hơn */
+        
 
         .input-group {
             display: flex;
             width: 100%;
-            
+
             .form-control {
-                flex: 1; /* Chiều rộng tự động giãn */
+                flex: 1;
+                /* Chiều rộng tự động giãn */
             }
 
             .search-button {
@@ -52,7 +59,8 @@
             margin-right: 20px;
             color: black;
             cursor: pointer;
-
+            display: flex;
+            align-items: center;
             svg {
                 font-size: 1.5rem;
                 margin-right: 5px;
@@ -67,9 +75,11 @@
         }
 
         .icon-wrapper:last-child {
-            margin-right: 0; /* Bỏ khoảng cách sau icon cuối cùng */
+            margin-right: 0;
+            /* Bỏ khoảng cách sau icon cuối cùng */
         }
     }
+
     .dropdown-menu-custom {
         position: absolute;
         top: 100%; // Xuất hiện ngay dưới icon menu
@@ -77,50 +87,82 @@
         background-color: white;
         border: 1px solid #ccc;
         padding: 10px;
-        width: 250px; 
+        width: 250px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         z-index: 10;
-      
+
         ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
-      
+
             li {
                 padding: 8px 0;
                 cursor: pointer;
-      
+
                 &:hover {
-                    color: #ff0000; 
+                    color: #ff0000;
                 }
             }
         }
+
         .hovered-category {
-          margin-top: 10px;
-          height: auto;
-          width: 250px;
-          top: -10.5px;;
-          left: 100%;
-          position: absolute;
-          padding: 10px;
-          border: 1px solid #ddd;
-          background-color: #f9f9f9;
+            margin-top: 10px;
+            height: auto;
+            width: 250px;
+            top: -10.5px;
+            ;
+            left: 100%;
+            position: absolute;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: white;
         }
-      }
+    }
 }
 
-// @media (max-width: 768px) {
-//     .main-header {
-//         flex-direction: column; /* Chuyển sang dạng cột trên màn hình nhỏ */
-//         align-items: stretch; /* Đảm bảo các phần tử giãn đều */
+@media only screen and (max-width: 479px) {
+    .main-header {
+        .logo-img {
+            display: none;
+        }
 
-//         .search-box {
-//             margin: 10px 0; /* Tạo khoảng cách giữa tìm kiếm và các thành phần khác */
-//         }
+        .icon-group a {
+            span {
+                display: none; 
+            }
+        }
+        
+    }
+}
 
-//         .icon-group {
-//             justify-content: space-around;
-//             width: 100%;
-//         }
-//     }
-// }
+/* Dành cho điện thoại lớn hơn hoặc bằng 480px */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    .main-header {
+        .logo-img {
+            display: none;
+        }
+
+        .icon-group a {
+            span {
+                display: none; 
+            }
+        }
+        
+    }
+}
+
+/* Dành cho tablet (màn hình từ 768px trở lên) */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    
+}
+
+/* Dành cho laptop nhỏ (màn hình từ 1024px trở lên) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+/* Dành cho desktop (màn hình từ 1200px trở lên) */
+@media only screen and (min-width: 1200px) {
+    
+}

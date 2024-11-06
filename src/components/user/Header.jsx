@@ -111,18 +111,18 @@ const Header = () => {
                     </div>
 
                     <div className="col search-box">
-                        <ProductSearch />
+                        <ProductSearch containerRef={containerRef}/>
                     </div>
 
                     <div className="col-auto d-flex align-items-center icon-group">
                         <div className="icon-wrapper">
                             <a href="/cart">
-                                <FaCartPlus /> Giỏ Hàng
+                                <FaCartPlus /> <span>Giỏ Hàng</span>
                             </a>
                         </div>
                         <div className="icon-wrapper">
                             <a href="/profile">
-                                <FaCircleUser /> Tài Khoản
+                                <FaCircleUser /> <span>Tài Khoản</span>
                             </a>
                         </div>
                     </div>
