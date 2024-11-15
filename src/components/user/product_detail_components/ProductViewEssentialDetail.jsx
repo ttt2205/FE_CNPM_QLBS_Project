@@ -7,7 +7,12 @@ import {
 } from "./product_view_essential_detail";
 import { useAuth } from "context/AuthContext";
 
-function ProductViewEssentialDetail({ detailProduct }) {
+function ProductViewEssentialDetail({
+  detailProduct,
+  count,
+  handleQuantityChange,
+  getDiscountValueLatest,
+}) {
   const [productInfo, setProductInfo] = useState({});
 
   const [detailProductInfo, setDetailProductInfo] = useState({});
@@ -16,28 +21,32 @@ function ProductViewEssentialDetail({ detailProduct }) {
   // const {user} = useAuth();
 
   useEffect(() => {
+    const bestDiscount = getDiscountValueLatest(detailProduct.discounts);
     setProductInfo({
       title: detailProduct.title,
-      publisher: detailProduct.publisher,
+      publisher: detailProduct.publisher.name,
       author: detailProduct.authors?.map((item) => item.name),
-      stock: detailProduct.stock,
-      salePrice: detailProduct.salePrice,
+      stock: detailProduct.stock_quantity,
+      salePrice: detailProduct.sale_price,
+      discountValue: bestDiscount.value,
     });
 
     setDetailProductInfo({
-      productCode: detailProduct.id,
-      suplier: detailProduct.goodsReceipts?.map((item, index) => item.provider),
+      productCode: detailProduct.book_id,
+      suplier: detailProduct.receipts?.map(
+        (item, index) => item.providers.name
+      ),
       author: detailProduct.authors?.map((item) => item.name),
-      publisher: detailProduct.publisher,
-      publisherYear: detailProduct.publisherYear,
+      publisher: detailProduct.publisher.name,
+      publisherYear: detailProduct.publication_year,
       weight: detailProduct.weight,
       size: detailProduct.size,
-      quantityOfPage: detailProduct.numPage,
+      quantityOfPage: detailProduct.num_page,
     });
 
     setDescriptionProduct({
       title: detailProduct.title,
-      description: detailProduct.description,
+      description: detailProduct.decription,
     });
   }, [detailProduct]);
 
@@ -48,7 +57,10 @@ function ProductViewEssentialDetail({ detailProduct }) {
           <ProductInfo productInfo={productInfo}></ProductInfo>
         </div>
         <div id="delivery_infor" className="delivery-infor-container">
-          <DeliveryInfo></DeliveryInfo>
+          <DeliveryInfo
+            count={count}
+            handleQuantityChange={handleQuantityChange}
+          ></DeliveryInfo>
         </div>
         <div
           id="detail_product_infor"
@@ -56,6 +68,7 @@ function ProductViewEssentialDetail({ detailProduct }) {
         >
           <DetailProductInfo
             detailProductInfo={detailProductInfo}
+            count={count}
           ></DetailProductInfo>
         </div>
         <div id="description_product" className="description-product-container">

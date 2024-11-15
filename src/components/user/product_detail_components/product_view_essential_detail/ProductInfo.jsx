@@ -2,6 +2,14 @@ import React from "react";
 import { CiStar } from "react-icons/ci";
 
 function ProductInfo({ productInfo }) {
+  // Hàm định dạng tiền tệ Việt Nam
+  function formatCurrencyVND(amount) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  }
+
   return (
     <div className="product-infor-content">
       <div className="name-product">
@@ -43,20 +51,44 @@ function ProductInfo({ productInfo }) {
         </div>
         <div className="sale">
           <p>|</p>
-          <span>aaaaaa</span>
+          <span className="pt-1" style={{ fontSize: "14px" }}>
+            (0 lượt đánh giá)
+          </span>
         </div>
       </div>
       <div className="price-and-discount">
         <div className="price-discount">
-          <h2>143.000 đ</h2>
+          <h2>
+            {productInfo.discountValue > 0
+              ? formatCurrencyVND(
+                  Math.round(
+                    parseFloat(productInfo.salePrice, 10) *
+                      (100 - parseFloat(productInfo.discountValue, 10))
+                  ) / 100
+                )
+              : formatCurrencyVND(
+                  Math.round(parseFloat(productInfo.salePrice, 10))
+                )}
+            &nbsp;
+          </h2>
         </div>
         <div className="price-product">
-          <p>{productInfo.salePrice}</p>
+          {productInfo.discountValue > 0 ? (
+            <p id="price">
+              {formatCurrencyVND(productInfo.salePrice)}
+              &nbsp;
+            </p>
+          ) : null}
         </div>
-        <div className="discount">
-          <strong>-{23}%</strong>
-        </div>
+        {productInfo.discountValue > 0 ? (
+          <div className="discount d-flex align-items-center p-1">
+            <p id="discountValue" className="m-0">
+              <strong>-{productInfo.discountValue}%</strong>
+            </p>
+          </div>
+        ) : null}
       </div>
+
       {productInfo.stock > 0 ? (
         <></>
       ) : (
