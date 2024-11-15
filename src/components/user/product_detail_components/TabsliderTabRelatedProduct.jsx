@@ -4,18 +4,16 @@ import { FiChevronLeft } from "react-icons/fi";
 import { CiStar } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
-function TabsliderTabRelatedProduct({ relatedProducts }) {
+function TabsliderTabRelatedProduct({
+  relatedProducts,
+  getDiscountValueLatest,
+}) {
   const [tabsRelatedProduct, setTabsRelatedProduct] = useState([]);
 
   useEffect(() => {
     const fetchDataAboutRelatedProduct = async () => {
       try {
         const relatedProductArrayChunked = chunksArray(relatedProducts, 4);
-        relatedProducts.forEach((related) => {
-          if (related.discount !== null) {
-            console.log(">>>related: ", related.title);
-          }
-        });
         setTabsRelatedProduct(relatedProductArrayChunked);
       } catch (error) {
         console.log("relatedProductArrayChunked error = ", error.message);
@@ -39,9 +37,20 @@ function TabsliderTabRelatedProduct({ relatedProducts }) {
     return newArr;
   };
 
-  const getPathImage = (imageName) => {
-    return `/asset/images/${imageName}`;
+  const getPathImage = (images) => {
+    const urlImage = images.find((item) => {
+      if (item.is_main === 1) return item;
+    });
+    return urlImage.url;
   };
+
+  // Hàm định dạng tiền tệ Việt Nam
+  function formatCurrencyVND(amount) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  }
 
   return (
     <>
@@ -74,10 +83,10 @@ function TabsliderTabRelatedProduct({ relatedProducts }) {
                                   >
                                     <div className="image">
                                       <img
-                                        src={getPathImage(
-                                          related.bookimages[0].url ||
-                                            "book26_v1.jpg"
-                                        )}
+                                        src={
+                                          getPathImage(related.alt_images) ||
+                                          "book26_v1.jpg"
+                                        }
                                         alt="Not Found image"
                                       />
                                     </div>
@@ -95,40 +104,49 @@ function TabsliderTabRelatedProduct({ relatedProducts }) {
                                 <div className="relatedproduct-discount">
                                   <p id="price-now">
                                     <strong>
-                                      {related.discount
-                                        ? Math.round(
-                                            parseFloat(
-                                              related.price_receipt,
-                                              10
-                                            ) *
-                                              (100 -
-                                                parseFloat(
-                                                  related.price_receipt,
-                                                  10
-                                                ))
-                                          ) / 100
-                                        : Math.round(
-                                            parseFloat(
-                                              related.price_receipt,
-                                              10
+                                      {related.discounts.length !== 0
+                                        ? formatCurrencyVND(
+                                            Math.round(
+                                              parseFloat(
+                                                related.sale_price,
+                                                10
+                                              ) *
+                                                (100 -
+                                                  parseFloat(
+                                                    getDiscountValueLatest(
+                                                      related.discounts
+                                                    ).value,
+                                                    10
+                                                  ))
+                                            ) / 100
+                                          )
+                                        : formatCurrencyVND(
+                                            Math.round(
+                                              parseFloat(related.sale_price, 10)
                                             )
                                           )}
-                                      &nbsp;đ
+                                      &nbsp;
                                     </strong>
                                   </p>
-                                  {related.discount ? (
+                                  {related.discounts.length !== 0 ? (
                                     <p id="discount">
                                       <strong>
-                                        -{related.discount.discount_value}%
+                                        -
+                                        {
+                                          getDiscountValueLatest(
+                                            related.discounts
+                                          ).value
+                                        }
+                                        %
                                       </strong>
                                     </p>
                                   ) : null}
                                 </div>
                                 <div className="relatedproduct-price">
-                                  {related.discount ? (
+                                  {related.discounts.length !== 0 ? (
                                     <p id="price">
-                                      {related.price_receipt}
-                                      &nbsp;đ
+                                      {formatCurrencyVND(related.sale_price)}
+                                      &nbsp;
                                     </p>
                                   ) : null}
                                 </div>

@@ -2,17 +2,7 @@ import React, { useState, useCallback } from "react";
 import { TbTruckDelivery } from "react-icons/tb";
 import ChooseQuantity from "./ChooseQuantity";
 
-function DeliveryInfo() {
-  const [count, setCount] = useState(1);
-
-  const handleQuantityChange = useCallback((type) => {
-    setCount((quantity) => {
-      if (type === "increment") return quantity + 1;
-      if (type === "decrement") return quantity > 1 ? quantity - 1 : 1;
-      return quantity;
-    });
-  }, []);
-
+function DeliveryInfo({ count, handleQuantityChange }) {
   return (
     <div className="delivery-infor-content">
       <div className="deliver-title">
