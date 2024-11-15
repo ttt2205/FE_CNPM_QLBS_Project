@@ -48,3 +48,39 @@
     flex-wrap: wrap;
     gap: 20px;
 }
+
+@media only screen and (max-width: 479px) {
+    .product-search-container{
+        display: block;
+        .sidebar{
+            width: 100%;
+            border-right: none; 
+        }
+    }
+}
+
+/* Dành cho điện thoại lớn hơn hoặc bằng 480px */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    .product-search-container{
+        display: block;
+        .sidebar{
+            width: 100%;
+            border-right: none; 
+        }
+    }
+}
+
+/* Dành cho tablet (màn hình từ 768px trở lên) */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    
+}
+
+/* Dành cho laptop nhỏ (màn hình từ 1024px trở lên) */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+/* Dành cho desktop (màn hình từ 1200px trở lên) */
+@media only screen and (min-width: 1200px) {
+    
+}

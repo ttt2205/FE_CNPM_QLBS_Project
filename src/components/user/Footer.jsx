@@ -11,7 +11,7 @@ const Footer = () => {
             <div className="text-light py-4 ">
 
                 <div className="row justify-content-center">
-                    <div className="col-md-8 d-flex align-items-center">
+                    <div className="col-md-8 d-flex align-items-center hidden">
                         <CiMail size={32} className="mr-2 mb-3" />
                         <label className="mr-3 mb-3">Đăng kí nhận thông tin</label>
 
