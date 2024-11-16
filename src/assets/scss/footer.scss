@@ -116,7 +116,14 @@
 }
 
 /* Dành cho tablet (màn hình từ 768px trở lên) */
-@media only screen and (min-width: 768px) and (max-width: 991px) {}
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .footer{
+        .border_right {
+            
+            margin-right: -1px;
+        }
+    }
+}
 
 /* Dành cho laptop nhỏ (màn hình từ 1024px trở lên) */
 @media only screen and (min-width: 992px) and (max-width: 1199px) {}
