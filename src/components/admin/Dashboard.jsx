@@ -22,7 +22,7 @@ const navs = [
   },
   {
     name: "Analytics",
-    link: "analytics",
+    link: "thongke",
   },
   {
     name: "Accounts",

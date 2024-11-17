@@ -36,7 +36,9 @@ import AdvancedSearch from "context/advancedSearch";
 import AccountPanel, {
   loader as accountsLoader,
 } from "components/admin/AccountPanel";
-import ThongKe from "components/admin/ThongKe";
+import ThongKe from "components/admin/thongke/index";
+import SoLuongNhapChart from "components/admin/charts/SoLuongNhapChart";
+import LuotTruyCapChart from "components/admin/charts/LuotTruyCapChart";
 
 const router = createBrowserRouter([
   {
@@ -103,9 +105,32 @@ const router = createBrowserRouter([
                     errorElement: <ErrorPage />,
                   },
                   {
-                    path: "analytics",
+                    path: "thongke",
                     element: <ThongKe />,
                     errorElement: <ErrorPage />,
+                    children: [
+                      {
+                        element: <div>Thong ke page</div>,
+                        index: true,
+                      },
+                      {
+                        path: "0",
+                        element: <SoLuongNhapChart />,
+                      },
+                      {
+                        path: "1",
+                        element: <div>So luong ban</div>,
+                      },
+                      {
+                        path: "2",
+                        element: <div>Doanh thu</div>,
+                        index: true,
+                      },
+                      {
+                        path: "3",
+                        element: <LuotTruyCapChart />,
+                      },
+                    ],
                   },
                   {
                     path: "accounts",
