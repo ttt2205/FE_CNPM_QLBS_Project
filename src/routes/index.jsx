@@ -166,8 +166,10 @@ const router = createBrowserRouter([
             element: <DetailProductPage />,
           },
           {
-            path: "shopping-cart",
+            path: "cart",
             element: <ShoppingCart />,
+          },
+          {
             path: "shopping-trends",
             element: <ShoppingTrends />,
           },
