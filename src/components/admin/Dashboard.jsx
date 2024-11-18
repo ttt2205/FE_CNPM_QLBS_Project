@@ -2,33 +2,10 @@
  *Admin Dashboard
  *
  */
-import {
-  Outlet,
-  NavLink,
-  useLoaderData,
-  Form,
-  redirect,
-  useNavigation,
-  useSubmit,
-  useLocation,
-} from "react-router-dom";
-import { getContacts, createContact } from "../../services/contacts";
-import { useEffect, useState } from "react";
+import { Outlet, NavLink, useNavigation } from "react-router-dom";
 import "../../assets/scss/admin.scss";
 import LogoutButton from "../LogoutButton";
 import UserProfile from "./UserProfile";
-
-export async function loader({ request }) {
-  // const url = new URL(request.url);
-  // const q = url.searchParams.get("q");
-  // const contacts = await getContacts(q);
-  // return { contacts, q };
-}
-
-export async function action() {
-  const contact = await createContact();
-  return redirect(`/dashboard/contacts/${contact.id}/edit`);
-}
 
 const navs = [
   {
@@ -45,19 +22,17 @@ const navs = [
   },
   {
     name: "Analytics",
-    link: "analytics",
+    link: "thongke",
+  },
+  {
+    name: "Accounts",
+    link: "accounts",
   },
 ];
 
 export default function Root() {
   // const { contacts, q } = useLoaderData();
   const navigation = useNavigation(); //use to get location and state
-  const submit = useSubmit();
-  const location = useLocation();
-
-  const searching =
-    navigation.location &&
-    new URLSearchParams(navigation.location.search).has("q");
 
   // useEffect(() => {
   //   document.getElementById("q").value = q;
@@ -77,7 +52,7 @@ export default function Root() {
               {navs.map((nav) => (
                 <li key={nav.name}>
                   <NavLink
-                    to={`${nav.link}${location.search}`}
+                    to={`${nav.link}`}
                     className={({ isActive, isPending }) =>
                       isActive ? "active" : isPending ? "pending" : ""
                     }
@@ -97,6 +72,7 @@ export default function Root() {
       <div
         id="detail"
         className={navigation.state === "loading" ? "loading" : ""}
+        style={{ overflow: "auto" }}
       >
         <div className="loader"></div>
         <Outlet />

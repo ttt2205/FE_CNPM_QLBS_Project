@@ -240,7 +240,7 @@ i {
 
 #detail {
   flex: 1;
-  padding: 2rem 4rem;
+  padding: 2rem 2rem;
   width: 100%;
 }
 
@@ -416,4 +416,19 @@ i {
   margin: auto;
   width: 300px;
   max-width: 100%;
+}
+
+.bold-label-form {
+  label {
+    font-weight: 600;
+  }
+  .form-group {
+    margin-bottom: 1rem;
+  }
+}
+
+.sortable {
+  th {
+    cursor: pointer;
+  }
 }

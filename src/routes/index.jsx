@@ -1,16 +1,6 @@
 import * as React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import ErrorPage from "../components/admin/error-page";
-import Contact, {
-  loader as contactLoader,
-  action as contactAction,
-} from "../components/admin/contact";
-import Root, {
-  loader as rootLoader,
-  action as rootAction,
-} from "../components/admin/root";
-import EditContact, { action as editAction } from "../components/admin/edit";
-import { action as destroyAction } from "../components/admin/destroy";
 import Index from "../components/admin/index";
 import PrivateRoute from "./PrivateRoute";
 import AuthProvider from "../context/AuthContext";
@@ -19,14 +9,37 @@ import Home from "./Home";
 import HomePage from "components/user/HomePageUser";
 import UserProfile from "components/admin/UserProfile";
 import Dashboard from "components/admin/Dashboard";
+import ProductPanel from "components/admin/ProductPanel"; // loader as productLoader,
+import EditProduct, {
+  loader as editProductLoader,
+  action as editProductAction,
+} from "components/admin/EditProduct";
+import AddProduct, {
+  loader as addProductLoader,
+  action as addProductAction,
+} from "components/admin/AddProduct";
+import NhapHangPanel, {
+  loader as nhapHangLoader,
+} from "components/admin/NhapHangPanel";
+import ChiTietPhieuNhap, {
+  loader as phieuNhapLoader,
+} from "components/admin/ChiTietPhieuNhap";
+import ThemPhieuNhap, {
+  loader as themPhieuNhapLoader,
+  action as createPhieuNhapAction,
+} from "components/admin/ThemPhieuNhap";
+
 import DetailProductPage from "./DetailProductPage";
 import ShoppingCart from "./ShoppingCart";
-
-import ProductPanel, {
-  loader as productLoader,
-} from "components/admin/ProductPanel";
 import ShoppingTrends from "components/user/ShoppingTrends";
 import AdvancedSearch from "context/advancedSearch";
+import AccountPanel, {
+  loader as accountsLoader,
+} from "components/admin/AccountPanel";
+import ThongKe from "components/admin/thongke/index";
+import SoLuongNhapChart from "components/admin/charts/SoLuongNhapChart";
+import LuotTruyCapChart from "components/admin/charts/LuotTruyCapChart";
+
 const router = createBrowserRouter([
   {
     element: <AuthProvider />,
@@ -40,8 +53,6 @@ const router = createBrowserRouter([
           {
             element: <Dashboard />,
             errorElement: <ErrorPage />,
-            loader: rootLoader,
-            action: rootAction,
             children: [
               {
                 errorElement: <ErrorPage />,
@@ -54,11 +65,38 @@ const router = createBrowserRouter([
                     path: "products",
                     element: <ProductPanel />,
                     errorElement: <ErrorPage />,
-                    loader: productLoader,
+                  },
+                  {
+                    path: "products/edit/:productId",
+                    element: <EditProduct />,
+                    errorElement: <ErrorPage />,
+                    loader: editProductLoader,
+                    action: editProductAction,
+                  },
+                  {
+                    path: "products/add",
+                    element: <AddProduct />,
+                    errorElement: <ErrorPage />,
+                    loader: addProductLoader,
+                    action: addProductAction,
                   },
                   {
                     path: "sales",
-                    element: <div>Sales</div>,
+                    element: <NhapHangPanel />,
+                    loader: nhapHangLoader,
+                    errorElement: <ErrorPage />,
+                  },
+                  {
+                    path: "sales/read/:receiptId",
+                    element: <ChiTietPhieuNhap />,
+                    loader: phieuNhapLoader,
+                    errorElement: <ErrorPage />,
+                  },
+                  {
+                    path: "sales/create",
+                    loader: themPhieuNhapLoader,
+                    action: createPhieuNhapAction,
+                    element: <ThemPhieuNhap />,
                     errorElement: <ErrorPage />,
                   },
                   {
@@ -67,8 +105,37 @@ const router = createBrowserRouter([
                     errorElement: <ErrorPage />,
                   },
                   {
-                    path: "analytics",
-                    element: <div>Analytic</div>,
+                    path: "thongke",
+                    element: <ThongKe />,
+                    errorElement: <ErrorPage />,
+                    children: [
+                      {
+                        element: <div>Thong ke page</div>,
+                        index: true,
+                      },
+                      {
+                        path: "0",
+                        element: <SoLuongNhapChart />,
+                      },
+                      {
+                        path: "1",
+                        element: <div>So luong ban</div>,
+                      },
+                      {
+                        path: "2",
+                        element: <div>Doanh thu</div>,
+                        index: true,
+                      },
+                      {
+                        path: "3",
+                        element: <LuotTruyCapChart />,
+                      },
+                    ],
+                  },
+                  {
+                    path: "accounts",
+                    element: <AccountPanel />,
+                    loader: accountsLoader,
                     errorElement: <ErrorPage />,
                   },
                 ],

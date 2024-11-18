@@ -1,5 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { login, loginWithToken } from "services/authServices";
 import { toast } from "react-toastify";
 
@@ -9,6 +9,7 @@ const AuthProvider = () => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const loginAction = async (data) => {
     try {
@@ -40,46 +41,36 @@ const AuthProvider = () => {
     navigate("/login");
   };
 
-  const loginUsingToken = async (token) => {
+  const loadUserFromLocal = async () => {
     try {
-      const response = await loginWithToken(token);
-      if (response.data) {
-        if (response.data.user) {
-          setUser(response.data.user);
-          setToken(response.data.token);
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          return;
-        } else {
-          console.log(1);
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+      //get user from local storage
+      const token = localStorage.getItem("token") || "";
+      let data = await loginWithToken(token);
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setUser(data.user);
+        setToken(data.token);
+      } else {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        // navigate("/login");
+        //neu location la dashboard thi moi chuyen ve login
+        if (location.pathname.includes("/dashboard")) {
+          navigate("/login");
         }
       }
     } catch (err) {
-      console.log(2);
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      console.log("Error: ", err);
     }
   };
 
   useEffect(() => {
-    let isEffectRan = false; //ngan chay nhieu lan
-
-    if (!isEffectRan) {
-      try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          loginUsingToken(token);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      loadUserFromLocal();
+    } catch (error) {
+      console.log(error);
     }
-
-    return () => {
-      isEffectRan = true;
-    };
   }, []);
 
   return (

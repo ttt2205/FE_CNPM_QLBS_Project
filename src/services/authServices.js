@@ -17,14 +17,18 @@ export const login = async (email, password) => {
 
 export const loginWithToken = async (token) => {
   //add token to request header
-  const response = await axios.post(
-    "http://localhost:8080/api/auth/login",
-    {},
-    {
-      headers: {
-        Authorization: token,
-      },
-    }
-  );
-  return response;
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/auth/login",
+      {},
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
 };

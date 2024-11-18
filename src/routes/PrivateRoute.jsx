@@ -11,15 +11,15 @@ export const PrivateRoute = ({ children }) => {
   //   // return <Navigate to="/login" />;
   //   return <Outlet />; //test
   // }
-  if (!user?.role?.role_name || user.role.role_name !== "Admin") {
-    return (
-      <ErrorPage
-        otherError={{ message: "You are not admin!" }}
-        children={<LogoutButton />}
-      />
-    );
+  if (user && user.role.role_name === "Admin") {
+    return <Outlet />;
   }
-  return <Outlet />;
+  return (
+    <ErrorPage
+      otherError={{ message: "You are not admin!" }}
+      children={<LogoutButton />}
+    />
+  );
 };
 
 export default PrivateRoute;
