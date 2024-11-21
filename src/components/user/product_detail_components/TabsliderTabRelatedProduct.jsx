@@ -52,6 +52,11 @@ function TabsliderTabRelatedProduct({
     }).format(amount);
   }
 
+  // Hàm format params name của url
+  const formatNameParamOfUrl = (bookTitle) => {
+    return bookTitle.split(/[- _]/).join("-");
+  };
+
   return (
     <>
       <div className="tabslier-relatedproduct-title">
@@ -73,12 +78,14 @@ function TabsliderTabRelatedProduct({
                     >
                       <div className="tab-relatedproduct">
                         {tab.map((related) => (
-                          <div className="relatedproduct" key={related.id}>
+                          <div className="relatedproduct" key={related.book_id}>
                             <div className="relatedproduct-image-box">
                               <div className="relatedproduct-image-container">
                                 <div className="relatedproduct-image-content">
                                   <a
-                                    href="/detail-product/27/anh-trang-chieu-roi-con-duong-lac-loi"
+                                    href={`/detail-product/${
+                                      related.book_id
+                                    }/${formatNameParamOfUrl(related.title)}`}
                                     title={related.title}
                                   >
                                     <div className="image">
