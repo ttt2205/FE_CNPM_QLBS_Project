@@ -41,6 +41,36 @@ const AuthProvider = () => {
     navigate("/login");
   };
 
+  const loginCustomer = async (data) => {
+    try {
+      const response = await login(data.username, data.password);
+      // console.log(response);
+      if (response.data) {
+        if (response.data.user) {
+          toast.success(response.data.message);
+          setUser(response.data.user);
+          setToken(response.data.token);
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          navigate("/");
+          return;
+        } else {
+          toast.error(response.data.message);
+        }
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const logOutCustomer = () => {
+    setUser(null);
+    setToken("");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/user-login");
+  };
+
   const loadUserFromLocal = async () => {
     try {
       //get user from local storage
@@ -65,16 +95,50 @@ const AuthProvider = () => {
     }
   };
 
+  const loadCustomerFromLocal = async () => {
+    try {
+      //get user from local storage
+      const tokenCustomer = localStorage.getItem("tokenCustomer") || "";
+      let data = await loginWithToken(tokenCustomer);
+      if (data.token) {
+        localStorage.setItem("tokenCustomer", data.token);
+        localStorage.setItem("customer", JSON.stringify(data.user));
+        setUser(data.user);
+        setToken(data.token);
+      } else {
+        localStorage.removeItem("tokenCustomer");
+        localStorage.removeItem("customer");
+        // navigate("/login");
+        //neu location la dashboard thi moi chuyen ve login
+        if (location.pathname.includes("/dashboard")) {
+          navigate("/user-login");
+        }
+      }
+    } catch (err) {
+      console.log("Error: ", err);
+    }
+  };
+
   useEffect(() => {
     try {
       loadUserFromLocal();
+      loadCustomerFromLocal();
     } catch (error) {
       console.log(error);
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        user,
+        loginAction,
+        logOut,
+        loginCustomer,
+        logOutCustomer,
+      }}
+    >
       <Outlet />
     </AuthContext.Provider>
   );

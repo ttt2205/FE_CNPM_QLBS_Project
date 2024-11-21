@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { TbTruckDelivery } from "react-icons/tb";
 import ChooseQuantity from "./ChooseQuantity";
 
-function DeliveryInfo({ count, handleQuantityChange }) {
+function DeliveryInfo({ count, handleQuantityChange, handleChangeAddress }) {
   const [currentCityCoordinateIsChosen, setCurrentCityCoordinateIsChosen] =
     useState({ city: "Hà Nội", lat: 21.0285, lng: 105.8048 });
   const [temptCity, setTemptCity] = useState(currentCityCoordinateIsChosen);
@@ -27,6 +27,8 @@ function DeliveryInfo({ count, handleQuantityChange }) {
   ];
 
   useEffect(() => {
+    // Thay đổi address
+    handleChangeAddress(currentCityCoordinateIsChosen.city);
     // Hàm tính khoảng cách từ điểm hiện tại tới điểm được chọn
     function calculateDistance(lat1, lng1, lat2, lng2) {
       const R = 6371; // Bán kính Trái Đất (km)

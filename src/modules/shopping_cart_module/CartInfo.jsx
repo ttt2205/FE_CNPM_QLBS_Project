@@ -34,6 +34,7 @@ function CartInfo({
     }, {}),
   });
   const { user, token } = useAuth();
+  console.log("user ", user);
   const navigate = useNavigate();
 
   // Thay đổi total khi chọn sản phẩm thay đổi
@@ -197,17 +198,28 @@ function CartInfo({
   // Thực hiện xác nhận thanh toán
   const handleConfirmPayment = async () => {
     try {
+      let addressIsChose = localStorage.getItem("addressIsChose");
       const orders = {
         order: {
           customer_id: user?.username || 1,
-          order_date: new Date(),
           total_amount: totalPromotion,
           status_id: 1,
-          address: "HCM",
+          address: addressIsChose,
           billPromotion_id: null,
         },
         orderDetails: [],
       };
+
+      // Kiểm tra khi có sản phẩm được chọn để thanh toán không
+      let flag = false;
+      Object.values(checkBoxes).forEach((checkBox) => {
+        if (checkBox === true) flag = true;
+      });
+      if (!flag) {
+        alert("Vui lòng chọn sản phẩm");
+        handleOpenModal(null);
+        return;
+      }
 
       // Kiểm tra promotion client chọn có đủ điều kiện
       if (promotionCurrent.isEligible) {
@@ -218,7 +230,7 @@ function CartInfo({
       let itemIsRemoved = [];
 
       if (checkBoxes.selectAll) {
-        // Kiểm tra xem có chon tất cả sản phẩm
+        // Kiểm tra xem có chọn tất cả sản phẩm
         let orderDetail = {};
         cartProducts.forEach((item) => {
           orderDetail = {
@@ -251,7 +263,6 @@ function CartInfo({
         });
       }
       const respone = await insertOrder(orders);
-      console.log(">>> respone Insert Order", respone);
       itemIsRemoved.forEach((item) => {
         handleRemoveItemFromCart(item);
       });

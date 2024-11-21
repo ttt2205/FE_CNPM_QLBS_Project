@@ -5,6 +5,8 @@ import Index from "../components/admin/index";
 import PrivateRoute from "./PrivateRoute";
 import AuthProvider from "../context/AuthContext";
 import LoginAdmin from "./LoginAdmin";
+import LoginPage from "./LoginPage";
+import RegisterForm from "./RegisterForm";
 import Home from "./Home";
 import HomePage from "components/user/HomePageUser";
 import UserProfile from "components/admin/UserProfile";
@@ -39,6 +41,9 @@ import AccountPanel, {
 import ThongKe from "components/admin/thongke/index";
 import SoLuongNhapChart from "components/admin/charts/SoLuongNhapChart";
 import LuotTruyCapChart from "components/admin/charts/LuotTruyCapChart";
+import OderConfirmation, {
+  loader as oderConfirmationLoader,
+} from "components/admin/OderConfirmation";
 
 const router = createBrowserRouter([
   {
@@ -138,6 +143,11 @@ const router = createBrowserRouter([
                     loader: accountsLoader,
                     errorElement: <ErrorPage />,
                   },
+                  {
+                    path: "order-confirmation",
+                    element: <OderConfirmation />,
+                    loader: oderConfirmationLoader,
+                  },
                 ],
               },
             ],
@@ -147,6 +157,14 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginAdmin />,
+      },
+      {
+        path: "/user-login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/register",
+        element: <RegisterForm />,
       },
       {
         path: "/",

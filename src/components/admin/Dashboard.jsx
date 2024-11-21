@@ -28,11 +28,15 @@ const navs = [
     name: "Accounts",
     link: "accounts",
   },
+  {
+    name: "Order Confirmation",
+    link: "order-confirmation",
+  },
 ];
 
 export default function Root() {
   // const { contacts, q } = useLoaderData();
-  const navigation = useNavigation(); //use to get location and state
+  const navigation = useNavigation(); // use to get location and state
 
   // useEffect(() => {
   //   document.getElementById("q").value = q;
