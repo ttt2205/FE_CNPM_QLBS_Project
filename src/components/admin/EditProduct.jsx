@@ -55,7 +55,7 @@ export default function EditProduct() {
   const [deletedImages, setDeletedImages] = useState([]);
   let priceMean =
     product.stock.reduce((acc, item) => {
-      return acc + item.price * item.quantity;
+      return acc + item.price * item.stock_quantity;
     }, 0) / product.stock_quantity;
   const [salePrice, setSalePrice] = useState(product.sale_price);
   let percentDiff = ((salePrice - priceMean) / priceMean) * 100;

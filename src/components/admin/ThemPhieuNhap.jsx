@@ -18,9 +18,9 @@ export async function loader({ request }) {
 
 export async function action({ request }) {
   let formData = await request.formData();
-  let selectedBooks = JSON.parse(formData.get("selectedBooks"));
+  let purchaseDetails = JSON.parse(formData.get("purchaseDetails"));
   let provider_id = formData.get("provider_id");
-  let res = await createReceipt({ selectedBooks, provider_id });
+  let res = await createReceipt({ purchaseDetails, provider_id });
   if (res) {
     toast.success("Tạo phiếu nhập thành công");
   }
@@ -41,57 +41,60 @@ const ThemPhieuNhap = () => {
     sortBy: "book_id",
     sortType: "asc",
   });
-  const [selectedBooks, setSelectedBooks] = useState([]);
+  const [purchaseDetails, setPurchaseDetails] = useState([]);
   const submit = useSubmit();
   const navigate = useNavigate();
-  let total = selectedBooks.reduce((acc, item) => {
+  let total = purchaseDetails.reduce((acc, item) => {
     return acc + item.quantity * item.price;
   }, 0);
 
   const handleSelectBook = (book) => {
-    let found = selectedBooks.find((item) => item.book_id === book.book_id);
+    let found = purchaseDetails.find((item) => item.book_id === book.book_id);
     if (found) {
       found.quantity = parseInt(found.quantity) + 1;
-      const newSelectedBooks = [...selectedBooks]; // Tạo bản sao mới của mảng
-      setSelectedBooks(newSelectedBooks);
+      const newpurchaseDetails = [...purchaseDetails];
+      setPurchaseDetails(newpurchaseDetails);
     } else {
-      setSelectedBooks([{ ...book, quantity: 1, price: 0 }, ...selectedBooks]);
+      setPurchaseDetails([
+        { ...book, quantity: 1, price: 0 },
+        ...purchaseDetails,
+      ]);
     }
   };
 
   const handleChangeQuantity = (e, book_id) => {
-    const found = selectedBooks.find((item) => item.book_id === book_id);
+    const found = purchaseDetails.find((item) => item.book_id === book_id);
 
     if (found) {
       found.quantity = parseInt(e.target.value);
-      const newSelectedBooks = [...selectedBooks]; // Tạo bản sao mới của mảng
-      setSelectedBooks(newSelectedBooks); // Cập nhật lại state
+      const newpurchaseDetails = [...purchaseDetails]; // Tạo bản sao mới của mảng
+      setPurchaseDetails(newpurchaseDetails); // Cập nhật lại state
     }
   };
 
   const handleDelete = (book_id) => {
-    const newSelectedBooks = selectedBooks.filter(
+    const newpurchaseDetails = purchaseDetails.filter(
       (item) => item.book_id !== book_id
     );
-    setSelectedBooks(newSelectedBooks);
+    setPurchaseDetails(newpurchaseDetails);
   };
 
   const handleChangePrice = (e, book_id) => {
-    const found = selectedBooks.find((item) => item.book_id === book_id);
+    const found = purchaseDetails.find((item) => item.book_id === book_id);
 
     if (found) {
       found.price = e.target.value;
-      const newSelectedBooks = [...selectedBooks]; // Tạo bản sao mới của mảng
-      setSelectedBooks(newSelectedBooks); // Cập nhật lại state
+      const newpurchaseDetails = [...purchaseDetails]; // Tạo bản sao mới của mảng
+      setPurchaseDetails(newpurchaseDetails); // Cập nhật lại state
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let json = JSON.stringify(selectedBooks);
+    let json = JSON.stringify(purchaseDetails);
     let provider_id = document.getElementById("provider_id").value;
     let formData = new FormData();
-    formData.append("selectedBooks", json);
+    formData.append("purchaseDetails", json);
     formData.append("provider_id", provider_id);
     submit(formData, {
       method: "POST",
@@ -139,7 +142,7 @@ const ThemPhieuNhap = () => {
       </Form>
 
       <div className="d-flex flex-column">
-        <table className="table">
+        <table className="table table-hover">
           <thead>
             <tr>
               <th>Book ID</th>
@@ -209,7 +212,7 @@ const ThemPhieuNhap = () => {
             </tr>
           </thead>
           <tbody>
-            {selectedBooks.map((book, index) => (
+            {purchaseDetails.map((book, index) => (
               <tr key={book.book_id}>
                 <th scope="row">{book.book_id}</th>
                 <td>{book.title}</td>
@@ -246,7 +249,7 @@ const ThemPhieuNhap = () => {
       </Form>
 
       <div className="d-flex">
-        <div className="form-group me-auto">
+        <div className="form-group">
           <select name="providerID" id="provider_id" className="form-select">
             <option value="">Chọn nhà cung cấp</option>
             {providers.map((provider) => (
@@ -254,12 +257,12 @@ const ThemPhieuNhap = () => {
             ))}
           </select>
         </div>
-        <h4 className="ms-auto">
+        <h4 className="ms-3">
           Tổng tiền: {new Intl.NumberFormat("en-US").format(total)}
         </h4>
       </div>
 
-      <div className="d-flex justify-content-end">
+      <div className="d-flex justify-content-center">
         <button
           type="button"
           className="btn btn-primary"

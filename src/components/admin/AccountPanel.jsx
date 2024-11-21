@@ -122,7 +122,7 @@ const AccountPanel = () => {
           ))}
         </select>
       </form>
-      <table className="table sortable">
+      <table className="table sortable table-hover">
         <thead>
           <tr>
             <th>ID</th>
