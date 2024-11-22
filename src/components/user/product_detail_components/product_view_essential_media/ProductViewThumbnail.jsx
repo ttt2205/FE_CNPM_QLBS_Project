@@ -4,10 +4,6 @@ import { FiChevronLeft } from "react-icons/fi";
 
 const ProductViewThumbnail = React.memo(
   ({ images, handleOnclickThumbnail }) => {
-    const getPathImage = (imageName) => {
-      return `/asset/images/${imageName}`;
-    };
-
     return (
       <div className="product-view-thumbnail-tabs">
         <div
@@ -28,13 +24,13 @@ const ProductViewThumbnail = React.memo(
                           <div className="product-view-image-box">
                             <div className="product-view-image-container">
                               <div className="product-view-image-content">
-                                <a href="#" title={image.url}>
+                                <a href="#" title={image.bookImage_id}>
                                   <div
                                     id={image.bookImage_id}
                                     className="image"
                                   >
                                     <img
-                                      src={getPathImage(image.url)}
+                                      src={image.url}
                                       alt="Not Found image"
                                       onClick={() =>
                                         handleOnclickThumbnail(image.url)

@@ -19,6 +19,8 @@ function DetailProductPage() {
 
   const [detailProduct, setDetailProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
+  // it uses in Deliveryinfo.jsx for change quantity product
+  const [count, setCount] = useState(1);
 
   const checkInputProductId = () => {
     const id = Number(productId);
@@ -26,6 +28,13 @@ function DetailProductPage() {
     return false;
   };
 
+  const handleQuantityChange = (type) => {
+    setCount((quantity) => {
+      if (type === "increment") return quantity + 1;
+      if (type === "decrement") return quantity > 1 ? quantity - 1 : 1;
+      return quantity;
+    });
+  };
   // Get detail product
   useEffect(() => {
     if (checkInputProductId()) {
@@ -55,14 +64,14 @@ function DetailProductPage() {
   // Get related products based on genreId of detail product
   useEffect(() => {
     // Kiểm tra nếu genreId đã tồn tại trước khi gọi API
-    if (detailProduct.genreId) {
+    if (detailProduct.genre_id) {
       const getRelatedProductData = async () => {
         try {
-          const responeRelatedProduct = await getRelatedProductDataService(
+          const responseRelatedProduct = await getRelatedProductDataService(
             productId,
-            detailProduct.genreId
+            detailProduct.genre_id
           );
-          setRelatedProducts(responeRelatedProduct.data.relatedProducts);
+          setRelatedProducts(responseRelatedProduct.data.relatedProducts);
         } catch (error) {
           if (error.response && error.response.status === 404) {
             console.log("Related product not found");
@@ -75,11 +84,30 @@ function DetailProductPage() {
       };
       getRelatedProductData();
     }
-  }, [detailProduct.genreId]);
+  }, [detailProduct.genre_id]);
 
-  useEffect(() => {
-    console.log(relatedProducts);
-  }, [relatedProducts]);
+  // Tim discount tot nhat
+  const getDiscountValueLatest = (discounts) => {
+    let discountLatest = {
+      discountId: null,
+      value: 0,
+    };
+    if (discounts.length > 0) {
+      discounts.forEach((discount) => {
+        let startAt = new Date(discount.start_at);
+        let endAt = new Date(discount.end_at);
+        let day = new Date();
+        if (day >= startAt && day <= endAt) {
+          if (discount.percent_value >= discountLatest.value) {
+            discountLatest.value = discount.percent_value;
+            discountLatest.discountId = discount.discount_id;
+          }
+        }
+      });
+    }
+    return discountLatest;
+  };
+
   return (
     <>
       {!checkInputProductId() ||
@@ -98,9 +126,15 @@ function DetailProductPage() {
             <div id="product_view_detail" className="product-essential">
               <ProductViewEssentialMedia
                 productID={productId}
+                count={count}
+                detailProduct={detailProduct}
+                getDiscountValueLatest={getDiscountValueLatest}
               ></ProductViewEssentialMedia>
               <ProductViewEssentialDetail
                 detailProduct={detailProduct}
+                count={count}
+                handleQuantityChange={handleQuantityChange}
+                getDiscountValueLatest={getDiscountValueLatest}
               ></ProductViewEssentialDetail>
             </div>
           </form>
@@ -109,6 +143,7 @@ function DetailProductPage() {
             className="tabslider-relatedproduct-container"
           >
             <TabsliderTabRelatedProduct
+              getDiscountValueLatest={getDiscountValueLatest}
               relatedProducts={relatedProducts}
             ></TabsliderTabRelatedProduct>
           </div>
