@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../assets/scss/carousel.scss";
 
-export default function ImageCarousel({ product, setDeletedImages }) {
+export default function ImageCarousel({ product, setDeletedImages, errors }) {
   const [activeIndex, setActiveIndex] = useState(0);
   let initialImages = product
     ? [product.image, ...product.alt_images].filter((img) => img !== null)
@@ -153,6 +153,9 @@ export default function ImageCarousel({ product, setDeletedImages }) {
         className="form-control"
         onChange={handleImageInput}
       />
+      {errors && errors.images && (
+        <p style={{ color: "red" }}>{errors.images}</p>
+      )}
       <input
         type="hidden"
         name="main_image_id"

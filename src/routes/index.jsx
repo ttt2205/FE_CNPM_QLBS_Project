@@ -81,27 +81,27 @@ const router = createBrowserRouter([
                     action: addProductAction,
                   },
                   {
-                    path: "sales",
+                    path: "purchase",
                     element: <NhapHangPanel />,
                     loader: nhapHangLoader,
                     errorElement: <ErrorPage />,
                   },
                   {
-                    path: "sales/read/:receiptId",
+                    path: "purchase/read/:receiptId",
                     element: <ChiTietPhieuNhap />,
                     loader: phieuNhapLoader,
                     errorElement: <ErrorPage />,
                   },
                   {
-                    path: "sales/create",
+                    path: "purchase/create",
                     loader: themPhieuNhapLoader,
                     action: createPhieuNhapAction,
                     element: <ThemPhieuNhap />,
                     errorElement: <ErrorPage />,
                   },
                   {
-                    path: "purchase",
-                    element: <div>Purchase</div>,
+                    path: "sales",
+                    element: <div>Sales</div>,
                     errorElement: <ErrorPage />,
                   },
                   {
