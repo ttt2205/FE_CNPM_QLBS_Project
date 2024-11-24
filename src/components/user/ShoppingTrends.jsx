@@ -5,14 +5,14 @@ import RenderContent from "context/RenderContent";
 import "assets/scss/homePageUser.scss";
 import "assets/scss/shoppingTrend.scss";
 import { FaArrowTrendUp } from "react-icons/fa6";
-import { Container, Row, Col, Nav, Breadcrumb } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container, Row, Col, Breadcrumb, Button } from "react-bootstrap";
 import { useFetchBooks } from "config/useFetchBook";
 const ShoppingTrends = () => {
-    const { books, currentPage, totalPages, setCurrentPage } = useFetchBooks(1, 3);
+    const { books, currentPage, totalPages, setCurrentPage } = useFetchBooks(1, 12);
+    console.log(books[0].genre);
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-      };
+    };
 
     return (
         <>
@@ -35,7 +35,10 @@ const ShoppingTrends = () => {
                 </Row>
                 <Row className="mt-3">
                     <Col>
-                        <Nav variant="tabs" defaultActiveKey="all">
+                        {/* <Nav variant="tabs" defaultActiveKey="all">
+                        <Nav.Item>
+                                <Nav.Link as={Link} to="/">Tất cả</Nav.Link>
+                            </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link as={Link} to="/">Văn học</Nav.Link>
                             </Nav.Item>
@@ -45,7 +48,13 @@ const ShoppingTrends = () => {
                             <Nav.Item>
                                 <Nav.Link as={Link} to="/">Manga - Comic</Nav.Link>
                             </Nav.Item>
-                        </Nav>
+                        </Nav> */}
+                        <div className="">
+                            <Button>Tất cả</Button>
+                            <Button>Văn học</Button>
+                            <Button>Tâm lí-Kĩ năng sống</Button>
+                            <Button>Sách giáo khoa</Button>
+                        </div>
                     </Col>
                 </Row>
 
