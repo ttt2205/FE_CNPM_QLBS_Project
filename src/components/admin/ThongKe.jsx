@@ -1,5 +1,5 @@
 import SoLuongNhapChart from "./charts/SoLuongNhapChart";
-
+//het xai
 const ThongKe = () => {
   return (
     <div>
