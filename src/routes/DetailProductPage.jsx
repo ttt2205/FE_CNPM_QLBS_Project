@@ -21,6 +21,7 @@ function DetailProductPage() {
   const [relatedProducts, setRelatedProducts] = useState([]);
   // it uses in Deliveryinfo.jsx for change quantity product
   const [count, setCount] = useState(1);
+  const [address, setAddress] = useState("Hà Nội");
 
   const checkInputProductId = () => {
     const id = Number(productId);
@@ -40,6 +41,7 @@ function DetailProductPage() {
     if (checkInputProductId()) {
       const getDetailProductData = async () => {
         try {
+          console.log(">>>productId ", productId);
           const responeDetailProduct = await getDetailProductDataService(
             productId
           );
@@ -108,6 +110,10 @@ function DetailProductPage() {
     return discountLatest;
   };
 
+  const handleChangeAddress = (newAddress) => {
+    setAddress(newAddress);
+  };
+
   return (
     <>
       {!checkInputProductId() ||
@@ -129,12 +135,14 @@ function DetailProductPage() {
                 count={count}
                 detailProduct={detailProduct}
                 getDiscountValueLatest={getDiscountValueLatest}
+                address={address}
               ></ProductViewEssentialMedia>
               <ProductViewEssentialDetail
                 detailProduct={detailProduct}
                 count={count}
                 handleQuantityChange={handleQuantityChange}
                 getDiscountValueLatest={getDiscountValueLatest}
+                handleChangeAddress={handleChangeAddress}
               ></ProductViewEssentialDetail>
             </div>
           </form>

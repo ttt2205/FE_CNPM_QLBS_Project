@@ -12,6 +12,7 @@ function ProductViewEssentialDetail({
   count,
   handleQuantityChange,
   getDiscountValueLatest,
+  handleChangeAddress,
 }) {
   const [productInfo, setProductInfo] = useState({});
 
@@ -60,6 +61,7 @@ function ProductViewEssentialDetail({
           <DeliveryInfo
             count={count}
             handleQuantityChange={handleQuantityChange}
+            handleChangeAddress={handleChangeAddress}
           ></DeliveryInfo>
         </div>
         <div

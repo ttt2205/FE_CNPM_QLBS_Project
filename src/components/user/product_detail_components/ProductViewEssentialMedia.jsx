@@ -11,6 +11,7 @@ function ProductViewEsstenialMedia({
   count,
   detailProduct,
   getDiscountValueLatest,
+  address,
 }) {
   const [images, setImages] = useState([]);
   const [imageCurrent, setImageCurrent] = useState("");
@@ -66,6 +67,7 @@ function ProductViewEsstenialMedia({
       discountId: bestDiscount.discountId,
       discountValue: bestDiscount.value,
       quantity: count,
+      address: address,
       stockQuantity: detailProduct.stock_quantity,
       imageMain: imageMain,
       title: detailProduct.title,
@@ -89,6 +91,8 @@ function ProductViewEsstenialMedia({
 
     // Lưu giỏ hàng mới vào localStorage
     localStorage.setItem("cart", JSON.stringify(cart));
+    // Lưu địa chỉ client chọn hiện tại
+    localStorage.setItem("addressIsChose", address);
   };
 
   // Kiểm tra số lượng tồn kho
