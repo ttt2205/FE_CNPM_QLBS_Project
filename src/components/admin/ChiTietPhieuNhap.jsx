@@ -7,53 +7,58 @@ export async function loader({ params }) {
   return { receipt: receipt || {}, id };
 }
 
+// "receipt": {
+//     "receipt_id": 1,
+//     "total": 0,
+//     "provider_id": 1,
+//     "createdAt": "2024-11-19T13:12:01.000Z",
+//     "updatedAt": "2024-11-19T13:12:02.000Z",
+//     "batches": [
+//       {
+//         "price": 0,
+//         "book": {
+//           "book_id": 3,
+//           "title": "Faker! What was that????"
+//         },
+//         "detail": {
+//           "quantity": 100
+//         }
+//       }
+//     ],
+//     "provider": {
+//       "name": "Global Books Supply"
+//     }
+//   }
+
 const ChiTietPhieuNhap = () => {
   const { receipt, id } = useLoaderData();
   const navigate = useNavigate();
-  /*
-  {
-                   "details": [
-      {
-        "book_id": 1,
-        "title": "The Great Adventure",
-        "detail": {
-          "quantity": 10,
-          "price": "50000.00"
-        }
-      },
-      {
-        "book_id": 3,
-        "title": "Faker! What was that????",
-        "detail": {
-          "quantity": 10,
-          "price": "100000.00"
-        }
-      }
-    ],
-*/
+
   return (
     <>
       <h1>Chi tiết phiếu nhập</h1>
       <div>Mã phiếu nhập: {id}</div>
       <div className="">Nhà cung cấp: {receipt.provider?.name}</div>
-      <table className="table">
+      <table className="table table-hover">
         <thead>
           <tr>
             <th>Mã sản phẩm</th>
             <th>Tên sản phẩm</th>
             <th>Số lượng</th>
             <th>Giá</th>
+            <th>Thành tiền</th>
           </tr>
         </thead>
         <tbody>
-          {receipt.details.map((detail) => (
-            <tr key={detail.book_id}>
-              <td>{detail.book_id}</td>
-              <td>{detail.title}</td>
-              <td>{detail.detail?.quantity}</td>
+          {receipt.batches.map((batch) => (
+            <tr key={batch.book.book_id}>
+              <td>{batch.book.book_id}</td>
+              <td>{batch.book.title}</td>
+              <td>{batch.detail.quantity}</td>
+              <td>{new Intl.NumberFormat("en-US").format(batch.price || 0)}</td>
               <td>
                 {new Intl.NumberFormat("en-US").format(
-                  detail.detail?.price || 0
+                  (batch.detail?.quantity || 0) * batch.price
                 )}
               </td>
             </tr>
@@ -61,13 +66,12 @@ const ChiTietPhieuNhap = () => {
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan="3">Tổng cộng</td>
+            <td colSpan="4">Tổng cộng</td>
             <td>
               {new Intl.NumberFormat("en-US").format(
-                receipt.details.reduce(
-                  (total, detail) =>
-                    total +
-                    (detail.detail?.quantity || 0) * detail.detail?.price,
+                receipt.batches.reduce(
+                  (total, batch) =>
+                    total + (batch.detail?.quantity || 0) * batch.price,
                   0
                 )
               )}

@@ -133,7 +133,7 @@ export default function NhapHangPanel() {
         />
       </div>
 
-      <table className="table">
+      <table className="table table-hover">
         <thead>
           <tr>
             <th

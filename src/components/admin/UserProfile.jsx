@@ -5,7 +5,7 @@ const UserProfile = () => {
   return (
     <div className="d-flex fs-6">
       <img
-        src="https://via.placeholder.com/30"
+        src="https://robohash.org/279ys55.png?size=200x200"
         alt="profile"
         width={30}
         height={30}

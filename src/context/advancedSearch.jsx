@@ -2,31 +2,31 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import RenderContent from './RenderContent';
 import PaginationComponent from './pagination';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import 'assets/scss/advancedSearch.scss';
+
 const AdvancedSearch = () => {
   const [searchParams] = useSearchParams();
-  const categoryFromUrl = searchParams.get('category'); // Get category from URL query
+  const categoryFromUrl = searchParams.get('category');
   const query = searchParams.get('query');
   const [search, setSearch] = useState('');
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [priceRange, setPriceRange] = useState('');
-  const [categories, setCategories] = useState([]); // Main categories
-  const [childCategories, setChildCategories] = useState([]); // Subcategories
-  const [selectedSupplier, setSelectedSupplier] = useState(''); // Language
+  const [priceRange, setPriceRange] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [childCategories, setChildCategories] = useState([]);
+  const [selectedSupplier, setSelectedSupplier] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
-  const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl || null); // tự động chọn category từ URL
+  const itemsPerPage = 12;  // tăng giảm tùy vào số lượng sản phẩm muốn hiển thị
+  const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedChildCategories, setSelectedChildCategories] = useState([]);
-  
-  // Fetch categories and products from API
+
   useEffect(() => {
     const fetchCategoriesAndProducts = async () => {
       try {
         const [productsResponse, categoriesResponse] = await Promise.all([
           axios.get('http://localhost:8080/api/book?page=1&limit=10000'),
-          axios.get('http://localhost:8080/api/book/genres'),
+          axios.get('http://localhost:8080/api/book/reference/genres'),
         ]);
 
         const books = productsResponse.data.books;
@@ -34,8 +34,8 @@ const AdvancedSearch = () => {
 
         setProducts(books);
         setFilteredProducts(books);
-        setCategories(mainCategories); // Set main categories
-        setChildCategories(subCategories); // Set subcategories
+        setCategories(mainCategories);
+        setChildCategories(subCategories);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -43,23 +43,6 @@ const AdvancedSearch = () => {
 
     fetchCategoriesAndProducts();
   }, []);
-useEffect(() => {
-    if (categoryFromUrl) {
-      const mainCategory = categories.find(cat => cat.name === categoryFromUrl);
-      const subCategory = childCategories.find(subCat => subCat.name === categoryFromUrl);
-  
-      if (mainCategory) {
-        setSelectedCategory(mainCategory.name);
-        setSelectedChildCategories([]); 
-      } else if (subCategory) {
-        const parentCategory = categories.find(cat => cat.genre_id === subCategory.parent_id);
-        if (parentCategory) {
-          setSelectedCategory(parentCategory.name); 
-          setSelectedChildCategories([subCategory.name]); 
-        }
-      }
-    }
-  }, [categoryFromUrl, categories, childCategories]);
   useEffect(() => {
     if (selectedCategory) {
       filterProducts();
@@ -68,18 +51,58 @@ useEffect(() => {
   }, [selectedCategory, products]);
   useEffect(() => {
     filterProducts(); // Lọc lại sản phẩm khi `query` thay đổi
-}, [query]);
+  }, [query]);
+  useEffect(() => {
+    if (categoryFromUrl) {
+      const mainCategory = categories.find(cat => cat.name === categoryFromUrl);
+      const subCategory = childCategories.find(subCat => subCat.name === categoryFromUrl);
+
+      if (mainCategory) {
+        setSelectedCategory([mainCategory.name]);
+        setSelectedChildCategories([]);
+      } else if (subCategory) {
+        const parentCategory = categories.find(cat => cat.genre_id === subCategory.parent_id);
+        if (parentCategory) {
+          setSelectedCategory([parentCategory.name]);
+          setSelectedChildCategories([subCategory.name]);
+        }
+      }
+    }
+  }, [categoryFromUrl, categories, childCategories]);
+
   const handleCategoryChange = (genreName) => {
-    setSelectedCategory(genreName);
-    setSelectedChildCategories([]); 
+    setSelectedCategory(prevState =>
+      prevState.includes(genreName)
+        ? prevState.filter(name => name !== genreName)
+        : [...prevState, genreName]
+    );
+    setSelectedChildCategories([]);
   };
+
   const handleChildCategoryChange = (genreName) => {
     setSelectedChildCategories(prevState =>
       prevState.includes(genreName)
-        ? prevState.filter(name => name !== genreName) 
-        : [...prevState, genreName] 
+        ? prevState.filter(name => name !== genreName)
+        : [...prevState, genreName]
     );
   };
+
+  const handlePriceRangeChange = (range) => {
+    setPriceRange(prevState =>
+      prevState.includes(range)
+        ? prevState.filter(r => r !== range)
+        : [...prevState, range]
+    );
+  };
+
+  const handleSupplierChange = (supplier) => {
+    setSelectedSupplier(prevState =>
+      prevState.includes(supplier)
+        ? prevState.filter(s => s !== supplier)
+        : [...prevState, supplier]
+    );
+  };
+
   const filterProducts = () => {
     let filtered = products;
     if (query) {
@@ -87,38 +110,54 @@ useEffect(() => {
         product.title.toLowerCase().includes(query.toLowerCase().trim())
       );
     }
-    if (selectedCategory) {
-      const selectedMainCategory = categories.find(cat => cat.name === selectedCategory);
-      if (selectedMainCategory) {
-        const mainCategoryId = selectedMainCategory.genre_id;
-        filtered = filtered.filter(product =>
-          product.genre_id === mainCategoryId ||
-          product.genre.parent_id === mainCategoryId
-        );
-      }
+
+    if (selectedCategory.length > 0) {
+      const selectedMainCategories = selectedCategory.map(categoryName =>
+        categories.find(cat => cat.name === categoryName)
+      );
+
+      const mainCategoryIds = selectedMainCategories.map(cat => cat.genre_id);
+      const subCategoryIds = childCategories
+        .filter(subCat => mainCategoryIds.includes(subCat.parent_id))
+        .map(subCat => subCat.genre_id);
+
+      filtered = filtered.filter(product =>
+        mainCategoryIds.includes(product.genre_id) ||
+        subCategoryIds.includes(product.genre_id)
+      );
     }
+
     if (selectedChildCategories.length > 0) {
       filtered = filtered.filter(product =>
         selectedChildCategories.includes(product.genre.name)
       );
     }
-    if (priceRange) {
-      const [min, max] = priceRange.split('-').map(Number);
+
+    if (priceRange.length > 0) {
       filtered = filtered.filter(product => {
-        const productPrice = product.price_receipt + product.price_receipt * product.profit_rate;
-        return productPrice >= min && (!max || productPrice <= max);
+        const productPrice = parseInt(product.sale_price);
+        return priceRange.some(range => {
+          const [min, max] = range.split('-').map(Number);
+          return productPrice >= min && (!max || productPrice <= max);
+        });
       });
     }
-    if (selectedSupplier) {  //tìm theo ngôn ngữ
-      filtered = filtered.filter(product => product.language.language_name === selectedSupplier);
+
+    if (selectedSupplier.length > 0) {
+      filtered = filtered.filter(product =>
+        selectedSupplier.includes(product.language.language_name)
+      );
     }
 
     setFilteredProducts(filtered);
+    
   };
+
   useEffect(() => {
     filterProducts();
+    
   }, [search, selectedCategory, selectedChildCategories, priceRange, selectedSupplier]);
-  //pagination
+
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const currentProducts = filteredProducts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -135,16 +174,15 @@ useEffect(() => {
         <div className="sidebar mt-3">
           <h4 className="fw-b">Lọc theo</h4>
 
-          {/* Main categories */}
           <h5>Danh mục chính</h5>
           <ul className="categories-list">
             {categories.map((category, index) => (
               <li key={`${category.name}-${index}`}>
                 <label>
                   <input
-                    type="radio"
+                    type="checkbox"
                     name="mainCategory"
-                    checked={selectedCategory === category.name}
+                    checked={selectedCategory.includes(category.name)}
                     onChange={() => handleCategoryChange(category.name)}
                   />
                   {category.name}
@@ -153,13 +191,14 @@ useEffect(() => {
             ))}
           </ul>
 
-          {/* Subcategories */}
-          {selectedCategory && childCategories.length > 0 && (
+          {selectedCategory.length > 0 && childCategories.length > 0 && (
             <>
               <h5>Danh mục phụ</h5>
               <ul className="categories-list">
                 {childCategories
-                  .filter(category => category.parent_id === categories.find(cat => cat.name === selectedCategory)?.genre_id)
+                  .filter(category => selectedCategory.some(mainCat =>
+                    categories.find(cat => cat.name === mainCat && cat.genre_id === category.parent_id)
+                  ))
                   .map((category, index) => (
                     <li key={`${category.name}-${index}`}>
                       <label>
@@ -177,16 +216,16 @@ useEffect(() => {
             </>
           )}
 
-          {/* Price range */}
           <h4>Giá</h4>
           <ul className="price-range-list">
             {['0-150000', '150000-300000', '300000-500000', '500000-700000', '700000'].map((range, index) => (
               <li key={index}>
                 <label>
                   <input
-                    type="radio"
+                    type="checkbox"
                     name="price"
-                    onChange={() => setPriceRange(range)}
+                    checked={priceRange.includes(range)}
+                    onChange={() => handlePriceRangeChange(range)}
                   />
                   {range === '700000' ? '700,000đ Trở Lên' : `${range.replace('-', 'đ - ')}đ`}
                 </label>
@@ -194,16 +233,16 @@ useEffect(() => {
             ))}
           </ul>
 
-          {/* Language */}
           <h4>Ngôn ngữ</h4>
           <ul className="suppliers-list">
             {['Vietnamese', 'English', 'French'].map((lang, index) => (
               <li key={index}>
                 <label>
                   <input
-                    type="radio"
+                    type="checkbox"
                     name="supplier"
-                    onChange={() => setSelectedSupplier(lang)}
+                    checked={selectedSupplier.includes(lang)}
+                    onChange={() => handleSupplierChange(lang)}
                   />
                   {lang === 'Vietnamese' ? 'Tiếng Việt' : lang === 'English' ? 'Tiếng Anh' : 'Tiếng Pháp'}
                 </label>

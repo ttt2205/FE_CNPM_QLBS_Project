@@ -25,7 +25,7 @@ const InventoryChart = ({ stockData, totalStock }) => {
     //tra ve gio,phut,ngay, thang, nam
     return `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`; // Format ngày giờ
   });
-  const quantities = stockData.map((entry) => entry.quantity);
+  const quantities = stockData.map((entry) => entry.stock_quantity);
   const prices = stockData.map((entry) => entry.price);
 
   // Cấu hình biểu đồ ApexCharts với các màu sắc và tooltip tùy chỉnh

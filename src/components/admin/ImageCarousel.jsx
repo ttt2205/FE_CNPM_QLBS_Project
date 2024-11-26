@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../assets/scss/carousel.scss";
 
-export default function ImageCarousel({ product, setDeletedImages }) {
+export default function ImageCarousel({ product, setDeletedImages, errors }) {
   const [activeIndex, setActiveIndex] = useState(0);
   let initialImages = product
     ? [product.image, ...product.alt_images].filter((img) => img !== null)
@@ -153,6 +153,9 @@ export default function ImageCarousel({ product, setDeletedImages }) {
         className="form-control"
         onChange={handleImageInput}
       />
+      {errors && errors.images && (
+        <p style={{ color: "red" }}>{errors.images}</p>
+      )}
       <input
         type="hidden"
         name="main_image_id"
@@ -165,7 +168,7 @@ export default function ImageCarousel({ product, setDeletedImages }) {
       />
       <div
         id="carouselImage"
-        className="carousel slide carousel-fade m-auto w-100"
+        className="carousel slide carousel-fade mt-3 w-100"
         data-bs-ride="false"
       >
         <div className="carousel-indicators">{renderIndicators()}</div>
@@ -173,7 +176,7 @@ export default function ImageCarousel({ product, setDeletedImages }) {
       </div>
       <button
         type="button"
-        className={`btn btn-primary mt-2 ${
+        className={`btn btn-primary mt-3 ${
           activeIndex < images.length ? "" : "disabled"
         }`}
         onClick={handleChangeMain}

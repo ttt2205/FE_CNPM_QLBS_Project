@@ -91,7 +91,7 @@ export default function ProductPanel() {
         </div>
       </div>
       <div className="table-responsive-md">
-        <table className="table">
+        <table className="table table-hover">
           <thead>
             <tr>
               <th

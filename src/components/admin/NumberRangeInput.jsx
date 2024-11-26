@@ -7,6 +7,7 @@ const App = ({ className, startNum, setStartNum, endNum, setEndNum }) => {
           defaultValue={startNum}
           onChange={(e) => setStartNum(e.target.value)}
           className="form-control"
+          placeholder="Từ"
         />
       </div>
       <div className={className}>
@@ -15,6 +16,7 @@ const App = ({ className, startNum, setStartNum, endNum, setEndNum }) => {
           defaultValue={endNum}
           onChange={(e) => setEndNum(e.target.value)}
           className="form-control"
+          placeholder="Đến"
         />
       </div>
     </>
