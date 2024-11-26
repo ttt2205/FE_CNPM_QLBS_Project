@@ -11,6 +11,7 @@ export const login = async (email, password) => {
     // console.log(response);
     return response;
   } catch (error) {
+    console.error(error);
     return error.message;
   }
 };
@@ -29,6 +30,7 @@ export const loginWithToken = async (token) => {
     );
     return response.data;
   } catch (error) {
+    console.error(error);
     return error.message;
   }
 };

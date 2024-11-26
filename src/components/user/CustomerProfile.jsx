@@ -22,8 +22,8 @@ function CustomerProfile() {
     const fetchCustomerInfo = async () => {
       try {
         const response = await getCustomerInfoByEmail(
-          auth.customer.email,
-          auth.tokenCustomer
+          auth.user.email,
+          auth.token
         );
         const { firstName, lastName, email, phone_number } =
           response.data.customer;

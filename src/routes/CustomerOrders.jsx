@@ -4,7 +4,7 @@ import { useAuth } from "context/AuthContext";
 import axios from "axios";
 
 const CustomerOrders = () => {
-  const { isLoading, customer } = useAuth();
+  const { user } = useAuth();
   const [selectedOrder, setSelectedOrder] = useState(null); // Đơn hàng được chọn
   const [customerOrders, setCustomerOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState({});
@@ -30,14 +30,12 @@ const CustomerOrders = () => {
   useEffect(() => {
     const getOrder = async () => {
       try {
-        if (customer.email) {
-          const resOrder = async () => {
-            return await axios.get(
-              `${process.env.REACT_APP_BACK_END_LOCALHOST}/api/order/order-by-email?email=${customer.email}`
-            );
-          };
+        if (user && user.email) {
+          const resOrder = await axios.get(
+            `${process.env.REACT_APP_BACK_END_LOCALHOST}/api/order/order-by-email?email=${user.email}`
+          );
+          setCustomerOrders(resOrder.data.customer.orders);
           console.log(">>> res order", resOrder);
-          resOrder();
         }
       } catch (error) {
         console.log(
@@ -48,7 +46,9 @@ const CustomerOrders = () => {
       }
     };
     getOrder();
-  }, [isLoading]);
+  }, [user]);
+
+  useEffect(() => {}, [selectedOrder]);
 
   // Mở modal để xem chi tiết sản phẩm
   const handleShowDetails = (orderId) => {
@@ -57,111 +57,109 @@ const CustomerOrders = () => {
 
   const handleCancelOrder = (orderId) => {};
 
-  if (!isLoading) {
-    return (
-      <div className="container mt-2">
-        <h2 className="mb-4">Đơn hàng của bạn</h2>
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th>Mã đơn hàng</th>
-              <th>Trạng thái</th>
-              <th>Ngày đặt</th>
-              <th>Tổng tiền</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customerOrders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.status}</td>
-                <td>{order.date}</td>
-                <td>${order.total}</td>
-                <td>
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() => handleShowDetails(order.id)}
-                    data-bs-toggle="modal"
-                    data-bs-target="#orderDetailModal"
-                  >
-                    Xem chi tiết
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Modal chi tiết sản phẩm */}
-        <div
-          className="modal fade"
-          id="orderDetailModal"
-          tabIndex="-1"
-          aria-labelledby="orderDetailModalLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="orderDetailModalLabel">
-                  Chi tiết đơn hàng #{selectedOrder}
-                </h5>
+  return (
+    <div className="container mt-2">
+      <h2 className="mb-4">Đơn hàng của bạn</h2>
+      <table className="table table-hover">
+        <thead>
+          <tr>
+            <th>Mã đơn hàng</th>
+            <th>Trạng thái</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          {customerOrders.map((order) => (
+            <tr key={order.order_id}>
+              <td>{order.order_id}</td>
+              <td>{order.status_id}</td>
+              <td>{order.createdAt}</td>
+              <td>${order.total_amount}</td>
+              <td>
                 <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body">
-                {selectedOrder && orderDetails[selectedOrder] ? (
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th>Mã sản phẩm</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Số lượng</th>
-                        <th>Giá</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {orderDetails[selectedOrder].map((item) => (
-                        <tr key={item.id}>
-                          <td>{item.id}</td>
-                          <td>{item.productName}</td>
-                          <td>{item.quantity}</td>
-                          <td>${item.price}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <p>Không tìm thấy chi tiết đơn hàng.</p>
-                )}
-              </div>
-              <div className="modal-footer">
-                {selectedOrder &&
-                  customerOrders.find((order) => order.id === selectedOrder)
-                    ?.status === "Chờ xác nhận" && (
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => alert("Đơn hàng đã bị hủy.")}
-                      data-bs-dismiss="modal"
-                    >
-                      Hủy đơn
-                    </button>
-                  )}
-                <button className="btn btn-secondary" data-bs-dismiss="modal">
-                  Đóng
+                  className="btn btn-primary btn-sm"
+                  onClick={() => handleShowDetails(order.order_id)}
+                  data-bs-toggle="modal"
+                  data-bs-target="#orderDetailModal"
+                >
+                  Xem chi tiết
                 </button>
-              </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Modal chi tiết sản phẩm */}
+      <div
+        className="modal fade"
+        id="orderDetailModal"
+        tabIndex="-1"
+        aria-labelledby="orderDetailModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="orderDetailModalLabel">
+                Chi tiết đơn hàng #{selectedOrder}
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              {selectedOrder && orderDetails[selectedOrder] ? (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Mã sản phẩm</th>
+                      <th>Tên sản phẩm</th>
+                      <th>Số lượng</th>
+                      <th>Giá</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderDetails[selectedOrder].map((item) => (
+                      <tr key={item.id}>
+                        <td>{item.id}</td>
+                        <td>{item.productName}</td>
+                        <td>{item.quantity}</td>
+                        <td>${item.price}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>Không tìm thấy chi tiết đơn hàng.</p>
+              )}
+            </div>
+            <div className="modal-footer">
+              {selectedOrder &&
+                customerOrders.find((order) => order.order_id === selectedOrder)
+                  ?.status === "Chờ xác nhận" && (
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => alert("Đơn hàng đã bị hủy.")}
+                    data-bs-dismiss="modal"
+                  >
+                    Hủy đơn
+                  </button>
+                )}
+              <button className="btn btn-secondary" data-bs-dismiss="modal">
+                Đóng
+              </button>
             </div>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default CustomerOrders;

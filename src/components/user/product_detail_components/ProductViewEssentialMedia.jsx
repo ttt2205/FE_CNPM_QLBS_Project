@@ -5,6 +5,8 @@ import {
   ProductViewPolicy,
 } from "./product_view_essential_media";
 import { getImagesForThumbnail } from "../../../services/detailProductService";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 function ProductViewEsstenialMedia({
   productID,
@@ -93,6 +95,7 @@ function ProductViewEsstenialMedia({
     localStorage.setItem("cart", JSON.stringify(cart));
     // Lưu địa chỉ client chọn hiện tại
     localStorage.setItem("addressIsChose", address);
+    toast.success("Đã thêm vào giỏ hàng !");
   };
 
   // Kiểm tra số lượng tồn kho
@@ -142,14 +145,19 @@ function ProductViewEsstenialMedia({
               <button
                 id="btn-add-to-card"
                 className="btn-add-box"
+                type="button"
                 onClick={handleOnclickButtonAddToCard}
               >
                 <BsCart3 size={20}></BsCart3>
                 <span>Thêm vào giỏ hàng</span>
               </button>
-              <button id="btn-buy" className="btn-add-box">
-                <span>Mua ngay</span>
-              </button>
+              <Link
+                to="/cart"
+                id="btn-buy"
+                className="btn-add-box d-flex justify-content-center align-items-center text-decoration-none"
+              >
+                Mua ngay
+              </Link>
             </div>
           </div>
 

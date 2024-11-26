@@ -3,23 +3,15 @@ import { login } from "../services/authServices";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 
-const LoginAdmin = ({ setUser }) => {
+///***********HET XAI */
+const LoginAdmin = () => {
   const [input, setInput] = useState({
     username: "",
     password: "",
   });
 
   const auth = useAuth();
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (input.username !== "" && input.password !== "") {
-  //     console.log(input);
-  //     auth.loginAction(input);
-  //     return;
-  //   }
-  //   console.log(input);
-  //   alert("please provide a valid input");
-  // };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (input.username !== "" && input.password !== "") {
