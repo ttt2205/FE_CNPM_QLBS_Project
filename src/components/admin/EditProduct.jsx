@@ -70,7 +70,7 @@ export default function EditProduct() {
     const publication_year = form.publication_year.value.trim();
     const images = form.new_images.files;
     //regex
-    const sizeRegex = /^\d{1,3}x\d{1,3}[A-Za-z]{2}$/;
+    const sizeRegex = /^\d{1,3}[Xx]\d{1,3}[A-Za-z]{2}$/;
 
     if (!title.trim()) {
       newErrors.title = "Title is required";
@@ -90,7 +90,11 @@ export default function EditProduct() {
     if (publication_year < 0) {
       newErrors.publication_year = "Publication year must be greater than 0";
     }
-    if (images.length === 0) {
+    if (
+      images.length === 0 &&
+      product.image === null &&
+      product.alt_images.length === 0
+    ) {
       newErrors.images = "At least 1 image is required";
     }
 
@@ -236,11 +240,16 @@ export default function EditProduct() {
                 name="genre_id"
                 defaultValue={product.genre_id}
               >
-                {allReferences.genres.map((genre) => (
-                  <option key={genre.genre_id} value={genre.genre_id}>
-                    {genre.name}
-                  </option>
-                ))}
+                {allReferences.genres.map((genre) => {
+                  let parent = allReferences.genres.find(
+                    (g) => g.genre_id === genre.parent_id
+                  );
+                  return (
+                    <option key={genre.genre_id} value={genre.genre_id}>
+                      {parent ? `${parent.name} - ` : ""} {genre.name}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>
@@ -265,30 +274,21 @@ export default function EditProduct() {
               </select>
             </div>
             <div className="col form-group">
-              <label className="form-label">Cover Format</label>
-              <select className="form-select" name="cover_format_id">
-                {allReferences.coverformats.map((coverformat) => (
-                  <option
-                    key={coverformat.cover_id}
-                    value={coverformat.cover_id}
-                  >
-                    {coverformat.name}
+              <label className="form-label">Authors</label>
+              <select
+                className="form-select"
+                multiple={true}
+                size={3}
+                name="author_id"
+                defaultValue={product.authors.map((a) => a.author_id)}
+              >
+                {allReferences.authors.map((author) => (
+                  <option key={author.author_id} value={author.author_id}>
+                    {author.name}
                   </option>
                 ))}
               </select>
             </div>
-          </div>
-          <div className="form-group">
-            <label className="form-label">Description</label>
-            <textarea
-              type="text"
-              className="form-control"
-              name="decription"
-              defaultValue={product?.decription}
-            />
-            {errors.description && (
-              <p style={{ color: "red" }}>{errors.description}</p>
-            )}
           </div>
         </div>
         <div className="col col-md-auto col-lg-6 d-flex flex-column">
@@ -298,6 +298,30 @@ export default function EditProduct() {
             setDeletedImages={setDeletedImages}
             errors={errors}
           />
+        </div>
+      </div>
+      <div className="row mb-3">
+        <div className="col form-group">
+          <label className="form-label">Cover Format</label>
+          <select className="form-select" name="cover_format_id">
+            {allReferences.coverformats.map((coverformat) => (
+              <option key={coverformat.cover_id} value={coverformat.cover_id}>
+                {coverformat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col form-group">
+          <label className="form-label">Description</label>
+          <textarea
+            type="text"
+            className="form-control"
+            name="decription"
+            defaultValue={product?.decription}
+          />
+          {errors.description && (
+            <p style={{ color: "red" }}>{errors.description}</p>
+          )}
         </div>
       </div>
 

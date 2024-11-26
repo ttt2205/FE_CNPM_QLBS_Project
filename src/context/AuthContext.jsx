@@ -68,7 +68,7 @@ const AuthProvider = () => {
     setToken("");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    navigate("/user-login");
+    navigate("/login");
   };
 
   const loadUserFromLocal = async () => {
@@ -111,7 +111,7 @@ const AuthProvider = () => {
         // navigate("/login");
         //neu location la dashboard thi moi chuyen ve login
         if (location.pathname.includes("/dashboard")) {
-          navigate("/user-login");
+          navigate("/login");
         }
       }
     } catch (err) {

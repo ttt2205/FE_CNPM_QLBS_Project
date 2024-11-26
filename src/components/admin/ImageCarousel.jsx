@@ -168,7 +168,7 @@ export default function ImageCarousel({ product, setDeletedImages, errors }) {
       />
       <div
         id="carouselImage"
-        className="carousel slide carousel-fade m-auto w-100"
+        className="carousel slide carousel-fade mt-3 w-100"
         data-bs-ride="false"
       >
         <div className="carousel-indicators">{renderIndicators()}</div>
@@ -176,7 +176,7 @@ export default function ImageCarousel({ product, setDeletedImages, errors }) {
       </div>
       <button
         type="button"
-        className={`btn btn-primary mt-2 ${
+        className={`btn btn-primary mt-3 ${
           activeIndex < images.length ? "" : "disabled"
         }`}
         onClick={handleChangeMain}
