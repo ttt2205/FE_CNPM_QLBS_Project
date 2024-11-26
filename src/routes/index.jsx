@@ -7,7 +7,9 @@ import AuthProvider from "../context/AuthContext";
 import LoginAdmin from "./LoginAdmin";
 import LoginPage from "./LoginPage";
 import RegisterForm from "./RegisterForm";
+import CustomerOrders from "./CustomerOrders";
 import Home from "./Home";
+import CustomerProfile from "components/user/CustomerProfile";
 import HomePage from "components/user/HomePageUser";
 import UserProfile from "components/admin/UserProfile";
 import Dashboard from "components/admin/Dashboard";
@@ -177,7 +179,7 @@ const router = createBrowserRouter([
           {
             path: "profile",
             //dang xai tam cua admin, sau nay thi tao cai khac va dung loader de tai du lieu
-            element: <UserProfile />,
+            element: <CustomerProfile />,
           },
           {
             path: "detail-product/:productId/:productName",
@@ -186,6 +188,10 @@ const router = createBrowserRouter([
           {
             path: "cart",
             element: <ShoppingCart />,
+          },
+          {
+            path: "order-status",
+            element: <CustomerOrders />,
           },
           {
             path: "shopping-trends",

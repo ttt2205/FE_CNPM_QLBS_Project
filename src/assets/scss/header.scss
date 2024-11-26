@@ -1,8 +1,8 @@
 .header {
     width: 100%;
     background-color: white;
-    padding-bottom: 10px;
-    
+    padding-bottom: 0px;
+
 }
 
 .banner_header {
@@ -33,7 +33,7 @@
     .search-box {
         flex-grow: 1;
         /* Thanh tìm kiếm chiếm nhiều không gian hơn */
-        
+
 
         .input-group {
             display: flex;
@@ -61,6 +61,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+
             svg {
                 font-size: 1.5rem;
                 margin-right: 5px;
@@ -129,10 +130,10 @@
 
         .icon-group a {
             span {
-                display: none; 
+                display: none;
             }
         }
-        
+
     }
 }
 
@@ -145,24 +146,18 @@
 
         .icon-group a {
             span {
-                display: none; 
+                display: none;
             }
         }
-        
+
     }
 }
 
 /* Dành cho tablet (màn hình từ 768px trở lên) */
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-    
-}
+@media only screen and (min-width: 768px) and (max-width: 991px) {}
 
 /* Dành cho laptop nhỏ (màn hình từ 1024px trở lên) */
-@media only screen and (min-width: 992px) and (max-width: 1199px) {
-
-}
+@media only screen and (min-width: 992px) and (max-width: 1199px) {}
 
 /* Dành cho desktop (màn hình từ 1200px trở lên) */
-@media only screen and (min-width: 1200px) {
-    
-}
+@media only screen and (min-width: 1200px) {}
