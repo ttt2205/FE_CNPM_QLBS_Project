@@ -33,15 +33,15 @@ function CartInfo({
       return acc;
     }, {}),
   });
-  const { isLoading, customer, tokenCustomer } = useAuth();
+  const { user, token } = useAuth();
   const navigate = useNavigate();
   const [emailCustomer, setEmailCustomer] = useState("");
 
   // Cập nhật email người dùng
   useEffect(() => {
     try {
-      if (customer.email) {
-        setEmailCustomer(customer.email);
+      if (user.email) {
+        setEmailCustomer(user.email);
       }
     } catch (error) {
       console.log(
@@ -50,7 +50,7 @@ function CartInfo({
         error
       );
     }
-  }, [isLoading]);
+  }, [user]);
 
   // Thay đổi total khi chọn sản phẩm thay đổi
   useEffect(() => {
@@ -218,7 +218,7 @@ function CartInfo({
       const orders = {
         email: emailCustomer || "",
         order: {
-          customer_id: "",
+          user_id: "",
           total_amount: totalPromotion,
           status_id: 1,
           address: addressIsChose,
@@ -290,450 +290,447 @@ function CartInfo({
     }
   };
 
-  if (!isLoading) {
-    return (
-      <div className="cart-info-content row">
-        {/* product-of-cart-info-container */}
-        <div className="col-lg-8 col-sm-12 product-of-cart-info-container">
-          <div className="product-of-cart-info-content">
-            {/* header cart item */}
-            <div className="header-cart-item-container rounded-1 pt-2 pb-2">
-              <div className="header-cart-item-content d-flex flex-column align-items-center rounded-1">
-                <div className="header-cart-item row w-100">
-                  <div className="col-1 d-flex justify-content-center align-items-center">
-                    <input
-                      id="checkbox-all"
-                      type="checkbox"
-                      checked={checkBoxes.selectAll}
-                      onChange={() => {
-                        handlsSelectAllChange();
-                      }}
-                      style={{
-                        width: "15px",
-                        height: "15px",
-                        transform: "scale(1.5)", // Tăng kích thước nếu muốn
-                      }}
-                    />
-                  </div>
-                  <p className="col-6 p-0 m-0 ">
-                    Chọn tất cả ({quantityProductChosen} sản phẩm)
-                  </p>
-                  <p className="col-2 text-center p-0 m-0 ">Số lượng</p>
-                  <p className="col-2 text-center p-0 m-0 ">Thành tiền</p>
-                  <div className="col-1 p-0 m-0"></div>
+  return (
+    <div className="cart-info-content row">
+      {/* product-of-cart-info-container */}
+      <div className="col-lg-8 col-sm-12 product-of-cart-info-container">
+        <div className="product-of-cart-info-content">
+          {/* header cart item */}
+          <div className="header-cart-item-container rounded-1 pt-2 pb-2">
+            <div className="header-cart-item-content d-flex flex-column align-items-center rounded-1">
+              <div className="header-cart-item row w-100">
+                <div className="col-1 d-flex justify-content-center align-items-center">
+                  <input
+                    id="checkbox-all"
+                    type="checkbox"
+                    checked={checkBoxes.selectAll}
+                    onChange={() => {
+                      handlsSelectAllChange();
+                    }}
+                    style={{
+                      width: "15px",
+                      height: "15px",
+                      transform: "scale(1.5)", // Tăng kích thước nếu muốn
+                    }}
+                  />
                 </div>
+                <p className="col-6 p-0 m-0 ">
+                  Chọn tất cả ({quantityProductChosen} sản phẩm)
+                </p>
+                <p className="col-2 text-center p-0 m-0 ">Số lượng</p>
+                <p className="col-2 text-center p-0 m-0 ">Thành tiền</p>
+                <div className="col-1 p-0 m-0"></div>
               </div>
             </div>
-            {/* product-cart-items */}
-            <div className="product-cart-container-left rounded-1">
-              {/* Nội dung của sản phẩm hoặc thông tin khác */}
-              <div className="product-cart-content-left d-flex flex-column align-items-center rounded-1">
-                {/* Items */}
-                {cartProducts ? (
-                  cartProducts.map((cartItem) => (
-                    <div className="product-cart-item row w-100">
-                      <div className="col-1 d-flex justify-content-center align-items-center">
-                        <input
-                          id={cartItem.productID}
-                          type="checkbox"
-                          checked={checkBoxes.items[cartItem.productID]}
-                          onChange={() => {
-                            handleItemChange(cartItem.productID);
-                          }}
-                          style={{
-                            width: "15px",
-                            height: "15px",
-                            transform: "scale(1.5)", // Tăng kích thước nếu muốn
-                          }}
-                        />
-                      </div>
-                      <div className="col-6 p-0 m-0 d-flex align-items-center ">
-                        <div className="product-item d-flex flex-row w-100 h-100 row">
-                          <div className="col-4 item-img">
-                            <img src={cartItem.imageMain} alt="" />
-                          </div>
-                          <div className="item-info col-8">
-                            <p className="item-name">{cartItem.title}</p>
-                            <div className="item-price d-flex flex-row">
-                              {cartItem.discountValue !== 0 ? (
-                                <>
-                                  <p style={{ marginRight: "10px" }}>
-                                    <strong>
-                                      {formatCurrencyVND(
-                                        (cartItem.salePrice *
-                                          (100 - cartItem.discountValue)) /
-                                          100
-                                      )}
-                                    </strong>
-                                  </p>
-                                  <p style={{ textDecoration: "line-through" }}>
+          </div>
+          {/* product-cart-items */}
+          <div className="product-cart-container-left rounded-1">
+            {/* Nội dung của sản phẩm hoặc thông tin khác */}
+            <div className="product-cart-content-left d-flex flex-column align-items-center rounded-1">
+              {/* Items */}
+              {cartProducts ? (
+                cartProducts.map((cartItem) => (
+                  <div className="product-cart-item row w-100">
+                    <div className="col-1 d-flex justify-content-center align-items-center">
+                      <input
+                        id={cartItem.productID}
+                        type="checkbox"
+                        checked={checkBoxes.items[cartItem.productID]}
+                        onChange={() => {
+                          handleItemChange(cartItem.productID);
+                        }}
+                        style={{
+                          width: "15px",
+                          height: "15px",
+                          transform: "scale(1.5)", // Tăng kích thước nếu muốn
+                        }}
+                      />
+                    </div>
+                    <div className="col-6 p-0 m-0 d-flex align-items-center ">
+                      <div className="product-item d-flex flex-row w-100 h-100 row">
+                        <div className="col-4 item-img">
+                          <img src={cartItem.imageMain} alt="" />
+                        </div>
+                        <div className="item-info col-8">
+                          <p className="item-name">{cartItem.title}</p>
+                          <div className="item-price d-flex flex-row">
+                            {cartItem.discountValue !== 0 ? (
+                              <>
+                                <p style={{ marginRight: "10px" }}>
+                                  <strong>
+                                    {formatCurrencyVND(
+                                      (cartItem.salePrice *
+                                        (100 - cartItem.discountValue)) /
+                                        100
+                                    )}
+                                  </strong>
+                                </p>
+                                <p style={{ textDecoration: "line-through" }}>
+                                  {formatCurrencyVND(cartItem.salePrice)}
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <p style={{ marginRight: "10px" }}>
+                                  <strong>
                                     {formatCurrencyVND(cartItem.salePrice)}
-                                  </p>
-                                </>
-                              ) : (
-                                <>
-                                  <p style={{ marginRight: "10px" }}>
-                                    <strong>
-                                      {formatCurrencyVND(cartItem.salePrice)}
-                                    </strong>
-                                  </p>
-                                </>
-                              )}
-                            </div>
+                                  </strong>
+                                </p>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
-                      <div className="col-2 text-center d-flex align-items-center justify-content-center ">
-                        <ChoseQuantityComponent
-                          quantity={cartItem.quantity}
-                          productId={cartItem.productID}
-                          handleQuantityChange={handleQuantityChange}
-                        />
-                      </div>
-                      <div className="col-2 text-center d-flex align-items-center justify-content-center ">
-                        {formatCurrencyVND(cartItem.total)}
-                      </div>
-                      <div className="col-1 p-0 m-0 d-flex align-items-center  justify-content-center">
-                        <ModalComfirmRemoveItemFromCart
-                          productId={cartItem.productID}
-                          productTitle={cartItem.title}
-                          handleRemoveItemFromCart={handleRemoveItemFromCart}
-                        ></ModalComfirmRemoveItemFromCart>
-                      </div>
                     </div>
-                  ))
+                    <div className="col-2 text-center d-flex align-items-center justify-content-center ">
+                      <ChoseQuantityComponent
+                        quantity={cartItem.quantity}
+                        productId={cartItem.productID}
+                        handleQuantityChange={handleQuantityChange}
+                      />
+                    </div>
+                    <div className="col-2 text-center d-flex align-items-center justify-content-center ">
+                      {formatCurrencyVND(cartItem.total)}
+                    </div>
+                    <div className="col-1 p-0 m-0 d-flex align-items-center  justify-content-center">
+                      <ModalComfirmRemoveItemFromCart
+                        productId={cartItem.productID}
+                        productTitle={cartItem.title}
+                        handleRemoveItemFromCart={handleRemoveItemFromCart}
+                      ></ModalComfirmRemoveItemFromCart>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* total-amount */}
+      <div className="col-lg-4 hidden-max-width-992px d-none d-lg-block total-right-container">
+        <div className="total-right-content">
+          <div className="promotion-right-container mb-2">
+            <div className="promotion-right-content">
+              <div className="promotion-title row text-primary pt-2">
+                <div className="col-6 d-flex align-items-center">
+                  <BiSolidDiscount />
+                  &nbsp;&nbsp;KHUYẾN MÃI
+                </div>
+                <div
+                  className="col-6 d-flex align-items-center justify-content-end"
+                  onClick={closeDetailPromotion}
+                  style={{ cursor: "pointer" }}
+                >
+                  Xem&nbsp;thêm&nbsp;&nbsp;&gt;
+                </div>
+              </div>
+              <hr />
+              <div className="promotion-content">
+                <div className="row">
+                  <p className="col-8">{promotionCurrent.promotion_name}</p>
+                  <p className="col-4 d-flex justify-content-end text-primary text-decoration-underline">
+                    Chi tiết
+                  </p>
+                </div>
+                <p className="fs-6 fw-light text-break">
+                  Đơn hàng từ {formatCurrencyVND(promotionCurrent.conditional)}{" "}
+                  - Xem chi tiết để biết thêm về thể lệ chương trình
+                </p>
+                <div className="row">
+                  <div className="col-8">
+                    <div
+                      className="progress progress-sm"
+                      style={{ height: "0.5rem" }}
+                    >
+                      <div
+                        className="progress-bar progress-height-0.5"
+                        style={{
+                          width: `${handleProgress(
+                            promotionCurrent.conditional,
+                            total
+                          )}%`,
+                          height: "0.5rem",
+                        }}
+                        role="progressbar"
+                        aria-valuenow={`${handleProgress(
+                          promotionCurrent.conditional,
+                          total
+                        )}%`}
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                    <p
+                      className="fw-light text-break"
+                      style={{ fontSize: "0.8rem" }}
+                    >
+                      Mua thêm{" "}
+                      {promotionCurrent.conditional - total > 0
+                        ? formatCurrencyVND(
+                            promotionCurrent.conditional - total
+                          )
+                        : 0}{" "}
+                      để nhận mã
+                    </p>
+                  </div>
+                  <div className="col-4 m-0 p-0">
+                    <a
+                      className="btn btn-primary m-0"
+                      style={{
+                        width: "80%",
+                        fontSize: "0.8rem",
+                        wordWrap: "break-word",
+                      }}
+                      href="/"
+                      role="button"
+                    >
+                      Mua&nbsp;thêm
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div className="promotion-matched">
+                <div className="quantity-matched row text-primary m-0">
+                  <p
+                    className="col-10 pl-2 m-0 d-flex align-items-center"
+                    style={{ backgroundColor: "rgba(173, 216, 230, 0.7)" }}
+                  >
+                    &nbsp;&nbsp;{promotionIsEligible} khuyến mãi đủ điều kiện
+                  </p>
+                  <p
+                    className="col-2 m-0 d-flex align-items-center justify-content-end"
+                    style={{ backgroundColor: "rgba(173, 216, 230, 0.7)" }}
+                  >
+                    &gt;
+                  </p>
+                </div>
+                <p
+                  className="fw-light"
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  Áp dụng khuyến mãi khi đủ điều kiện
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="payment-right-container mb-2">
+            <div className="payment-right-content">
+              <div className="payment-title row pt-2">
+                <div className="col-6 d-flex align-items-center">
+                  &nbsp;&nbsp;Thành tiền
+                </div>
+                <div className="col-6 d-flex align-items-center justify-content-end">
+                  {formatCurrencyVND(total)}
+                </div>
+              </div>
+              <hr />
+              <div className="payment-content">
+                <div className="payment-price row pt-2">
+                  <div className="col-8 d-flex align-items-center">
+                    &nbsp;&nbsp;Tổng Số Tiền (Đã Giảm)
+                  </div>
+                  <div className="col-4 d-flex align-items-center justify-content-end fs-5 text-danger">
+                    <strong>{formatCurrencyVND(totalPromotion)}</strong>
+                  </div>
+                </div>
+                {/* Button Thanh Toan */}
+                <button
+                  type="button"
+                  class="btn btn-danger w-100 mt-2 fs-5"
+                  onClick={handleOpenModal}
+                >
+                  <strong>Thanh Toán</strong>
+                </button>
+                {/* THONG BAO CHO NGUOI DUNG DANG NHAP */}
+                {!user ? (
+                  <ModalNotice
+                    header={"Vui lòng đăng nhập"}
+                    content={"Vui lòng đăng nhập để thanh toán!"}
+                    btnAction={"Đăng nhập"}
+                    handleAction={handleLoginUser}
+                    ref={modalThongBaoDangNhap}
+                  />
                 ) : (
-                  <></>
+                  <ModalNotice
+                    header={"Thanh Toán"}
+                    content={"Xác nhận thanh toán!"}
+                    btnAction={"Xác nhận"}
+                    handleAction={handleConfirmPayment}
+                    ref={modalThongBaoDangNhap}
+                  />
                 )}
               </div>
             </div>
           </div>
         </div>
-        {/* total-amount */}
-        <div className="col-lg-4 hidden-max-width-992px d-none d-lg-block total-right-container">
-          <div className="total-right-content">
-            <div className="promotion-right-container mb-2">
-              <div className="promotion-right-content">
-                <div className="promotion-title row text-primary pt-2">
-                  <div className="col-6 d-flex align-items-center">
-                    <BiSolidDiscount />
-                    &nbsp;&nbsp;KHUYẾN MÃI
-                  </div>
-                  <div
-                    className="col-6 d-flex align-items-center justify-content-end"
-                    onClick={closeDetailPromotion}
-                    style={{ cursor: "pointer" }}
-                  >
-                    Xem&nbsp;thêm&nbsp;&nbsp;&gt;
-                  </div>
-                </div>
-                <hr />
-                <div className="promotion-content">
-                  <div className="row">
-                    <p className="col-8">{promotionCurrent.promotion_name}</p>
-                    <p className="col-4 d-flex justify-content-end text-primary text-decoration-underline">
-                      Chi tiết
-                    </p>
-                  </div>
-                  <p className="fs-6 fw-light text-break">
-                    Đơn hàng từ{" "}
-                    {formatCurrencyVND(promotionCurrent.conditional)} - Xem chi
-                    tiết để biết thêm về thể lệ chương trình
-                  </p>
-                  <div className="row">
-                    <div className="col-8">
-                      <div
-                        className="progress progress-sm"
-                        style={{ height: "0.5rem" }}
-                      >
-                        <div
-                          className="progress-bar progress-height-0.5"
-                          style={{
-                            width: `${handleProgress(
-                              promotionCurrent.conditional,
-                              total
-                            )}%`,
-                            height: "0.5rem",
-                          }}
-                          role="progressbar"
-                          aria-valuenow={`${handleProgress(
-                            promotionCurrent.conditional,
-                            total
-                          )}%`}
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
-                      </div>
-                      <p
-                        className="fw-light text-break"
-                        style={{ fontSize: "0.8rem" }}
-                      >
-                        Mua thêm{" "}
-                        {promotionCurrent.conditional - total > 0
-                          ? formatCurrencyVND(
-                              promotionCurrent.conditional - total
-                            )
-                          : 0}{" "}
-                        để nhận mã
-                      </p>
-                    </div>
-                    <div className="col-4 m-0 p-0">
-                      <a
-                        className="btn btn-primary m-0"
-                        style={{
-                          width: "80%",
-                          fontSize: "0.8rem",
-                          wordWrap: "break-word",
-                        }}
-                        href="/"
-                        role="button"
-                      >
-                        Mua&nbsp;thêm
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <hr />
-                <div className="promotion-matched">
-                  <div className="quantity-matched row text-primary m-0">
-                    <p
-                      className="col-10 pl-2 m-0 d-flex align-items-center"
-                      style={{ backgroundColor: "rgba(173, 216, 230, 0.7)" }}
-                    >
-                      &nbsp;&nbsp;{promotionIsEligible} khuyến mãi đủ điều kiện
-                    </p>
-                    <p
-                      className="col-2 m-0 d-flex align-items-center justify-content-end"
-                      style={{ backgroundColor: "rgba(173, 216, 230, 0.7)" }}
-                    >
-                      &gt;
-                    </p>
-                  </div>
-                  <p
-                    className="fw-light"
-                    style={{
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      fontSize: "0.8rem",
-                    }}
-                  >
-                    Áp dụng khuyến mãi khi đủ điều kiện
-                  </p>
-                </div>
-              </div>
+      </div>
+      {/* Detail Promotion */}
+      <div
+        className="detail-promotion-container d-none"
+        ref={detailPromotionContainerRef}
+      >
+        <div className="detail-promotion-content">
+          <div className="promotion-header row text-primary pt-1 mb-2">
+            <div
+              className="col-10 d-flex align-items-center text-center"
+              style={{
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
+            >
+              <BiSolidDiscount />
+              &nbsp;&nbsp;CHỌN KHUYẾN MÃI &nbsp;
             </div>
-            <div className="payment-right-container mb-2">
-              <div className="payment-right-content">
-                <div className="payment-title row pt-2">
-                  <div className="col-6 d-flex align-items-center">
-                    &nbsp;&nbsp;Thành tiền
-                  </div>
-                  <div className="col-6 d-flex align-items-center justify-content-end">
-                    {formatCurrencyVND(total)}
-                  </div>
-                </div>
-                <hr />
-                <div className="payment-content">
-                  <div className="payment-price row pt-2">
-                    <div className="col-8 d-flex align-items-center">
-                      &nbsp;&nbsp;Tổng Số Tiền (Đã Giảm)
-                    </div>
-                    <div className="col-4 d-flex align-items-center justify-content-end fs-5 text-danger">
-                      <strong>{formatCurrencyVND(totalPromotion)}</strong>
-                    </div>
-                  </div>
-                  {/* Button Thanh Toan */}
-                  <button
-                    type="button"
-                    class="btn btn-danger w-100 mt-2 fs-5"
-                    onClick={handleOpenModal}
-                  >
-                    <strong>Thanh Toán</strong>
-                  </button>
-                  {/* THONG BAO CHO NGUOI DUNG DANG NHAP */}
-                  {!customer ? (
-                    <ModalNotice
-                      header={"Vui lòng đăng nhập"}
-                      content={"Vui lòng đăng nhập để thanh toán!"}
-                      btnAction={"Đăng nhập"}
-                      handleAction={handleLoginUser}
-                      ref={modalThongBaoDangNhap}
-                    />
-                  ) : (
-                    <ModalNotice
-                      header={"Thanh Toán"}
-                      content={"Xác nhận thanh toán!"}
-                      btnAction={"Xác nhận"}
-                      handleAction={handleConfirmPayment}
-                      ref={modalThongBaoDangNhap}
-                    />
-                  )}
-                </div>
-              </div>
+            <div className="col-2 d-flex align-items-center justify-content-end">
+              <button
+                type="button"
+                class="btn-close"
+                aria-label="Close"
+                onClick={closeDetailPromotion}
+              ></button>
             </div>
           </div>
-        </div>
-        {/* Detail Promotion */}
-        <div
-          className="detail-promotion-container d-none"
-          ref={detailPromotionContainerRef}
-        >
-          <div className="detail-promotion-content">
-            <div className="promotion-header row text-primary pt-1 mb-2">
-              <div
-                className="col-10 d-flex align-items-center text-center"
-                style={{
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                }}
+          <div className="promotion-search">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Nhập tên khuyến mãi"
+                aria-label="Nhập tên khuyến mãi"
+                aria-describedby="button-addon2"
+              />
+              <button
+                class="btn btn-outline-primary"
+                type="button"
+                id="button-addon2"
               >
-                <BiSolidDiscount />
-                &nbsp;&nbsp;CHỌN KHUYẾN MÃI &nbsp;
-              </div>
-              <div className="col-2 d-flex align-items-center justify-content-end">
-                <button
-                  type="button"
-                  class="btn-close"
-                  aria-label="Close"
-                  onClick={closeDetailPromotion}
-                ></button>
-              </div>
+                Áp dụng
+              </button>
             </div>
-            <div className="promotion-search">
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Nhập tên khuyến mãi"
-                  aria-label="Nhập tên khuyến mãi"
-                  aria-describedby="button-addon2"
-                />
-                <button
-                  class="btn btn-outline-primary"
-                  type="button"
-                  id="button-addon2"
-                >
-                  Áp dụng
-                </button>
-              </div>
-            </div>
-            <div className="scrollable-container">
-              <p className="d-flex justify-content-start">
-                <strong>Mã giảm giá</strong>
-              </p>
-              <div className="promotion-items">
-                {/* Promotion Items */}
-                {promotions.map((promotion) => {
-                  return (
-                    <div
-                      className="card mb-3 promotion-item"
-                      style={{ maxWidth: "100%" }}
-                      key={promotion.id}
-                      onClick={() => {
-                        setPromotionCurrent(promotion);
-                      }}
-                    >
-                      <div className="row g-0">
-                        <div className="col-md-4">
-                          <img
-                            src={`${process.env.PUBLIC_URL}/asset/images/promotionIcon.png`}
-                            className="img-fluid rounded-start"
+          </div>
+          <div className="scrollable-container">
+            <p className="d-flex justify-content-start">
+              <strong>Mã giảm giá</strong>
+            </p>
+            <div className="promotion-items">
+              {/* Promotion Items */}
+              {promotions.map((promotion) => {
+                return (
+                  <div
+                    className="card mb-3 promotion-item"
+                    style={{ maxWidth: "100%" }}
+                    key={promotion.id}
+                    onClick={() => {
+                      setPromotionCurrent(promotion);
+                    }}
+                  >
+                    <div className="row g-0">
+                      <div className="col-md-4">
+                        <img
+                          src={`${process.env.PUBLIC_URL}/asset/images/promotionIcon.png`}
+                          className="img-fluid rounded-start"
+                          style={{
+                            width: "60%",
+                            height: "100%",
+                            objectFit: "contain",
+                          }}
+                          alt="..."
+                        />
+                      </div>
+                      <div className="col-md-8">
+                        <div className="card-body">
+                          <h5 className="card-title text-start ms-0">
+                            {promotion.promotion_name}
+                          </h5>
+                          <p
+                            className="card-text text-start ms-0"
                             style={{
-                              width: "60%",
-                              height: "100%",
-                              objectFit: "contain",
+                              overflow: "hidden",
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
                             }}
-                            alt="..."
-                          />
-                        </div>
-                        <div className="col-md-8">
-                          <div className="card-body">
-                            <h5 className="card-title text-start ms-0">
-                              {promotion.promotion_name}
-                            </h5>
-                            <p
-                              className="card-text text-start ms-0"
-                              style={{
-                                overflow: "hidden",
-                                whiteSpace: "nowrap",
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              Đơn hàng từ{" "}
-                              {formatCurrencyVND(promotion.conditional)} - Xem
-                              chi tiết để biết thêm về thể lệ chương trình
-                            </p>
-                            <p className="card-text text-start ms-0">
-                              <small className="text-muted">
-                                <div className="row">
-                                  <div className="col-8">
+                          >
+                            Đơn hàng từ{" "}
+                            {formatCurrencyVND(promotion.conditional)} - Xem chi
+                            tiết để biết thêm về thể lệ chương trình
+                          </p>
+                          <p className="card-text text-start ms-0">
+                            <small className="text-muted">
+                              <div className="row">
+                                <div className="col-8">
+                                  <div
+                                    className="progress progress-sm"
+                                    style={{ height: "0.5rem" }}
+                                  >
                                     <div
-                                      className="progress progress-sm"
-                                      style={{ height: "0.5rem" }}
-                                    >
-                                      <div
-                                        className="progress-bar progress-height-0.5"
-                                        style={{
-                                          width: `${handleProgress(
-                                            promotion.conditional,
-                                            total
-                                          )}%`,
-                                          height: "0.5rem",
-                                        }}
-                                        role="progressbar"
-                                        aria-valuenow={`${handleProgress(
+                                      className="progress-bar progress-height-0.5"
+                                      style={{
+                                        width: `${handleProgress(
                                           promotion.conditional,
                                           total
-                                        )}%`}
-                                        aria-valuemin="0"
-                                        aria-valuemax="100"
-                                      ></div>
-                                    </div>
-                                    <p
-                                      className="fw-light text-break"
-                                      style={{ fontSize: "0.8rem" }}
-                                    >
-                                      Mua thêm{" "}
-                                      {promotion.conditional - total > 0
-                                        ? formatCurrencyVND(
-                                            promotion.conditional - total
-                                          )
-                                        : 0}{" "}
-                                      để nhận mã
-                                    </p>
-                                  </div>
-                                  <div className="col-4 m-0 p-0">
-                                    <a
-                                      className="btn btn-primary m-0"
-                                      style={{
-                                        width: "80%",
-                                        fontSize: "0.2rem",
-                                        wordWrap: "break-word",
+                                        )}%`,
+                                        height: "0.5rem",
                                       }}
-                                      href="/"
-                                      role="button"
-                                    >
-                                      Mua&nbsp;thêm
-                                    </a>
+                                      role="progressbar"
+                                      aria-valuenow={`${handleProgress(
+                                        promotion.conditional,
+                                        total
+                                      )}%`}
+                                      aria-valuemin="0"
+                                      aria-valuemax="100"
+                                    ></div>
                                   </div>
+                                  <p
+                                    className="fw-light text-break"
+                                    style={{ fontSize: "0.8rem" }}
+                                  >
+                                    Mua thêm{" "}
+                                    {promotion.conditional - total > 0
+                                      ? formatCurrencyVND(
+                                          promotion.conditional - total
+                                        )
+                                      : 0}{" "}
+                                    để nhận mã
+                                  </p>
                                 </div>
-                              </small>
-                            </p>
-                          </div>
+                                <div className="col-4 m-0 p-0">
+                                  <a
+                                    className="btn btn-primary m-0"
+                                    style={{
+                                      width: "80%",
+                                      fontSize: "0.2rem",
+                                      wordWrap: "break-word",
+                                    }}
+                                    href="/"
+                                    role="button"
+                                  >
+                                    Mua&nbsp;thêm
+                                  </a>
+                                </div>
+                              </div>
+                            </small>
+                          </p>
                         </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default CartInfo;

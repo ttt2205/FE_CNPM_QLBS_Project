@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useAuth } from "context/AuthContext";
+import { updateConfirm } from "services/orderConfirmationService";
 import axios from "axios";
 
 const CustomerOrders = () => {
-  const { isLoading, customer } = useAuth();
+  const { user, isLoading } = useAuth();
   const [selectedOrder, setSelectedOrder] = useState(null); // Đơn hàng được chọn
   const [customerOrders, setCustomerOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState({});
@@ -36,10 +37,10 @@ const CustomerOrders = () => {
   useEffect(() => {
     const getOrder = async () => {
       try {
-        if (customer.email) {
+        if (user && user.email) {
           const resOrder = async () => {
             return await axios.get(
-              `${process.env.REACT_APP_BACK_END_LOCALHOST}/api/order/order-by-email?email=${customer.email}`
+              `${process.env.REACT_APP_BACK_END_LOCALHOST}/api/order/order-by-email?email=${user.email}`
             );
           };
           const res = await resOrder();
@@ -53,7 +54,7 @@ const CustomerOrders = () => {
               date: formatDate(new Date(item.createdAt)), // Chuyển đổi ngày
               total: item.total_amount,
             }));
-            setCustomerOrders((prevOrders) => [...prevOrders, ...newOrders]); // Cập nhật state một lần
+            setCustomerOrders([...newOrders]); // Cập nhật state một lần
 
             // Get data orderDetails
             const newOrderDetail = {};
@@ -77,14 +78,26 @@ const CustomerOrders = () => {
       }
     };
     getOrder();
-  }, [isLoading]);
+  }, [user]);
+
+  useEffect(() => {}, [selectedOrder]);
 
   // Mở modal để xem chi tiết sản phẩm
   const handleShowDetails = (orderId) => {
     setSelectedOrder(orderId);
   };
 
-  const handleCancelOrder = (orderId) => {};
+  const handleCancelOrder = async (orderId) => {
+    await updateConfirm(orderId, "cancel");
+    setCustomerOrders((prev) =>
+      prev.map(
+        (item) =>
+          item.id === orderId
+            ? { ...item, status: "Đã hủy" } // Tạo bản sao của item và cập nhật `status`
+            : item // Giữ nguyên các phần tử khác
+      )
+    );
+  };
 
   if (!isLoading) {
     return (
@@ -164,7 +177,7 @@ const CustomerOrders = () => {
                           <td>{item.id}</td>
                           <td>{item.productName}</td>
                           <td>{item.quantity}</td>
-                          <td>${item.price}</td>
+                          <td>{item.price}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -179,8 +192,10 @@ const CustomerOrders = () => {
                     ?.status === "Chờ xác nhận" && (
                     <button
                       className="btn btn-danger"
-                      onClick={() => alert("Đơn hàng đã bị hủy.")}
                       data-bs-dismiss="modal"
+                      onClick={() => {
+                        handleCancelOrder(selectedOrder);
+                      }}
                     >
                       Hủy đơn
                     </button>

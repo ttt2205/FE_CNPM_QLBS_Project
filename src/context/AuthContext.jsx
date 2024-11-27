@@ -8,17 +8,14 @@ const AuthContext = createContext({});
 const AuthProvider = () => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const [customer, setCustomer] = useState(null);
-  const [tokenCustomer, setTokenCustomer] = useState(
-    localStorage.getItem("tokenCustomer") || ""
-  );
-  const [isLoading, setIsLoading] = useState(true); // Thêm trạng thái loading
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const loginAction = async (data) => {
     try {
+      setIsLoading(true);
       const response = await login(data.username, data.password);
       // console.log(response);
       if (response.data) {
@@ -36,6 +33,8 @@ const AuthProvider = () => {
       }
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -47,38 +46,9 @@ const AuthProvider = () => {
     navigate("/login");
   };
 
-  const loginCustomer = async (data) => {
+  const loginFromLocal = async () => {
     try {
-      const response = await login(data.username, data.password);
-      // console.log(response);
-      if (response.data) {
-        if (response.data.user) {
-          toast.success(response.data.message);
-          setCustomer(response.data.user);
-          setTokenCustomer(response.data.token);
-          localStorage.setItem("tokenCustomer", response.data.token);
-          localStorage.setItem("customer", JSON.stringify(response.data.user));
-          navigate("/");
-          return;
-        } else {
-          toast.error(response.data.message);
-        }
-      }
-    } catch (err) {
-      toast.error(err.message);
-    }
-  };
-
-  const logOutCustomer = () => {
-    setCustomer(null);
-    setTokenCustomer("");
-    localStorage.removeItem("tokenCustomer");
-    localStorage.removeItem("customer");
-    navigate("/user-login");
-  };
-
-  const loadUserFromLocal = async () => {
-    try {
+      setIsLoading(true);
       //get user from local storage
       const token = localStorage.getItem("token") || "";
       let data = await loginWithToken(token);
@@ -98,42 +68,19 @@ const AuthProvider = () => {
       }
     } catch (err) {
       console.log("Error: ", err);
-    }
-  };
-
-  const loadCustomerFromLocal = async () => {
-    try {
-      const tokenCheck = localStorage.getItem("tokenCustomer") || "";
-      let data = await loginWithToken(tokenCheck);
-      if (data.token) {
-        localStorage.setItem("tokenCustomer", data.token);
-        localStorage.setItem("customer", JSON.stringify(data.user));
-        setCustomer(data.user);
-        setTokenCustomer(data.token);
-      } else {
-        localStorage.removeItem("tokenCustomer");
-        localStorage.removeItem("customer");
-        if (location.pathname.includes("/dashboard")) {
-          navigate("/user-login");
-        }
-      }
-    } catch (err) {
-      console.log("Error: ", err);
     } finally {
-      setIsLoading(false); // Hoàn tất tải
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    const initializeAuth = async () => {
+    (async () => {
       try {
-        await loadUserFromLocal();
-        await loadCustomerFromLocal();
+        await loginFromLocal();
       } catch (error) {
         console.log(error);
       }
-    };
-    initializeAuth();
+    })();
   }, []);
 
   return (
@@ -141,12 +88,8 @@ const AuthProvider = () => {
       value={{
         token,
         user,
-        tokenCustomer,
-        customer,
         loginAction,
         logOut,
-        loginCustomer,
-        logOutCustomer,
         isLoading,
       }}
     >

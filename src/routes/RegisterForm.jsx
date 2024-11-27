@@ -29,7 +29,7 @@ function RegisterForm() {
     console.log(formData); // In ra các giá trị của các trường input
     const resRegister = await postRegisterCustomer(formData);
     console.log(resRegister); // In ra các giá trị của các trường input
-    navigate("/user-login");
+    navigate("/login");
   };
 
   return (

@@ -158,7 +158,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <LoginAdmin />,
+        element: <LoginPage />,
       },
       {
         path: "/user-login",
@@ -190,7 +190,7 @@ const router = createBrowserRouter([
             element: <ShoppingCart />,
           },
           {
-            path: "order-status",
+            path: "order",
             element: <CustomerOrders />,
           },
           {

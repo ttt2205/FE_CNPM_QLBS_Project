@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function LoginPage() {
+  const { loginAction, user } = useAuth();
   const navigate = useNavigate();
-  const auth = useAuth();
+  if (user) {
+    navigate("/dashboard");
+  }
 
   // State để lưu trữ các giá trị nhập vào
   const [email, setEmail] = useState("");
@@ -20,7 +23,7 @@ function LoginPage() {
 
     // Chuyển hướng nếu đăng nhập thành công (Ví dụ: chuyển đến trang home)
     if (email && password) {
-      auth.loginCustomer({ username: email, password });
+      loginAction({ username: email, password });
     } else {
       alert("Please fill in all fields.");
     }
