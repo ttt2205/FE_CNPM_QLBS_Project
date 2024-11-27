@@ -1,10 +1,3 @@
-import React, { useState, useRef, useEffect } from "react";
-import banner_header from "assets/images/banner.webp";
-import logo from "assets/images/fahasa-logo.webp";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "assets/scss/header.scss";
-import { FaCartPlus } from "react-icons/fa";
-import { FaCircleUser } from "react-icons/fa6";
 // import React, { useState, useRef, useEffect } from 'react';
 // import banner_header from 'assets/images/banner.webp';
 // import logo from 'assets/images/fahasa-logo.webp';
@@ -354,9 +347,6 @@ const Header = () => {
             )}
           </div>
 
-          <div className="col search-box">
-            <ProductSearch containerRef={containerRef} />
-          </div>
           <div className="col search-box">
             <ProductSearch containerRef={containerRef} />
           </div>

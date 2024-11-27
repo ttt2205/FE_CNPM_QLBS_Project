@@ -25,6 +25,12 @@ const CustomerOrders = () => {
   //   102: [{ id: 3, productName: "Headphones", quantity: 1, price: 300 }],
   //   103: [{ id: 4, productName: "Notebook", quantity: 2, price: 50 }],
   // };
+  const formatDate = (date) => {
+    const day = date.getDate().toString().padStart(2, "0"); // Đảm bảo 2 chữ số
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   // Get data order
   useEffect(() => {
@@ -36,8 +42,31 @@ const CustomerOrders = () => {
               `${process.env.REACT_APP_BACK_END_LOCALHOST}/api/order/order-by-email?email=${customer.email}`
             );
           };
-          console.log(">>> res order", resOrder);
-          resOrder();
+          const res = await resOrder();
+          if (res.data.error === 0) {
+            const { orders } = res.data.customer;
+
+            // Get data customerOrder
+            const newOrders = orders.map((item) => ({
+              id: item.order_id,
+              status: item.orderstatus.status_name,
+              date: formatDate(new Date(item.createdAt)), // Chuyển đổi ngày
+              total: item.total_amount,
+            }));
+            setCustomerOrders((prevOrders) => [...prevOrders, ...newOrders]); // Cập nhật state một lần
+
+            // Get data orderDetails
+            const newOrderDetail = {};
+            orders.forEach((item) => {
+              newOrderDetail[item.order_id] = item.batches.map((batche) => ({
+                id: batche.book_id,
+                productName: batche.books.title,
+                quantity: batche.orderdetails.quantity,
+                price: batche.orderdetails.final_price,
+              }));
+            });
+            setOrderDetails(newOrderDetail);
+          }
         }
       } catch (error) {
         console.log(
@@ -61,37 +90,41 @@ const CustomerOrders = () => {
     return (
       <div className="container mt-2">
         <h2 className="mb-4">Đơn hàng của bạn</h2>
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th>Mã đơn hàng</th>
-              <th>Trạng thái</th>
-              <th>Ngày đặt</th>
-              <th>Tổng tiền</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customerOrders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.status}</td>
-                <td>{order.date}</td>
-                <td>${order.total}</td>
-                <td>
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() => handleShowDetails(order.id)}
-                    data-bs-toggle="modal"
-                    data-bs-target="#orderDetailModal"
-                  >
-                    Xem chi tiết
-                  </button>
-                </td>
+        {customerOrders.length === 0 ? (
+          <h6>Hiện tại không có đơn hàng nào</h6>
+        ) : (
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th>Mã đơn hàng</th>
+                <th>Trạng thái</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Hành động</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {customerOrders.map((order) => (
+                <tr key={order.id}>
+                  <td>{order.id}</td>
+                  <td>{order.status}</td>
+                  <td>{order.date}</td>
+                  <td>${order.total}</td>
+                  <td>
+                    <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => handleShowDetails(order.id)}
+                      data-bs-toggle="modal"
+                      data-bs-target="#orderDetailModal"
+                    >
+                      Xem chi tiết
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
 
         {/* Modal chi tiết sản phẩm */}
         <div
