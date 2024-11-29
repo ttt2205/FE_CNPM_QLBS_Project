@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function LoginPage() {
@@ -135,9 +135,9 @@ function LoginPage() {
                   </button>
                   <p className="small fw-bold mt-2 pt-1 mb-0">
                     Don't have an account?{" "}
-                    <a href="register" className="link-danger">
+                    <Link to="/register" className="link-danger">
                       Register
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </form>

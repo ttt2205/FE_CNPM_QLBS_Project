@@ -73,7 +73,10 @@ const AuthProvider = () => {
     }
   };
 
+  let hasRun = false;
   useEffect(() => {
+    if (hasRun) return; // Ngăn chạy lần thứ hai
+    hasRun = true;
     (async () => {
       try {
         await loginFromLocal();

@@ -1,22 +1,39 @@
 import { NavLink } from "react-router-dom";
+import LuotTruyCapChart from "../charts/LuotTruyCapChart";
+import XuHuongChart from "../charts/XuHuongChart";
+import DoanhThuChart from "../charts/DoanhThuChart";
+
+export const navs = [
+  {
+    path: "trending",
+    name: "Xu hướng",
+    element: <XuHuongChart />,
+  },
+  {
+    path: "revenue",
+    name: "Doanh thu",
+    element: <DoanhThuChart />,
+  },
+  {
+    path: "accession",
+    name: "Lượt truy cập",
+    element: <LuotTruyCapChart />,
+  },
+];
 
 export default function Navbar() {
-  const navName = [
-    "Số lượng nhập",
-    "Số lượng bán",
-    "Doanh thu",
-    "Lượt truy cập",
-  ];
+  // const navs = ["Số lượng nhập", "Doanh thu", "Lượt truy cập"];
+
   return (
     <>
       <nav className="w-100 d-flex flex-column">
         <div className="nav nav-tabs" id="nav-tab" role="tablist">
-          {navName.map((name, index) => (
-            <div className="nav-item">
+          {navs.map(({ name, path }) => (
+            <div className="nav-item" key={name}>
               <NavLink
-                to={`${index}`}
+                to={`${path}`}
                 className="nav-link text-dark"
-                activeClassName="active"
+                activeclassname="active"
               >
                 {name}
               </NavLink>

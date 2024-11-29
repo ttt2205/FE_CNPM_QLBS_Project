@@ -22,15 +22,11 @@ const navs = [
   },
   {
     name: "Analytics",
-    link: "thongke",
+    link: "thongke/revenue",
   },
   {
     name: "Accounts",
     link: "accounts",
-  },
-  {
-    name: "Order Confirmation",
-    link: "order-confirmation",
   },
 ];
 
