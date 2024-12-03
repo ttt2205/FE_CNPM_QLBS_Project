@@ -1,14 +1,13 @@
-
 import React from "react";
 import { Pagination } from "react-bootstrap";
 import "assets/scss/pagination.scss";
-/* Phân trang */
+
 const PaginationComponent = ({ totalPages, currentPage, handlePageChange }) => {
     return (
         <>
             {totalPages > 1 && (
                 <Pagination>
-                    {currentPage !== 1 && (
+                    {currentPage > 1 && (
                         <Pagination.First onClick={() => handlePageChange(currentPage - 1)} />
                     )}
                     {Array.from({ length: totalPages }, (_, i) => (
@@ -20,7 +19,7 @@ const PaginationComponent = ({ totalPages, currentPage, handlePageChange }) => {
                             {i + 1}
                         </Pagination.Item>
                     ))}
-                    {currentPage !== totalPages && (
+                    {currentPage < totalPages && (
                         <Pagination.Last onClick={() => handlePageChange(currentPage + 1)} />
                     )}
                 </Pagination>
