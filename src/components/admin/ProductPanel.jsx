@@ -35,7 +35,7 @@ export default function ProductPanel() {
   return (
     <>
       <div id="search-form" role="search">
-        <div className="row">
+        <div className="row mb-3">
           <div className="col col-md-2">
             <select
               name="type"
@@ -54,20 +54,22 @@ export default function ProductPanel() {
             </select>
           </div>
           <div className="col col-md-5">
-            <input
-              id="q"
-              className={searching ? "loading" : ""}
-              aria-label="Search contacts"
-              placeholder="Search"
-              type="search"
-              name="q"
-              defaultValue={formData.q}
-              onChange={(event) => {
-                setFormData({ ...formData, q: event.target.value });
-              }}
-            />
-            <div id="search-spinner" hidden={!searching} aria-hidden />
-            <div className="sr-only" aria-live="polite"></div>
+            <div className="input-group">
+              <span className="input-group-text">
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input
+                id="q"
+                type="text"
+                placeholder="Tìm kiếm"
+                name="q"
+                defaultValue={formData.q}
+                onChange={(event) => {
+                  setFormData({ ...formData, q: event.target.value });
+                }}
+                className="form-control"
+              />
+            </div>
           </div>
           <select
             id="limit"

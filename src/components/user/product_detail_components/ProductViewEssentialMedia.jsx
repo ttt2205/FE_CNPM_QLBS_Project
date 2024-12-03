@@ -95,7 +95,10 @@ function ProductViewEsstenialMedia({
     localStorage.setItem("cart", JSON.stringify(cart));
     // Lưu địa chỉ client chọn hiện tại
     localStorage.setItem("addressIsChose", address);
-    toast.success("Đã thêm vào giỏ hàng !");
+    toast.success("Đã thêm vào giỏ hàng !", {
+      autoClose: 800,
+      pauseOnHover: false,
+    });
   };
 
   // Kiểm tra số lượng tồn kho

@@ -44,6 +44,7 @@ import ThongKe, { navs as thongKeNavs } from "components/admin/thongke/index";
 import OderConfirmation, {
   loader as oderConfirmationLoader,
 } from "components/admin/OderConfirmation";
+import Promotions from "components/admin/promotion";
 
 const router = createBrowserRouter([
   {
@@ -127,6 +128,10 @@ const router = createBrowserRouter([
                     element: <OderConfirmation />,
                     errorElement: <ErrorPage />,
                     loader: oderConfirmationLoader,
+                  },
+                  {
+                    path: "promotions",
+                    element: <Promotions />,
                   },
                 ],
               },
