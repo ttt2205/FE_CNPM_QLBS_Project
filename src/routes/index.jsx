@@ -40,12 +40,11 @@ import AdvancedSearch from "context/advancedSearch";
 import AccountPanel, {
   loader as accountsLoader,
 } from "components/admin/AccountPanel";
-import ThongKe from "components/admin/thongke/index";
-import SoLuongNhapChart from "components/admin/charts/SoLuongNhapChart";
-import LuotTruyCapChart from "components/admin/charts/LuotTruyCapChart";
+import ThongKe, { navs as thongKeNavs } from "components/admin/thongke/index";
 import OderConfirmation, {
   loader as oderConfirmationLoader,
 } from "components/admin/OderConfirmation";
+import Promotions from "components/admin/promotion";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import ResetPasswordForm from "./ResetPasswordForm";
 
@@ -109,36 +108,15 @@ const router = createBrowserRouter([
                     errorElement: <ErrorPage />,
                   },
                   {
-                    path: "sales",
-                    element: <div>Sales</div>,
-                    errorElement: <ErrorPage />,
-                  },
-                  {
                     path: "thongke",
                     element: <ThongKe />,
                     errorElement: <ErrorPage />,
                     children: [
                       {
-                        element: <div>Thong ke page</div>,
                         index: true,
+                        element: <div>Thống kê</div>,
                       },
-                      {
-                        path: "0",
-                        element: <SoLuongNhapChart />,
-                      },
-                      {
-                        path: "1",
-                        element: <div>So luong ban</div>,
-                      },
-                      {
-                        path: "2",
-                        element: <div>Doanh thu</div>,
-                        index: true,
-                      },
-                      {
-                        path: "3",
-                        element: <LuotTruyCapChart />,
-                      },
+                      ...thongKeNavs,
                     ],
                   },
                   {
@@ -148,9 +126,14 @@ const router = createBrowserRouter([
                     errorElement: <ErrorPage />,
                   },
                   {
-                    path: "order-confirmation",
+                    path: "sales",
                     element: <OderConfirmation />,
+                    errorElement: <ErrorPage />,
                     loader: oderConfirmationLoader,
+                  },
+                  {
+                    path: "promotions",
+                    element: <Promotions />,
                   },
                 ],
               },

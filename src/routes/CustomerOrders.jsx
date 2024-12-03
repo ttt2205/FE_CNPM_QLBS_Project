@@ -61,7 +61,7 @@ const CustomerOrders = () => {
             orders.forEach((item) => {
               newOrderDetail[item.order_id] = item.batches.map((batche) => ({
                 id: batche.book_id,
-                productName: batche.books.title,
+                productName: batche.book.title,
                 quantity: batche.orderdetails.quantity,
                 price: batche.orderdetails.final_price,
               }));

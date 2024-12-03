@@ -1,24 +1,51 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 
-const LineChart = () => {
-  // State cho dữ liệu gốc và dữ liệu hiển thị
-  const [originalData, setOriginalData] = useState([]);
-  const [filteredData, setFilteredData] = useState({
-    dates: [],
-    counts: [],
-  });
+// const apiResponse = [
+//   {
+//     date: "2024-01-01",
+//     count: 10,
+//   },
+//   {
+//     date: "2024-01-02",
+//     count: 20,
+//   },
+//   {
+//     date: "2024-01-03",
+//     count: 13,
+//   },
+//   {
+//     date: "2024-02-02",
+//     count: 2,
+//   },
+//   {
+//     date: "2024-03-03",
+//     count: 13,
+//   },
+// ];
 
-  // State cho loại thống kê và giá trị được chọn
-  const [statType, setStatType] = useState("month"); // "month" hoặc "year"
-  const [selectedMonth, setSelectedMonth] = useState("01"); // Mặc định là tháng 1
-  const [selectedYear, setSelectedYear] = useState("2024"); // Mặc định là năm 2024
+const LineChart = () => {
+  let yearOptions = [];
+  let currentYear = new Date().getFullYear();
+  //5 nam truoc den nam hien tai
+  for (let i = 0; i < 5; i++) {
+    yearOptions.push(currentYear - 4 + i);
+  }
+
+  let currentDate = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(
+    currentDate.getMonth() + 1
+  );
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [apiResponse, setApiResponse] = useState([]);
+  const [type, setType] = useState("month");
 
   const [chartData, setChartData] = useState({
     series: [
       {
         name: "Số lượt truy cập",
-        data: [0], // Dữ liệu số lượt truy cập
+        data: [0, 1, 2, 3, 4], // Dữ liệu số lượt truy cập
       },
     ],
     options: {
@@ -28,7 +55,7 @@ const LineChart = () => {
         fontFamily: "inherit",
       },
       xaxis: {
-        categories: ["time"], // Trục thời gian
+        categories: ["khong", "mot", "hai", "ba", "bon"], // Trục thời gian
         title: {
           text: "Ngày/Tháng",
         },
@@ -48,115 +75,86 @@ const LineChart = () => {
     },
   });
 
-  // Tạo dữ liệu mẫu khi component mount
   useEffect(() => {
-    const generateSampleData = () => {
-      const startDate = new Date(2020, 0, 1); // 1/1/2024
-      const days = 365 * 5; // Số ngày
-      let data = [];
+    let year = parseInt(selectedYear);
+    let month = parseInt(selectedMonth);
+    let startDate, endDate;
+    if (type === "month") {
+      startDate = new Date(year, month - 1, 1);
+      endDate = new Date(year, month, 1);
+    } else if (type === "pastYears") {
+      startDate = new Date(year - 4, 0, 1);
+      endDate = new Date(year + 1, 0, 1);
+    } else {
+      startDate = new Date(year, 0, 1);
+      endDate = new Date(year + 1, 0, 1);
+    }
 
-      for (let i = 0; i < days; i++) {
-        const date = new Date(startDate);
-        date.setDate(startDate.getDate() + i);
-        const formattedDate = date.toISOString().split("T")[0]; // Format YYYY-MM-DD
-        data.push({
-          date: formattedDate,
-          count: Math.floor(Math.random() * 50) + 1, // Random lượt truy cập
-        });
+    let fromDate = startDate.toISOString().split("T")[0];
+    let toDate = endDate.toISOString().split("T")[0];
+    (async () => {
+      try {
+        let response = await axios.get(
+          `http://localhost:8080/api/thongke/accession?fromDate=${fromDate}&toDate=${toDate}`
+        );
+        setApiResponse(response.data.dataSet);
+      } catch (error) {
+        console.error(error);
+        return;
       }
+    })();
+  }, [selectedMonth, selectedYear, type]);
 
-      setOriginalData((prevData) => {
-        setChartData((prevState) => ({
-          ...prevState,
-          series: [
-            {
-              ...prevState.series[0],
-              data: data.map((item) => item.count),
-            },
-          ],
-          options: {
-            ...prevState.options,
-            xaxis: {
-              ...prevState.options.xaxis,
-              categories: data.map((item) => item.date),
-            },
-          },
-        }));
+  useEffect(() => {
+    let year = parseInt(selectedYear);
+    let month = parseInt(selectedMonth);
+    if (type === "month") {
+      thongTheoNgayTrongThang(year, month);
+    } else if (type === "year") {
+      thongKeTheoThangTrongNam(year);
+    } else {
+      thongKeTheoCacNam();
+    }
+  }, [apiResponse]);
 
-        return data;
+  const thongTheoNgayTrongThang = (year, month) => {
+    //tao apiData cho chart
+    let counts = [];
+    //so ngay cua thang
+    let daysInMonth = new Date(year, month, 0).getDate();
+    for (let i = 0; i < daysInMonth; i++) {
+      let date = new Date(year, month - 1, i + 1);
+      let count = 0;
+      //tim so luot truy cap cua ngay i
+      let found = apiResponse.find((item) => {
+        let itemDate = new Date(item.date);
+        return itemDate.getDate() === date.getDate();
       });
-    };
-
-    generateSampleData();
-  }, []);
-
-  useEffect(() => {
-    let newData = [];
-    for (let i = 0; i < 12; i++) {
-      newData.push(
-        originalData
-          .filter((item) => {
-            const [year, month] = item.date.split("-");
-            return parseInt(month) === i + 1 && year === selectedYear;
-          })
-          .reduce((sum, item) => sum + item.count, 0)
-      );
+      if (found) {
+        count = found.count;
+      }
+      counts.push(count);
     }
+
+    //update chart data
     setChartData((prevState) => ({
       ...prevState,
       series: [
         {
           ...prevState.series[0],
-          data: newData,
+          data: counts,
         },
       ],
       options: {
         ...prevState.options,
         xaxis: {
           ...prevState.options.xaxis,
-          categories: Array.from({ length: 12 }, (_, i) => {
-            return "Tháng " + (i + 1);
+          categories: Array.from({ length: counts.length }, (_, i) => {
+            return "Ngày " + (i + 1);
           }),
-        },
-        title: {
-          ...prevState.options.title,
-          text: "Thống kê số lượt truy cập năm " + selectedYear,
-        },
-      },
-    }));
-  }, [selectedYear]);
-
-  useEffect(() => {
-    let newData = [];
-    for (let i = 0; i < 31; i++) {
-      newData.push(
-        originalData
-          .filter((item) => {
-            const [year, month, day] = item.date.split("-");
-            return (
-              parseInt(day) === i + 1 &&
-              month === selectedMonth &&
-              year === selectedYear
-            );
-          })
-          .reduce((sum, item) => sum + item.count, 0)
-      );
-    }
-    setChartData((prevState) => ({
-      ...prevState,
-      series: [
-        {
-          ...prevState.series[0],
-          data: newData,
-        },
-      ],
-      options: {
-        ...prevState.options,
-        xaxis: {
-          ...prevState.options.xaxis,
-          categories: Array.from({ length: 31 }, (_, i) => {
-            return "Ngay " + (i + 1);
-          }),
+          title: {
+            text: "Ngày",
+          },
         },
         title: {
           ...prevState.options.title,
@@ -168,7 +166,86 @@ const LineChart = () => {
         },
       },
     }));
-  }, [selectedMonth]);
+  };
+
+  const thongKeTheoThangTrongNam = (year) => {
+    let counts = [];
+    for (let i = 0; i < 12; i++) {
+      let count = apiResponse
+        .filter((item) => {
+          let itemDate = new Date(item.date);
+          return itemDate.getMonth() === i;
+        })
+        .reduce((sum, item) => sum + item.count, 0);
+
+      counts.push(count);
+    }
+
+    setChartData((prevState) => ({
+      ...prevState,
+      series: [
+        {
+          ...prevState.series[0],
+          data: counts,
+        },
+      ],
+      options: {
+        ...prevState.options,
+        xaxis: {
+          ...prevState.options.xaxis,
+          categories: Array.from({ length: 12 }, (_, i) => {
+            return "Tháng " + (i + 1);
+          }),
+          title: {
+            text: "Tháng",
+          },
+        },
+        title: {
+          ...prevState.options.title,
+          text: "Thống kê số lượt truy cập năm " + year,
+        },
+      },
+    }));
+  };
+
+  const thongKeTheoCacNam = () => {
+    let counts = [];
+    for (let i = 0; i < yearOptions.length; i++) {
+      let year = yearOptions[i];
+      let count = apiResponse
+        .filter((item) => {
+          let itemDate = new Date(item.date);
+          return itemDate.getFullYear() === year;
+        })
+        .reduce((sum, item) => sum + item.count, 0);
+
+      counts.push(count);
+    }
+
+    setChartData((prevState) => ({
+      ...prevState,
+      series: [
+        {
+          ...prevState.series[0],
+          data: counts,
+        },
+      ],
+      options: {
+        ...prevState.options,
+        xaxis: {
+          ...prevState.options.xaxis,
+          categories: yearOptions.map((year) => year.toString()).sort(),
+          title: {
+            text: "Năm",
+          },
+        },
+        title: {
+          ...prevState.options.title,
+          text: "Thống kê số lượt truy cập theo năm",
+        },
+      },
+    }));
+  };
 
   return (
     <div>
@@ -177,74 +254,54 @@ const LineChart = () => {
         <div className="col-3">
           <select
             className="form-select"
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
+            value={type}
+            onChange={(e) => setType(e.target.value)}
           >
-            {Array.from({ length: 12 }, (_, i) => {
-              const month = (i + 1).toString().padStart(2, "0");
-              return (
-                <option value={month} key={month}>
-                  Tháng {month}
+            <option value="month">Theo ngày trong tháng</option>
+            <option value="year">Theo tháng trong năm</option>
+            <option value="pastYears">Theo các năm</option>
+          </select>
+        </div>
+        {type === "month" && (
+          <div className="col-3">
+            <select
+              className="form-select"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+            >
+              {Array.from({ length: 12 }, (_, i) => {
+                const month = (i + 1).toString().padStart(2, "0");
+                return (
+                  <option value={month} key={month}>
+                    Tháng {month}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        )}
+        {(type === "month" || type === "year") && (
+          <div className="col-3">
+            <select
+              className="form-select"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+            >
+              {yearOptions.map((year) => (
+                <option value={year} key={year}>
+                  Năm {year}
                 </option>
-              );
-            })}
-          </select>
-        </div>
-        <div className="col-3">
-          <select
-            className="form-select"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-          >
-            {["2021", "2022", "2023", "2024", "2025"].map((year) => (
-              <option value={year} key={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </div>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
-      <button
-        onClick={() => {
-          let newData = [];
-          for (let i = 0; i < 5; i++) {
-            newData.push(
-              originalData
-                .filter((item) => {
-                  const [year] = item.date.split("-");
-                  return year === "202" + i;
-                })
-                .reduce((sum, item) => sum + item.count, 0)
-            );
-          }
-          setChartData((prevState) => ({
-            ...prevState,
-            series: [
-              {
-                ...prevState.series[0],
-                data: newData,
-              },
-            ],
-            options: {
-              ...prevState.options,
-              xaxis: {
-                ...prevState.options.xaxis,
-                categories: Array.from({ length: 5 }, (_, i) => {
-                  return "202" + i;
-                }),
-              },
-            },
-          }));
-        }}
-      >
-        Theo tung nam
-      </button>
       <Chart
         options={chartData.options}
         series={chartData.series}
         type="line"
-        height={350}
+        height={450}
       />
     </div>
   );

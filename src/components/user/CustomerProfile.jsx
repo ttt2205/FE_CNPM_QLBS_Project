@@ -6,6 +6,7 @@ import {
   getCustomerInfoByEmail,
   updateCustomerInfo,
 } from "services/customerService";
+import { Link } from "react-router-dom";
 
 function CustomerProfile() {
   const auth = useAuth(); // Lấy thông tin auth từ context
@@ -154,6 +155,11 @@ function CustomerProfile() {
           )}
         </div>
       </div>
+      {auth.user && auth.user.role.role_name === "Admin" && (
+        <Link to="/dashboard" className="btn btn-primary mt-3">
+          Go to Admin Dashboard
+        </Link>
+      )}
     </div>
   );
 }
