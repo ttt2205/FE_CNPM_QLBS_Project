@@ -18,7 +18,29 @@ function ProductViewEsstenialMedia({
   const [images, setImages] = useState([]);
   const [imageCurrent, setImageCurrent] = useState("");
   const [imageMain, setImageMain] = useState("");
-
+  // begin thêm bởi tiệp để lấy detail product mỗi khi param thay đổi
+  useEffect(() => {
+    const fetchImageForThumbnailData = async () => {
+      try {
+        const ImageRespone = await getImagesForThumbnail(productID);
+        const dataImages = chunksArray(ImageRespone.data.images, 4);
+  
+        for (let i = 0; i < ImageRespone.data.images.length; i++) {
+          if (ImageRespone.data.images[i].is_main === 1) {
+            setImageCurrent(ImageRespone.data.images[i].url);
+            setImageMain(ImageRespone.data.images[i].url);
+            break;
+          }
+        }
+  
+        setImages(dataImages);
+      } catch (error) {
+        console.log("Fetching data thumbnail error = ", error);
+      }
+    };
+    fetchImageForThumbnailData();
+  }, [productID]);
+  //end
   useEffect(() => {
     const fetchImageForThumbnailData = async () => {
       try {

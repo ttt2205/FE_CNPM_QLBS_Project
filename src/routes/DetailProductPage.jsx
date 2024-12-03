@@ -28,7 +28,6 @@ function DetailProductPage() {
     if (!isNaN(id)) return true;
     return false;
   };
-
   const handleQuantityChange = (type) => {
     setCount((quantity) => {
       if (type === "increment") return quantity + 1;
@@ -36,6 +35,32 @@ function DetailProductPage() {
       return quantity;
     });
   };
+  // begin thêm bởi tiệp để lấy detail product mỗi khi param thay đổi
+  useEffect(() => {
+    const getDetailProductData = async () => {
+      if (checkInputProductId()) {
+        try {
+          console.log(">>>productId ", productId);
+          const responeDetailProduct = await getDetailProductDataService(
+            productId
+          );
+          setDetailProduct(responeDetailProduct.data.products);
+        } catch (error) {
+          if (error.response && error.response.status === 404) {
+            console.log("Product not found");
+          } else {
+            console.log(
+              "Error fetching product or related product data:",
+              error.message
+            );
+          }
+        }
+      }
+    };
+  
+    getDetailProductData();
+  }, [productId]); // Thêm productId vào dependency
+  // end 
   // Get detail product
   useEffect(() => {
     if (checkInputProductId()) {

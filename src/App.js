@@ -6,7 +6,7 @@ import * as React from "react";
 import { RouterProvider } from "react-router-dom";
 import AuthProvider from "./context/AuthContext";
 import router from "./routes";
-
+import ScrollToTopButton from "./components/ScrollToTopButton";
 export default function App() {
   // let [user, setUser] = useState();
 
@@ -26,6 +26,7 @@ export default function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <ScrollToTopButton />   
       <ToastContainer />
     </>
   );

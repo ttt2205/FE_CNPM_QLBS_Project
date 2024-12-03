@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import "assets/scss/homePageUser.scss";
 import RenderContent from "context/RenderContent";
 import { useFetchBooks } from "config/useFetchBook";
+import ScrollToTopButton from "components/ScrollToTopButton";
 export default function HomePage() {
   const navigate = useNavigate();
   const { books } = useFetchBooks(1, 8);
@@ -47,28 +48,28 @@ export default function HomePage() {
       <div className="container mt-4">
         <h3>Danh mục sản phẩm</h3>
         <div className="row text-center product-category">
-          <div className="col" onClick={() => handleCategoryClick("Kinh tế")}>
-            <img src={boardgameImg} alt="Kinh tế" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>Kinh tế</p>
+          <div className="col" onClick={() => handleCategoryClick("Adventure")}>
+            <img src={boardgameImg} alt="Adventure" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>Adventure</p>
           </div>
           <div
             className="col"
-            onClick={() => handleCategoryClick("Sách giáo khoa")}
+            onClick={() => handleCategoryClick("Primary School")}
           >
-            <img src={sgkImg} alt="SGK 2024" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>SGK 2024</p>
+            <img src={sgkImg} alt="Primary School" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>Primary School</p>
           </div>
-          <div className="col" onClick={() => handleCategoryClick("Văn học")}>
-            <img src={vanhocImg} alt="Văn học" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>Văn học</p>
+          <div className="col" onClick={() => handleCategoryClick("Secondary School")}>
+            <img src={vanhocImg} alt="Secondary School" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>Secondary School</p>
           </div>
-          <div className="col" onClick={() => handleCategoryClick("Thiếu nhi")}>
-            <img src={thieunhiImg} alt="Thiếu nhi" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>Thiếu nhi</p>
+          <div className="col" onClick={() => handleCategoryClick("High School")}>
+            <img src={thieunhiImg} alt="High School" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>High School</p>
           </div>
-          <div className="col" onClick={() => handleCategoryClick("Ngoại văn")}>
-            <img src={ngoaivanImg} alt="Ngoại văn" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>Ngoại văn</p>
+          <div className="col" onClick={() => handleCategoryClick("Fiction")}>
+            <img src={ngoaivanImg} alt="Fiction" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>Fiction</p>
           </div>
         </div>
       </div>
@@ -86,7 +87,9 @@ export default function HomePage() {
       </div>
       <div className="container-fluid mt-4">
         <div className="border-footer"></div>
+        
       </div>
     </main>
+    
   );
 }
