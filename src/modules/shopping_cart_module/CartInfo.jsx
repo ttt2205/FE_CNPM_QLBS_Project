@@ -411,116 +411,121 @@ function CartInfo({
       {/* total-amount */}
       <div className="col-lg-4 hidden-max-width-992px d-none d-lg-block total-right-container">
         <div className="total-right-content">
-          <div className="promotion-right-container mb-2">
-            <div className="promotion-right-content">
-              <div className="promotion-title row text-primary pt-2">
-                <div className="col-6 d-flex align-items-center">
-                  <BiSolidDiscount />
-                  &nbsp;&nbsp;KHUYẾN MÃI
+          {promotions.length > 0 ? (
+            <div className="promotion-right-container mb-2">
+              <div className="promotion-right-content">
+                <div className="promotion-title row text-primary pt-2">
+                  <div className="col-6 d-flex align-items-center">
+                    <BiSolidDiscount />
+                    &nbsp;&nbsp;KHUYẾN MÃI
+                  </div>
+                  <div
+                    className="col-6 d-flex align-items-center justify-content-end"
+                    onClick={closeDetailPromotion}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Xem&nbsp;thêm&nbsp;&nbsp;&gt;
+                  </div>
                 </div>
-                <div
-                  className="col-6 d-flex align-items-center justify-content-end"
-                  onClick={closeDetailPromotion}
-                  style={{ cursor: "pointer" }}
-                >
-                  Xem&nbsp;thêm&nbsp;&nbsp;&gt;
-                </div>
-              </div>
-              <hr />
-              <div className="promotion-content">
-                <div className="row">
-                  <p className="col-8">{promotionCurrent.promotion_name}</p>
-                  <p className="col-4 d-flex justify-content-end text-primary text-decoration-underline">
-                    Chi tiết
-                  </p>
-                </div>
-                <p className="fs-6 fw-light text-break">
-                  Đơn hàng từ {formatCurrencyVND(promotionCurrent.conditional)}{" "}
-                  - Xem chi tiết để biết thêm về thể lệ chương trình
-                </p>
-                <div className="row">
-                  <div className="col-8">
-                    <div
-                      className="progress progress-sm"
-                      style={{ height: "0.5rem" }}
-                    >
-                      <div
-                        className="progress-bar progress-height-0.5"
-                        style={{
-                          width: `${handleProgress(
-                            promotionCurrent.conditional,
-                            total
-                          )}%`,
-                          height: "0.5rem",
-                        }}
-                        role="progressbar"
-                        aria-valuenow={`${handleProgress(
-                          promotionCurrent.conditional,
-                          total
-                        )}%`}
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <p
-                      className="fw-light text-break"
-                      style={{ fontSize: "0.8rem" }}
-                    >
-                      Mua thêm{" "}
-                      {promotionCurrent.conditional - total > 0
-                        ? formatCurrencyVND(
-                            promotionCurrent.conditional - total
-                          )
-                        : 0}{" "}
-                      để nhận mã
+                <hr />
+                <div className="promotion-content">
+                  <div className="row">
+                    <p className="col-8">{promotionCurrent.promotion_name}</p>
+                    <p className="col-4 d-flex justify-content-end text-primary text-decoration-underline">
+                      Chi tiết
                     </p>
                   </div>
-                  <div className="col-4 m-0 p-0">
-                    <a
-                      className="btn btn-primary m-0"
-                      style={{
-                        width: "80%",
-                        fontSize: "0.8rem",
-                        wordWrap: "break-word",
-                      }}
-                      href="/"
-                      role="button"
-                    >
-                      Mua&nbsp;thêm
-                    </a>
+                  <p className="fs-6 fw-light text-break">
+                    Đơn hàng từ{" "}
+                    {formatCurrencyVND(promotionCurrent.conditional)} - Xem chi
+                    tiết để biết thêm về thể lệ chương trình
+                  </p>
+                  <div className="row">
+                    <div className="col-8">
+                      <div
+                        className="progress progress-sm"
+                        style={{ height: "0.5rem" }}
+                      >
+                        <div
+                          className="progress-bar progress-height-0.5"
+                          style={{
+                            width: `${handleProgress(
+                              promotionCurrent.conditional,
+                              total
+                            )}%`,
+                            height: "0.5rem",
+                          }}
+                          role="progressbar"
+                          aria-valuenow={`${handleProgress(
+                            promotionCurrent.conditional,
+                            total
+                          )}%`}
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        ></div>
+                      </div>
+                      <p
+                        className="fw-light text-break"
+                        style={{ fontSize: "0.8rem" }}
+                      >
+                        Mua thêm{" "}
+                        {promotionCurrent.conditional - total > 0
+                          ? formatCurrencyVND(
+                              promotionCurrent.conditional - total
+                            )
+                          : 0}{" "}
+                        để nhận mã
+                      </p>
+                    </div>
+                    <div className="col-4 m-0 p-0">
+                      <a
+                        className="btn btn-primary m-0"
+                        style={{
+                          width: "80%",
+                          fontSize: "0.8rem",
+                          wordWrap: "break-word",
+                        }}
+                        href="/"
+                        role="button"
+                      >
+                        Mua&nbsp;thêm
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <hr />
-              <div className="promotion-matched">
-                <div className="quantity-matched row text-primary m-0">
+                <hr />
+                <div className="promotion-matched">
+                  <div className="quantity-matched row text-primary m-0">
+                    <p
+                      className="col-10 pl-2 m-0 d-flex align-items-center"
+                      style={{ backgroundColor: "rgba(173, 216, 230, 0.7)" }}
+                    >
+                      &nbsp;&nbsp;{promotionIsEligible} khuyến mãi đủ điều kiện
+                    </p>
+                    <p
+                      className="col-2 m-0 d-flex align-items-center justify-content-end"
+                      style={{ backgroundColor: "rgba(173, 216, 230, 0.7)" }}
+                    >
+                      &gt;
+                    </p>
+                  </div>
                   <p
-                    className="col-10 pl-2 m-0 d-flex align-items-center"
-                    style={{ backgroundColor: "rgba(173, 216, 230, 0.7)" }}
+                    className="fw-light"
+                    style={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      fontSize: "0.8rem",
+                    }}
                   >
-                    &nbsp;&nbsp;{promotionIsEligible} khuyến mãi đủ điều kiện
-                  </p>
-                  <p
-                    className="col-2 m-0 d-flex align-items-center justify-content-end"
-                    style={{ backgroundColor: "rgba(173, 216, 230, 0.7)" }}
-                  >
-                    &gt;
+                    Áp dụng khuyến mãi khi đủ điều kiện
                   </p>
                 </div>
-                <p
-                  className="fw-light"
-                  style={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    fontSize: "0.8rem",
-                  }}
-                >
-                  Áp dụng khuyến mãi khi đủ điều kiện
-                </p>
               </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
           <div className="payment-right-container mb-2">
             <div className="payment-right-content">
               <div className="payment-title row pt-2">

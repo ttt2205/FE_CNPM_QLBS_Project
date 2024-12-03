@@ -124,8 +124,8 @@ function DetailProductPage() {
         </>
       ) : (
         <>
-          <div id="breadscumbs" className="breadscumb-container">
-            <BreadScumb></BreadScumb>
+          <div id="breadscumbs" className="breadscumb-container mb-2">
+            <BreadScumb genreId={detailProduct.genre_id}></BreadScumb>
           </div>
           <form id="product_addToCart_form">
             {/* <!-- begin product view UI --> */}

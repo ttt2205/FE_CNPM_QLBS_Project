@@ -6,6 +6,7 @@ import {
   CartEmpty,
 } from "../modules/shopping_cart_module";
 import { getAllBillPromotions } from "../services/cartService";
+import { toast } from "react-toastify";
 
 function ShoppingCart() {
   const [quantityProductChosen, setQuantityProductChosen] = useState(0);
@@ -53,13 +54,20 @@ function ShoppingCart() {
     setPromotionIsEligible(count);
 
     // Tính toán lại tổng số tiền khi thực hiện áp dụng khuyến mãi đủ điều kiện
-    console.log(">>> promotionCurrent", promotionCurrent);
     if (promotionCurrent.isEligible) {
-      if (promotionCurrent.discount_type === "PhanTram")
-        setTotalPromotion(
-          (total * (100 - promotionCurrent.discount_value)) / 100
-        );
-      else setTotalPromotion(total - promotionCurrent.discount_value);
+      if (promotionCurrent.type === "PhanTram") {
+        setTotalPromotion((total * (100 - promotionCurrent.value)) / 100);
+      } else {
+        let tempTotal = total - promotionCurrent.value;
+        if (tempTotal < 0) {
+          toast.info(
+            `Bạn cần mua thêm ${
+              promotionCurrent.value - total
+            } để áp dụng được giảm giá`
+          );
+          setTotalPromotion(total);
+        } else setTotalPromotion(total - promotionCurrent.value);
+      }
     } else setTotalPromotion(total);
   }, [total, promotionCurrent]);
 

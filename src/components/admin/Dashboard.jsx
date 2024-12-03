@@ -12,10 +12,10 @@ const navs = [
     name: "Products",
     link: "products",
   },
-  {
-    name: "Sales",
-    link: "sales",
-  },
+  // {
+  //   name: "Sales",
+  //   link: "sales",
+  // },
   {
     name: "Purchase",
     link: "purchase",

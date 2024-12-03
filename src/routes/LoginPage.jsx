@@ -106,7 +106,7 @@ function LoginPage() {
                 </div>
 
                 <div className="d-flex justify-content-between align-items-center">
-                  <div className="form-check mb-0">
+                  {/* <div className="form-check mb-0">
                     <input
                       className="form-check-input me-2"
                       type="checkbox"
@@ -117,8 +117,8 @@ function LoginPage() {
                     <label className="form-check-label" for="form2Example3">
                       Remember me
                     </label>
-                  </div>
-                  <a href="#!" className="text-body">
+                  </div> */}
+                  <a href="/forgot-password" className="text-body">
                     Forgot password?
                   </a>
                 </div>
