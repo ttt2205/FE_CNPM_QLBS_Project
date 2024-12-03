@@ -9,6 +9,8 @@ const fakePromotionResponse = [
     conditional: 40000,
     type: "Phan tram",
     value: 10,
+    start_at: "2021-10-01T00:00:00.000Z",
+    end_at: "2025-10-31T00:00:00.000Z",
   },
   {
     billPromotion_id: 2,
@@ -16,6 +18,8 @@ const fakePromotionResponse = [
     conditional: 100000,
     type: "Truc tiep",
     value: 10000,
+    start_at: "2021-10-01T00:00:00.000Z",
+    end_at: "2025-10-31T00:00:00.000Z",
   },
 ];
 
@@ -81,6 +85,8 @@ function Promotion() {
     conditional: 0,
     type: "",
     value: 0,
+    start_at: new Date(),
+    end_at: new Date(),
   });
   const [needReload, setNeedReload] = useState(false);
   const [action, setAction] = useState("new");
@@ -144,7 +150,7 @@ function Promotion() {
     <>
       <h2>Promotion</h2>
       <button
-        className="btn btn-primary"
+        className="btn btn-primary mb-3"
         data-bs-toggle="modal"
         data-bs-target="#promotionModal"
         onClick={() => {
@@ -155,6 +161,8 @@ function Promotion() {
             conditional: 0,
             type: "",
             value: 0,
+            start_at: new Date(),
+            end_at: new Date(),
           });
         }}
       >
@@ -280,6 +288,34 @@ function Promotion() {
                       value={item.conditional}
                       onChange={(e) =>
                         setItem({ ...item, conditional: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="promotionStart" className="form-label">
+                      Start
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={
+                        new Date(item.start_at).toISOString().split("T")[0]
+                      }
+                      onChange={(e) =>
+                        setItem({ ...item, start_at: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="promotionEnd" className="form-label">
+                      End
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={new Date(item.end_at).toISOString().split("T")[0]}
+                      onChange={(e) =>
+                        setItem({ ...item, end_at: e.target.value })
                       }
                     />
                   </div>

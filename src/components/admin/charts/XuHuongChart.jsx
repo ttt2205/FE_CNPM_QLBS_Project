@@ -83,9 +83,10 @@ const PieChart = () => {
       <h2>Tỷ lệ sản phẩm được mua trong khoảng thời gian</h2>
       <div className="row">
         <div className="col-3 d-inline-flex align-items-baseline">
-          <label>Start Date:</label>
+          <label>Start:</label>
           <input
             type="date"
+            className="form-control"
             value={startDate}
             onChange={(e) =>
               setStartDate(new Date(e.target.value).toISOString().split("T")[0])
@@ -93,9 +94,10 @@ const PieChart = () => {
           />
         </div>
         <div className="col-3 d-inline-flex align-items-baseline">
-          <label>End Date:</label>
+          <label>End:</label>
           <input
             type="date"
+            className="form-control"
             value={endDate}
             onChange={(e) =>
               setEndDate(new Date(e.target.value).toISOString().split("T")[0])

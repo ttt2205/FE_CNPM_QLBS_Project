@@ -252,7 +252,7 @@ function CartInfo({
         cartProducts.forEach((item) => {
           orderDetail = {
             order_id: null,
-            book_id: item.productID,
+            book_id: parseInt(item.productID),
             quantity: item.quantity,
             price: item.salePrice,
             discount_id: item.discountId,
@@ -269,7 +269,7 @@ function CartInfo({
         cartProducts.forEach((item) => {
           if (checkboxIsChosen.includes(item.productID)) {
             orderDetail = {
-              book_id: item.productID,
+              book_id: parseInt(item.productID),
               quantity: item.quantity,
               price: item.salePrice,
               discount_id: item.discountId,
