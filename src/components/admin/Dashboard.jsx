@@ -100,7 +100,19 @@ export default function Root() {
             </p>
           )}
         </nav>
+
+        <a
+          id="toggle-sidebar"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById("sidebar").classList.toggle("collapsed");
+          }}
+        >
+          <i class="fa-solid fa-bars"></i>
+        </a>
       </div>
+
       <div
         id="detail"
         className={navigation.state === "loading" ? "loading" : ""}
