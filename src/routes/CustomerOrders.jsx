@@ -99,6 +99,18 @@ const CustomerOrders = () => {
     );
   };
 
+  const handleConfirmReceivedTheGoods = async (orderId) => {
+    await updateConfirm(orderId, "received");
+    setCustomerOrders((prev) =>
+      prev.map(
+        (item) =>
+          item.id === orderId
+            ? { ...item, status: "Đã giao hàng" } // Tạo bản sao của item và cập nhật `status`
+            : item // Giữ nguyên các phần tử khác
+      )
+    );
+  };
+
   if (!isLoading) {
     return (
       <div className="container mt-2">
@@ -188,18 +200,31 @@ const CustomerOrders = () => {
               </div>
               <div className="modal-footer">
                 {selectedOrder &&
+                customerOrders.find((order) => order.id === selectedOrder)
+                  ?.status === "Chờ xác nhận" ? (
+                  <button
+                    className="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    onClick={() => {
+                      handleCancelOrder(selectedOrder);
+                    }}
+                  >
+                    Hủy đơn
+                  </button>
+                ) : (
                   customerOrders.find((order) => order.id === selectedOrder)
-                    ?.status === "Chờ xác nhận" && (
+                    ?.status === "Chờ thanh toán" && (
                     <button
                       className="btn btn-danger"
                       data-bs-dismiss="modal"
                       onClick={() => {
-                        handleCancelOrder(selectedOrder);
+                        handleConfirmReceivedTheGoods(selectedOrder);
                       }}
                     >
-                      Hủy đơn
+                      Đã nhận được hàng
                     </button>
-                  )}
+                  )
+                )}
                 <button className="btn btn-secondary" data-bs-dismiss="modal">
                   Đóng
                 </button>
