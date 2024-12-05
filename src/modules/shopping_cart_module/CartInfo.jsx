@@ -218,8 +218,7 @@ function CartInfo({
       const orders = {
         email: emailCustomer || "",
         order: {
-          user_id: "",
-          total_amount: totalPromotion,
+          total_amount: parseInt(totalPromotion),
           status_id: 1,
           address: addressIsChose,
           billPromotion_id: null,
@@ -251,7 +250,6 @@ function CartInfo({
         let orderDetail = {};
         cartProducts.forEach((item) => {
           orderDetail = {
-            order_id: null,
             book_id: parseInt(item.productID),
             quantity: item.quantity,
             price: item.salePrice,

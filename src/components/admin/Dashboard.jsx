@@ -15,10 +15,11 @@ const navs = [
     link: "products",
     icon: <i className="fa-solid fa-book"></i>,
   },
-  // {
-  //   name: "Sales",
-  //   link: "sales",
-  // },
+  {
+    name: "Sales",
+    link: "sales",
+    icon: <i className="fa-solid fa-shopping-bag"></i>,
+  },
   {
     name: "Purchase",
     link: "purchase",

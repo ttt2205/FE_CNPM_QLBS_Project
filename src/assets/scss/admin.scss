@@ -88,9 +88,9 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: absolute;
   top: 0;
-  right: -100px;
+  right: calc(-4rem - 4px);
   z-index: 1000;
   width: 3rem;
   height: 3rem;
