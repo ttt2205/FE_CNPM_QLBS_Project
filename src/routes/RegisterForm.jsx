@@ -13,42 +13,83 @@ function RegisterForm() {
     confirmPassword: "",
   });
 
-  // State để lưu trữ lỗi của số điện thoại
-  const [phoneError, setPhoneError] = useState("");
+  const [errors, setErrors] = useState({
+    firstname: "",
+    lastname: "",
+    phone_number: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  // Hàm xử lý sự kiện thay đổi giá trị input
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {};
 
-    if (name === "phone_number") {
-      // Kiểm tra số điện thoại
-      if (!/^\d+$/.test(value)) {
-        setPhoneError("Số điện thoại chỉ được chứa chữ số.");
-      } else if (value.length !== 10) {
-        setPhoneError("Số điện thoại phải có đúng 10 chữ số.");
-      } else {
-        setPhoneError(""); // Xóa lỗi nếu hợp lệ
-      }
+    // Kiểm tra không để trống các trường
+    if (!formData.firstname.trim()) {
+      newErrors.firstname = "Tên không được để trống.";
+      isValid = false;
+    }
+    if (!formData.lastname.trim()) {
+      newErrors.lastname = "Họ không được để trống.";
+      isValid = false;
+    }
+    if (!formData.phone_number.trim()) {
+      newErrors.phone_number = "Số điện thoại không được để trống.";
+      isValid = false;
+    } else if (!/^\d{10}$/.test(formData.phone_number)) {
+      newErrors.phone_number = "Số điện thoại phải là số và có đúng 10 chữ số.";
+      isValid = false;
     }
 
+    if (!formData.email.trim()) {
+      newErrors.email = "Email không được để trống.";
+      isValid = false;
+    } else if (!/^[\w.%+-]+@gmail\.com$/i.test(formData.email)) {
+      newErrors.email = "Email phải có định dạng @gmail.com.";
+      isValid = false;
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Mật khẩu không được để trống.";
+      isValid = false;
+    }
+    if (!formData.confirmPassword.trim()) {
+      newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu.";
+      isValid = false;
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu và mật khẩu xác nhận không khớp.";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+    setErrors({ ...errors, [name]: "" }); // Xóa lỗi khi người dùng chỉnh sửa
   };
 
-  // Hàm xử lý khi form được submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (phoneError) {
-      alert("Vui lòng kiểm tra lại số điện thoại.");
+    if (!validateForm()) {
       return;
     }
 
-    const resRegister = await postRegisterCustomer(formData);
-    console.log(resRegister);
-    navigate("/login");
+    try {
+      const resRegister = await postRegisterCustomer(formData);
+      console.log(resRegister);
+      navigate("/login");
+    } catch (error) {
+      console.error("Lỗi khi đăng ký:", error);
+    }
   };
 
   return (
@@ -66,8 +107,10 @@ function RegisterForm() {
             name="firstname"
             value={formData.firstname}
             onChange={handleChange}
-            required
           />
+          {errors.firstname && (
+            <small className="text-danger">{errors.firstname}</small>
+          )}
         </div>
 
         <div className="mb-3">
@@ -81,8 +124,10 @@ function RegisterForm() {
             name="lastname"
             value={formData.lastname}
             onChange={handleChange}
-            required
           />
+          {errors.lastname && (
+            <small className="text-danger">{errors.lastname}</small>
+          )}
         </div>
 
         <div className="mb-3">
@@ -96,9 +141,10 @@ function RegisterForm() {
             name="phone_number"
             value={formData.phone_number}
             onChange={handleChange}
-            required
           />
-          {phoneError && <small className="text-danger">{phoneError}</small>}
+          {errors.phone_number && (
+            <small className="text-danger">{errors.phone_number}</small>
+          )}
         </div>
 
         <div className="mb-3">
@@ -112,8 +158,10 @@ function RegisterForm() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            required
           />
+          {errors.email && (
+            <small className="text-danger">{errors.email}</small>
+          )}
         </div>
 
         <div className="mb-3">
@@ -127,8 +175,10 @@ function RegisterForm() {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            required
           />
+          {errors.password && (
+            <small className="text-danger">{errors.password}</small>
+          )}
         </div>
 
         <div className="mb-3">
@@ -142,8 +192,10 @@ function RegisterForm() {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
-            required
           />
+          {errors.confirmPassword && (
+            <small className="text-danger">{errors.confirmPassword}</small>
+          )}
         </div>
 
         <div className="mb-3 form-check">
