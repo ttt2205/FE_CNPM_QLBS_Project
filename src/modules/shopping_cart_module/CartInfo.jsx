@@ -58,7 +58,7 @@ function CartInfo({
   // Thay đổi total khi chọn sản phẩm thay đổi
   useEffect(() => {
     handleTotal(); // This will recalculate the total whenever the `checkBoxes` state changes
-  }, [checkBoxes, refreshKey]);
+  }, [checkBoxes, cartProducts]);
 
   const handleQuantityChange = (type, productId, count, setCount) => {
     if (type === "increment") {
@@ -149,14 +149,13 @@ function CartInfo({
   // Hàm tính total khi chọn sản phẩm
   const handleTotal = () => {
     const bookIsCheckBox = checkCheckBoxIsChecked();
-
     const newTotal = cartProducts.reduce((totalPrice, key) => {
       if (bookIsCheckBox.includes(key.productID)) {
         return totalPrice + key.total;
       }
       return totalPrice;
     }, 0);
-
+    console.log("newTotal", newTotal);
     handleChangeTotal(newTotal);
   };
 
