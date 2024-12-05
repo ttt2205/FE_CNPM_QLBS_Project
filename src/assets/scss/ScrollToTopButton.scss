@@ -1,52 +1,52 @@
 /* CSS cho hiệu ứng lắc ngang */
-@keyframes shake-horizontal {
+// @keyframes shake-horizontal {
 
-    0%,
-    100% {
-        transform: translateX(0);
-        /* Vị trí ban đầu */
-    }
+//     0%,
+//     100% {
+//         transform: translateX(0);
+//         /* Vị trí ban đầu */
+//     }
 
-    25% {
-        transform: translateX(-5px);
-        /* Dịch sang trái */
-    }
+//     25% {
+//         transform: translateX(-5px);
+//         /* Dịch sang trái */
+//     }
 
-    50% {
-        transform: translateX(5px);
-        /* Dịch sang phải */
-    }
+//     50% {
+//         transform: translateX(5px);
+//         /* Dịch sang phải */
+//     }
 
-    75% {
-        transform: translateX(-5px);
-        /* Dịch sang trái */
-    }
-}
+//     75% {
+//         transform: translateX(-5px);
+//         /* Dịch sang trái */
+//     }
+// }
 
-/* CSS cho hiệu ứng lắc dọc */
-@keyframes shake-vertical {
+// /* CSS cho hiệu ứng lắc dọc */
+// @keyframes shake-vertical {
 
-    0%,
-    100% {
-        transform: translateY(0);
-        /* Vị trí ban đầu */
-    }
+//     0%,
+//     100% {
+//         transform: translateY(0);
+//         /* Vị trí ban đầu */
+//     }
 
-    25% {
-        transform: translateY(-5px);
-        /* Dịch lên */
-    }
+//     25% {
+//         transform: translateY(-5px);
+//         /* Dịch lên */
+//     }
 
-    50% {
-        transform: translateY(5px);
-        /* Dịch xuống */
-    }
+//     50% {
+//         transform: translateY(5px);
+//         /* Dịch xuống */
+//     }
 
-    75% {
-        transform: translateY(-5px);
-        /* Dịch lên */
-    }
-}
+//     75% {
+//         transform: translateY(-5px);
+//         /* Dịch lên */
+//     }
+// }
 
 /* Áp dụng hiệu ứng khi nút hiển thị */
 .scroll-to-top {

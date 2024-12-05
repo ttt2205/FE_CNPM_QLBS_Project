@@ -193,9 +193,14 @@ const router = createBrowserRouter([
           {
             path: "products",
             element: <AdvancedSearch />,
-          },
+          }
         ],
       },
+
+      {
+        path: "coming-soon",
+        element: <div>Coming soon</div>,
+      }
     ],
   },
 ]);
