@@ -80,6 +80,10 @@ const ThemPhieuNhap = () => {
   };
 
   const handleChangePrice = (e, book_id) => {
+    if (e.target.value.includes("-")) {
+      e.target.value = "";
+      return;
+    }
     const found = purchaseDetails.find((item) => item.book_id === book_id);
 
     if (found) {
@@ -89,16 +93,42 @@ const ThemPhieuNhap = () => {
     }
   };
 
+  const validateForm = (provider_id) => {
+    if (provider_id === "") {
+      toast.error("Vui lòng chọn nhà cung cấp!");
+      return false;
+    }
+    if (purchaseDetails.length === 0) {
+      toast.error("Vui lòng chọn sản phẩm!");
+      return false;
+    }
+    for (let item of purchaseDetails) {
+      if (item.quantity <= 0) {
+        toast.error("Số lượng sản phẩm phải lớn hơn 0!");
+        return false;
+      }
+      if (item.price <= 0) {
+        toast.error("Giá nhập phải lớn hơn 0!");
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let json = JSON.stringify(purchaseDetails);
     let provider_id = document.getElementById("provider_id").value;
+    if (!validateForm(provider_id)) return;
+
     let formData = new FormData();
     formData.append("purchaseDetails", json);
     formData.append("provider_id", provider_id);
     submit(formData, {
       method: "POST",
     });
+    navigate(-1);
   };
 
   useEffect(() => {
@@ -123,10 +153,9 @@ const ThemPhieuNhap = () => {
       </div>
 
       <Form className="w-100">
-        <div>
+        {/* <div>
           <input
             id="q"
-            // className={searching ? "loading" : ""}
             aria-label="Search contacts"
             placeholder="Search"
             type="search"
@@ -136,8 +165,25 @@ const ThemPhieuNhap = () => {
               setFormData({ ...formData, q: event.target.value, page: 1 });
             }}
           />
-          {/* <div id="search-spinner" hidden={!searching} aria-hidden /> */}
+          {/* <div id="search-spinner" hidden={!searching} aria-hidden /> 
           <div className="sr-only" aria-live="polite"></div>
+        </div> */}
+        <div className="input-group mb-3 col">
+          <span className="input-group-text">
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </span>
+          <input
+            id="q"
+            aria-label="Search contacts"
+            placeholder="Search"
+            type="text"
+            name="q"
+            defaultValue={""}
+            onChange={(event) => {
+              setFormData({ ...formData, q: event.target.value, page: 1 });
+            }}
+            className="form-control"
+          />
         </div>
       </Form>
 
@@ -219,6 +265,7 @@ const ThemPhieuNhap = () => {
                 <td>
                   <input
                     type="number"
+                    className="form-control"
                     value={book.quantity}
                     onChange={(e) => handleChangeQuantity(e, book.book_id)}
                     min={1}
@@ -228,6 +275,7 @@ const ThemPhieuNhap = () => {
                 <td>
                   <input
                     type="number"
+                    className="form-control"
                     value={book.price}
                     onChange={(e) => handleChangePrice(e, book.book_id)}
                     min={0}
@@ -307,6 +355,7 @@ const ThemPhieuNhap = () => {
                 type="submit"
                 className="btn btn-primary"
                 form="formChiTietPhieuNhap"
+                data-bs-dismiss="modal"
               >
                 Lưu
               </button>

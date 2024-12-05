@@ -15,10 +15,11 @@ const navs = [
     link: "products",
     icon: <i className="fa-solid fa-book"></i>,
   },
-  // {
-  //   name: "Sales",
-  //   link: "sales",
-  // },
+  {
+    name: "Sales",
+    link: "sales",
+    icon: <i className="fa-solid fa-shopping-bag"></i>,
+  },
   {
     name: "Purchase",
     link: "purchase",
@@ -99,7 +100,19 @@ export default function Root() {
             </p>
           )}
         </nav>
+
+        <a
+          id="toggle-sidebar"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById("sidebar").classList.toggle("collapsed");
+          }}
+        >
+          <i class="fa-solid fa-bars"></i>
+        </a>
       </div>
+
       <div
         id="detail"
         className={navigation.state === "loading" ? "loading" : ""}

@@ -45,7 +45,8 @@ const CustomerOrders = () => {
           };
           const res = await resOrder();
           if (res.data.error === 0) {
-            const { orders } = res.data.customer;
+            let { orders } = res.data.customer;
+            orders = orders.sort((a, b) => b.order_id - a.order_id); // Sắp xếp theo id giảm dần
 
             // Get data customerOrder
             const newOrders = orders.map((item) => ({
@@ -132,7 +133,19 @@ const CustomerOrders = () => {
               {customerOrders.map((order) => (
                 <tr key={order.id}>
                   <td>{order.id}</td>
-                  <td>{order.status}</td>
+                  <td>
+                    <p
+                      className={
+                        order.status === "Chờ xác nhận"
+                          ? "text-warning"
+                          : order.status === "Đã thanh toán"
+                          ? "text-success"
+                          : "text-danger"
+                      }
+                    >
+                      {order.status}
+                    </p>
+                  </td>
                   <td>{order.date}</td>
                   <td>${order.total}</td>
                   <td>

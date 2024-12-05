@@ -8,7 +8,11 @@ import { useLoaderData } from "react-router-dom";
 import Pagination from "./Pagination";
 
 export async function loader() {
-  const ordersData = await getOrders();
+  let ordersData = await getOrders();
+  ordersData?.orders.sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+  console.log(">>> ordersData: ", ordersData);
   return { ordersData };
 }
 
@@ -27,14 +31,15 @@ function OderConfirmation() {
   const [selectedOrder, setSelectedOrder] = useState(null); // Đơn hàng được chọn
   const [orderDetails, setOrderDetails] = useState({});
   const totalPages = Math.ceil(orderArranged.length / pagination.itemsPerPage);
-  const [arrangeMethod, setArrangeMethod] = useState("asc");
+  const [arrangeMethod, setArrangeMethod] = useState("desc");
   const [inputSearch, setInputSearch] = useState("");
 
-  const [selectedValue, setSelectedValue] = useState("order_id"); // Lưu giá trị đã chọn
+  const [selectedValue, setSelectedValue] = useState("createdAt"); // Lưu giá trị đã chọn
   const options = [
     { OderId: "order_id" },
     { CustomerId: "customer_id" },
     { TotalAmount: "total_amount" },
+    { "Ngày đặt hàng": "createdAt" },
   ];
 
   // Dữ liệu mẫu: danh sách đơn hàng của Customer
@@ -65,7 +70,7 @@ function OderConfirmation() {
     ordersData.orders.forEach((item) => {
       newOrderDetail[item.order_id] = item.batches.map((batche) => ({
         id: batche.book_id,
-        productName: batche.books.title,
+        productName: batche.book.title,
         quantity: batche.orderdetails.quantity,
         price: batche.orderdetails.final_price,
       }));
@@ -229,9 +234,10 @@ function OderConfirmation() {
             aria-label="Default select example"
             value={selectedValue}
             onChange={handleOnchangeOptionValue}
+            defaultValue={selectedValue}
           >
             {options.map((option) => (
-              <option value={Object.values(option)}>
+              <option value={Object.values(option)} key={Object.values(option)}>
                 {Object.keys(option)}
               </option>
             ))}
@@ -242,7 +248,7 @@ function OderConfirmation() {
             className="form-select"
             style={{ width: "35%", marginLeft: "0.5rem" }}
             aria-label="Default select example"
-            // value={arrangeMethod}
+            defaultValue={arrangeMethod}
             onChange={handleChangeArrangedMethod}
           >
             <option value="asc">Tăng dần</option>
@@ -324,10 +330,6 @@ function OderConfirmation() {
                   ) : orderStatus[oder.order_id] === 3 ? (
                     <button type="button" className="btn btn-secondary">
                       Đã thanh toán
-                    </button>
-                  ) : orderStatus[oder.order_id] === 4 ? (
-                    <button type="button" className="btn btn-secondary">
-                      Đã giao hàng
                     </button>
                   ) : (
                     <button type="button" className="btn btn-secondary">

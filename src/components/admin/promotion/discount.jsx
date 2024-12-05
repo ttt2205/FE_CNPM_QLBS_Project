@@ -160,7 +160,7 @@ function Discounts() {
     <>
       <h2>Discount</h2>
       <button
-        className="btn btn-primary"
+        className="btn btn-primary mb-3"
         data-bs-toggle="modal"
         data-bs-target="#discountModal"
         onClick={() => {
