@@ -36,6 +36,9 @@ function CartInfo({
   const { user, token } = useAuth();
   const navigate = useNavigate();
   const [emailCustomer, setEmailCustomer] = useState("");
+  const [address, setAddress] = useState(
+    localStorage.getItem("addressIsChose")
+  );
 
   // Cập nhật email người dùng
   useEffect(() => {
@@ -55,7 +58,7 @@ function CartInfo({
   // Thay đổi total khi chọn sản phẩm thay đổi
   useEffect(() => {
     handleTotal(); // This will recalculate the total whenever the `checkBoxes` state changes
-  }, [checkBoxes, refreshKey]);
+  }, [checkBoxes, cartProducts]);
 
   const handleQuantityChange = (type, productId, count, setCount) => {
     if (type === "increment") {
@@ -146,14 +149,13 @@ function CartInfo({
   // Hàm tính total khi chọn sản phẩm
   const handleTotal = () => {
     const bookIsCheckBox = checkCheckBoxIsChecked();
-
     const newTotal = cartProducts.reduce((totalPrice, key) => {
       if (bookIsCheckBox.includes(key.productID)) {
         return totalPrice + key.total;
       }
       return totalPrice;
     }, 0);
-
+    console.log("newTotal", newTotal);
     handleChangeTotal(newTotal);
   };
 
@@ -213,14 +215,15 @@ function CartInfo({
   // Thực hiện xác nhận thanh toán
   const handleConfirmPayment = async () => {
     try {
-      console.log(">>> emailCustomer", emailCustomer);
-      let addressIsChose = localStorage.getItem("addressIsChose");
+      if (!address) {
+        return;
+      }
       const orders = {
         email: emailCustomer || "",
         order: {
           total_amount: parseInt(totalPromotion),
           status_id: 1,
-          address: addressIsChose,
+          address: address,
           billPromotion_id: null,
         },
         orderDetails: [],
@@ -286,6 +289,11 @@ function CartInfo({
     } catch (error) {
       console.log(">>> Error handleConfirmPayment", error);
     }
+  };
+
+  // Thay doi dia chi giao hang cua customer
+  const handleChangeAddress = (address) => {
+    setAddress(address);
   };
 
   return (
@@ -564,9 +572,11 @@ function CartInfo({
                 ) : (
                   <ModalNotice
                     header={"Thanh Toán"}
-                    content={"Xác nhận thanh toán!"}
+                    content={"Nhập địa chỉ giao hàng!"}
                     btnAction={"Xác nhận"}
                     handleAction={handleConfirmPayment}
+                    handleAddress={handleChangeAddress}
+                    address={address}
                     ref={modalThongBaoDangNhap}
                   />
                 )}

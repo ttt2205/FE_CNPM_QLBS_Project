@@ -33,6 +33,14 @@ const CustomerOrders = () => {
     return `${day}/${month}/${year}`;
   };
 
+  // Format currency VND
+  function formatCurrencyVND(number) {
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  }
+
   // Get data order
   useEffect(() => {
     const getOrder = async () => {
@@ -228,7 +236,7 @@ const CustomerOrders = () => {
                           <td>{item.id}</td>
                           <td>{item.productName}</td>
                           <td>{item.quantity}</td>
-                          <td>{item.price}</td>
+                          <td>{formatCurrencyVND(item.price)}</td>
                         </tr>
                       ))}
                     </tbody>

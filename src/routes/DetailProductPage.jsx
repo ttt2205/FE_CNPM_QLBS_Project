@@ -57,10 +57,10 @@ function DetailProductPage() {
         }
       }
     };
-  
+
     getDetailProductData();
   }, [productId]); // Thêm productId vào dependency
-  // end 
+  // end
   // Get detail product
   useEffect(() => {
     if (checkInputProductId()) {
@@ -171,15 +171,19 @@ function DetailProductPage() {
               ></ProductViewEssentialDetail>
             </div>
           </form>
-          <div
-            id="tabslider_tab_relatedproduct"
-            className="tabslider-relatedproduct-container"
-          >
-            <TabsliderTabRelatedProduct
-              getDiscountValueLatest={getDiscountValueLatest}
-              relatedProducts={relatedProducts}
-            ></TabsliderTabRelatedProduct>
-          </div>
+          {relatedProducts.length > 0 ? (
+            <div
+              id="tabslider_tab_relatedproduct"
+              className="tabslider-relatedproduct-container"
+            >
+              <TabsliderTabRelatedProduct
+                getDiscountValueLatest={getDiscountValueLatest}
+                relatedProducts={relatedProducts}
+              ></TabsliderTabRelatedProduct>
+            </div>
+          ) : (
+            <></>
+          )}
           <div
             id="product_view_review"
             className="product-view-review-container"

@@ -3,7 +3,10 @@ import { AiOutlineBell } from "react-icons/ai";
 
 // Sử dụng forwardRef để truyền ref xuống component con
 const ModalNotice = forwardRef(
-  ({ header, content, btnAction, handleAction }, ref) => {
+  (
+    { header, content, btnAction, handleAction, handleAddress, address },
+    ref
+  ) => {
     const closeModal = () => {
       if (ref.current) {
         // Kiểm tra xem phần tử có lớp "d-none" hay chưa
@@ -52,6 +55,37 @@ const ModalNotice = forwardRef(
           >
             {content}
           </div>
+          {header === "Thanh Toán" ? (
+            <>
+              <div className="input-group input-group-sm mb-2">
+                <span className="input-group-text" id="inputGroup-sizing-sm">
+                  Address
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-sm"
+                  value={address}
+                  onChange={(e) => {
+                    handleAddress(e.currentTarget.value);
+                  }}
+                />
+              </div>
+              {address === "" ? (
+                <p
+                  className="w-100 mb-1"
+                  style={{ color: "red", textAlign: "start" }}
+                >
+                  Vui lòng nhập địa chỉ nhận hàng!
+                </p>
+              ) : (
+                <></>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
           <div
             className="btn-modal modal-footer w-100"
             style={{
