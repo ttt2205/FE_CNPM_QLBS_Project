@@ -305,19 +305,21 @@ function OderConfirmation() {
                   {orderStatus[oder.order_id] === 1 ? (
                     <>
                       <button
+                        id={oder.order_id}
                         type="button"
                         className="btn btn-success"
-                        onClick={() => {
-                          handleConfirmOrder(oder.order_id, "confirm");
+                        onClick={(e) => {
+                          handleShowDetails(e.currentTarget.id);
                         }}
                       >
                         Confirm
                       </button>
                       <button
+                        id={oder.order_id}
                         type="button"
                         className="btn btn-danger"
-                        onClick={() => {
-                          handleCancelOrder(oder.order_id, "cancel");
+                        onClick={(e) => {
+                          handleShowDetails(e.currentTarget.id);
                         }}
                       >
                         Cancel
@@ -404,12 +406,42 @@ function OderConfirmation() {
               </div>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
+              {selectedOrder && orderStatus[selectedOrder] === 1 ? (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={() => {
+                      handleConfirmOrder(selectedOrder, "confirm");
+                    }}
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={() => {
+                      handleCancelOrder(selectedOrder, "cancel");
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : orderStatus[selectedOrder] === 2 ? (
+                <button type="button" className="btn btn-secondary">
+                  Chờ thanh toán
+                </button>
+              ) : orderStatus[selectedOrder] === 3 ? (
+                <button type="button" className="btn btn-secondary">
+                  Đã thanh toán
+                </button>
+              ) : (
+                <button type="button" className="btn btn-secondary">
+                  Đã hủy
+                </button>
+              )}
+              <button className="btn btn-secondary" data-bs-dismiss="modal">
+                Đóng
               </button>
             </div>
           </div>

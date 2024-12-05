@@ -36,6 +36,9 @@ function CartInfo({
   const { user, token } = useAuth();
   const navigate = useNavigate();
   const [emailCustomer, setEmailCustomer] = useState("");
+  const [address, setAddress] = useState(
+    localStorage.getItem("addressIsChose")
+  );
 
   // Cập nhật email người dùng
   useEffect(() => {
@@ -213,14 +216,15 @@ function CartInfo({
   // Thực hiện xác nhận thanh toán
   const handleConfirmPayment = async () => {
     try {
-      console.log(">>> emailCustomer", emailCustomer);
-      let addressIsChose = localStorage.getItem("addressIsChose");
+      if (!address) {
+        return;
+      }
       const orders = {
         email: emailCustomer || "",
         order: {
           total_amount: parseInt(totalPromotion),
           status_id: 1,
-          address: addressIsChose,
+          address: address,
           billPromotion_id: null,
         },
         orderDetails: [],
@@ -286,6 +290,11 @@ function CartInfo({
     } catch (error) {
       console.log(">>> Error handleConfirmPayment", error);
     }
+  };
+
+  // Thay doi dia chi giao hang cua customer
+  const handleChangeAddress = (address) => {
+    setAddress(address);
   };
 
   return (
@@ -564,9 +573,11 @@ function CartInfo({
                 ) : (
                   <ModalNotice
                     header={"Thanh Toán"}
-                    content={"Xác nhận thanh toán!"}
+                    content={"Nhập địa chỉ giao hàng!"}
                     btnAction={"Xác nhận"}
                     handleAction={handleConfirmPayment}
+                    handleAddress={handleChangeAddress}
+                    address={address}
                     ref={modalThongBaoDangNhap}
                   />
                 )}
