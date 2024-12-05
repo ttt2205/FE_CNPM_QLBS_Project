@@ -47,6 +47,32 @@ const CustomerOrders = () => {
           if (res.data.error === 0) {
             let { orders } = res.data.customer;
             orders = orders.sort((a, b) => b.order_id - a.order_id); // Sắp xếp theo id giảm dần
+            orders = orders.map((order) => {
+              const arr = order.batches;
+              let uniqueArr = arr.filter((item, index) => {
+                let foundIndex = arr.findIndex(
+                  (t) => t.book_id === item.book_id
+                );
+                return foundIndex === index;
+              });
+              uniqueArr = uniqueArr.map((item) => {
+                const quantity = arr.reduce((total, t) => {
+                  if (t.book_id === item.book_id) {
+                    total += t.orderdetails.quantity;
+                  }
+                  return total;
+                }, 0);
+                return {
+                  ...item,
+                  orderdetails: {
+                    ...item.orderdetails,
+                    quantity,
+                  },
+                };
+              });
+              order.batches = uniqueArr;
+              return order;
+            });
 
             // Get data customerOrder
             const newOrders = orders.map((item) => ({
@@ -106,7 +132,7 @@ const CustomerOrders = () => {
       prev.map(
         (item) =>
           item.id === orderId
-            ? { ...item, status: "Đã giao hàng" } // Tạo bản sao của item và cập nhật `status`
+            ? { ...item, status: "Đã thanh toán" } // Tạo bản sao của item và cập nhật `status`
             : item // Giữ nguyên các phần tử khác
       )
     );

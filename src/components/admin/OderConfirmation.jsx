@@ -62,12 +62,38 @@ function OderConfirmation() {
   // Gan status cho cac don hang
   useEffect(() => {
     // Gan order tu api
-    setOrders([...ordersData.orders]);
-    setOrderArranged([...ordersData.orders]);
+    let orders = ordersData.orders;
+    orders = orders.map((order) => {
+      const arr = order.batches;
+      let uniqueArr = arr.filter((item, index) => {
+        let foundIndex = arr.findIndex((t) => t.book_id === item.book_id);
+        return foundIndex === index;
+      });
+      uniqueArr = uniqueArr.map((item) => {
+        const quantity = arr.reduce((total, t) => {
+          if (t.book_id === item.book_id) {
+            total += t.orderdetails.quantity;
+          }
+          return total;
+        }, 0);
+        return {
+          ...item,
+          orderdetails: {
+            ...item.orderdetails,
+            quantity,
+          },
+        };
+      });
+      order.batches = uniqueArr;
+      return order;
+    });
+
+    setOrders([...orders]);
+    setOrderArranged([...orders]);
 
     // Get data orderDetails
     const newOrderDetail = {};
-    ordersData.orders.forEach((item) => {
+    orders.forEach((item) => {
       newOrderDetail[item.order_id] = item.batches.map((batche) => ({
         id: batche.book_id,
         productName: batche.book.title,
@@ -78,7 +104,7 @@ function OderConfirmation() {
     setOrderDetails(newOrderDetail);
 
     // Gán orderStatus
-    const newOrderStatus = ordersData.orders.reduce((acc, order) => {
+    const newOrderStatus = orders.reduce((acc, order) => {
       acc[order.order_id] = order.status_id;
       return acc;
     }, {});
@@ -384,7 +410,8 @@ function OderConfirmation() {
                         <th>Mã sản phẩm</th>
                         <th>Tên sản phẩm</th>
                         <th>Số lượng</th>
-                        <th>Giá</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -394,6 +421,9 @@ function OderConfirmation() {
                           <td>{item.productName}</td>
                           <td>{item.quantity}</td>
                           <td>{formatCurrencyVND(item.price)}</td>
+                          <td>
+                            {formatCurrencyVND(item.price * item.quantity)}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
