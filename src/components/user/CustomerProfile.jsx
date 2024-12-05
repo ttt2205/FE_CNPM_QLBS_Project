@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "context/AuthContext";
-import axios from "axios";
-
 import {
   getCustomerInfoByEmail,
   updateCustomerInfo,
@@ -9,7 +7,7 @@ import {
 import { Link } from "react-router-dom";
 
 function CustomerProfile() {
-  const auth = useAuth(); // Lấy thông tin auth từ context
+  const auth = useAuth();
   const [user, setUser] = useState({
     firstname: "",
     lastname: "",
@@ -18,6 +16,7 @@ function CustomerProfile() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(user);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchCustomerInfo = async () => {
@@ -33,8 +32,13 @@ function CustomerProfile() {
           lastname: lastName,
           email: email,
           phoneNumber: phone_number,
-        }); // Cập nhật dữ liệu người dùng
-        setFormData(response.data); // Đồng bộ formData
+        });
+        setFormData({
+          firstname: firstName,
+          lastname: lastName,
+          email: email,
+          phoneNumber: phone_number,
+        });
       } catch (error) {
         console.error("Error fetching customer info:", error);
       }
@@ -43,21 +47,50 @@ function CustomerProfile() {
   }, [auth]);
 
   useEffect(() => {
-    console.log("user", user);
-    setFormData(user); // Đồng bộ formData
+    setFormData(user);
   }, [user]);
+
+  const validateFields = () => {
+    const newErrors = {};
+
+    if (!formData.firstname.trim()) {
+      newErrors.firstname = "Vui lòng không để trống.";
+    }
+    if (!formData.lastname.trim()) {
+      newErrors.lastname = "Vui lòng không để trống.";
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = "Vui lòng không để trống.";
+    } else if (!/^[\w.%+-]+@gmail\.com$/i.test(formData.email)) {
+      newErrors.email = "Email phải có dạng @gmail.com.";
+    }
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Vui lòng không để trống.";
+    } else if (!/^\d{10}$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber =
+        "Số điện thoại phải là số và có đúng 10 kí tự.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name !== "email") setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: "" }); // Xóa lỗi khi người dùng sửa lại
   };
 
   const handleEditClick = () => setIsEditing(true);
 
   const handleSaveClick = async () => {
+    if (!validateFields()) {
+      return;
+    }
+
     try {
-      const response = await updateCustomerInfo(formData, auth.tokenCustomer);
-      setUser(formData); // Lưu thay đổi vào state chính
+      await updateCustomerInfo(formData, auth.token);
+      setUser(formData);
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating customer info:", error);
@@ -65,8 +98,9 @@ function CustomerProfile() {
   };
 
   const handleCancelClick = () => {
-    setFormData(user); // Hoàn tác thay đổi
+    setFormData(user);
     setIsEditing(false);
+    setErrors({});
   };
 
   return (
@@ -90,6 +124,9 @@ function CustomerProfile() {
                 onChange={handleInputChange}
                 disabled={!isEditing}
               />
+              {errors.firstname && (
+                <small className="text-danger">{errors.firstname}</small>
+              )}
             </div>
             <div className="mb-3">
               <label htmlFor="lastname" className="form-label">
@@ -104,6 +141,9 @@ function CustomerProfile() {
                 onChange={handleInputChange}
                 disabled={!isEditing}
               />
+              {errors.lastname && (
+                <small className="text-danger">{errors.lastname}</small>
+              )}
             </div>
             <div className="mb-3">
               <label htmlFor="email" className="form-label">
@@ -118,6 +158,9 @@ function CustomerProfile() {
                 onChange={handleInputChange}
                 disabled={!isEditing}
               />
+              {errors.email && (
+                <small className="text-danger">{errors.email}</small>
+              )}
             </div>
             <div className="mb-3">
               <label htmlFor="phoneNumber" className="form-label">
@@ -132,6 +175,9 @@ function CustomerProfile() {
                 onChange={handleInputChange}
                 disabled={!isEditing}
               />
+              {errors.phoneNumber && (
+                <small className="text-danger">{errors.phoneNumber}</small>
+              )}
             </div>
           </form>
         </div>
@@ -148,7 +194,10 @@ function CustomerProfile() {
               >
                 Save
               </button>
-              <button className="btn btn-secondary" onClick={handleCancelClick}>
+              <button
+                className="btn btn-secondary"
+                onClick={handleCancelClick}
+              >
                 Cancel
               </button>
             </>

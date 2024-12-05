@@ -5,6 +5,7 @@ import { CiMail } from "react-icons/ci";
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaPinterest } from "react-icons/fa";
 import book_img from 'assets/images/book.png';
 
+import { Link } from 'react-router-dom';
 const Footer = () => {
     return (
         <footer className="footer container mt-5 border_top ">
@@ -62,18 +63,24 @@ const Footer = () => {
                     <div className="col-md-4">
                         <h5>Dịch vụ</h5>
                         <ul className="list-unstyled">
-                            <li className="mb-2 text-white"><a href="/">Điều khoản sử dụng</a></li>
-                            <li className="mb-2 text-white"><a href="/">Chính sách bảo mật thông tin cá nhân</a></li>
-                            <li className="mb-2 text-white"><a href="/">Chính sách bảo mật thanh toán</a></li>
+                            <li className="mb-2 text-white"><Link to="/coming-soon">Điều khoản sử dụng</Link>
+                            </li>
+                            <li className="mb-2 text-white"><Link to="/coming-soon">Chính sách bảo mật thông tin cá nhân</Link>
+                            </li>
+                            <li className="mb-2 text-white"><Link to="/coming-soon">Chính sách bảo mật thanh toán</Link>
+                            </li>
+                            {/* <li className="mb-2 text-white"><a href="/">Chính sách bảo mật thông tin cá nhân</a></li>
+                            <li className="mb-2 text-white"><a href="/">Chính sách bảo mật thanh toán</a></li> */}
+
                         </ul>
                     </div>
 
                     <div className="col-md-4">
                         <h5>Hỗ trợ</h5>
                         <ul className="list-unstyled">
-                            <li className="mb-2 text-white"><a href="/">Chính sách đổi trả hoàn tiền</a></li>
-                            <li className="mb-2 text-white"><a href="/">Chính sách bảo hành</a></li>
-                            <li className="mb-2 text-white"><a href="/">Chính sách vận chuyển</a></li>
+                            <li className="mb-2 text-white"><Link to="/coming-soon">Chính sách đổi trả hoàn tiền</Link></li>
+                            <li className="mb-2 text-white"><Link to="/coming-soon">Chính sách bảo hành</Link></li>
+                            <li className="mb-2 text-white"><Link to="/coming-soon">Chính sách vận chuyển</Link></li>
                         </ul>
                     </div>
 
