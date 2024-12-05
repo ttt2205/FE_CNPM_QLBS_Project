@@ -25,6 +25,9 @@ function ProductViewEssentialDetail({
     const bestDiscount = getDiscountValueLatest(detailProduct.discounts);
     setProductInfo({
       title: detailProduct.title,
+      suplier: detailProduct.stock
+        .map((item) => item.goodsreceipts.map((item1) => item1.provider.name))
+        .filter((value, index, self) => self.indexOf(value) === index),
       publisher: detailProduct.publisher.name,
       author: detailProduct.authors?.map((item) => item.name),
       stock: detailProduct.stock_quantity,
@@ -34,12 +37,14 @@ function ProductViewEssentialDetail({
 
     setDetailProductInfo({
       productCode: detailProduct.book_id,
-      suplier: detailProduct.receipts?.map(
-        (item, index) => item.providers.name
-      ),
+      suplier: detailProduct.stock
+        .map((item) => item.goodsreceipts.map((item1) => item1.provider.name))
+        .filter((value, index, self) => self.indexOf(value) === index),
       author: detailProduct.authors?.map((item) => item.name),
       publisher: detailProduct.publisher.name,
       publisherYear: detailProduct.publication_year,
+      coverFormat: detailProduct.coverFormat.name,
+      language: detailProduct.language.language_name,
       weight: detailProduct.weight,
       size: detailProduct.size,
       quantityOfPage: detailProduct.num_page,

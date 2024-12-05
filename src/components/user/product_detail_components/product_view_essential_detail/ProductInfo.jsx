@@ -18,7 +18,17 @@ function ProductInfo({ productInfo }) {
       <div className="suplier-and-author">
         <div className="suplier">
           <p>
-            Suplier:<strong>{productInfo.publisher || "N/A"}</strong>
+            Suplier:
+            <strong>
+              {productInfo?.suplier?.map(
+                (provider) =>
+                  provider.map((item, index) => (
+                    <span>
+                      {index !== provider.length - 1 ? `${item}-` : `${item}`}
+                    </span>
+                  )) || "N/A"
+              )}
+            </strong>
           </p>
         </div>
         <div className="author">
