@@ -4,7 +4,6 @@ import { postRegisterCustomer } from "services/customerService";
 
 function RegisterForm() {
   const navigate = useNavigate();
-  // State để lưu trữ giá trị của các trường input
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -14,9 +13,24 @@ function RegisterForm() {
     confirmPassword: "",
   });
 
+  // State để lưu trữ lỗi của số điện thoại
+  const [phoneError, setPhoneError] = useState("");
+
   // Hàm xử lý sự kiện thay đổi giá trị input
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "phone_number") {
+      // Kiểm tra số điện thoại
+      if (!/^\d+$/.test(value)) {
+        setPhoneError("Số điện thoại chỉ được chứa chữ số.");
+      } else if (value.length !== 10) {
+        setPhoneError("Số điện thoại phải có đúng 10 chữ số.");
+      } else {
+        setPhoneError(""); // Xóa lỗi nếu hợp lệ
+      }
+    }
+
     setFormData({
       ...formData,
       [name]: value,
@@ -26,9 +40,14 @@ function RegisterForm() {
   // Hàm xử lý khi form được submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData); // In ra các giá trị của các trường input
+
+    if (phoneError) {
+      alert("Vui lòng kiểm tra lại số điện thoại.");
+      return;
+    }
+
     const resRegister = await postRegisterCustomer(formData);
-    console.log(resRegister); // In ra các giá trị của các trường input
+    console.log(resRegister);
     navigate("/login");
   };
 
@@ -79,6 +98,7 @@ function RegisterForm() {
             onChange={handleChange}
             required
           />
+          {phoneError && <small className="text-danger">{phoneError}</small>}
         </div>
 
         <div className="mb-3">
