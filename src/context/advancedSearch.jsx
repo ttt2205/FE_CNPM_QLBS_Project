@@ -17,7 +17,7 @@ const AdvancedSearch = () => {
   const [childCategories, setChildCategories] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12;  // tăng giảm tùy vào số lượng sản phẩm muốn hiển thị
+  const itemsPerPage = 15;  // tăng giảm tùy vào số lượng sản phẩm muốn hiển thị
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedChildCategories, setSelectedChildCategories] = useState([]);
 
@@ -25,7 +25,7 @@ const AdvancedSearch = () => {
     const fetchCategoriesAndProducts = async () => {
       try {
         const [productsResponse, categoriesResponse] = await Promise.all([
-          axios.get('http://localhost:8080/api/book?page=1&limit=10000'),
+          axios.get('http://localhost:8080/api/book?page=1&limit=1000'),
           axios.get('http://localhost:8080/api/book/reference/genres'),
         ]);
 
@@ -69,6 +69,10 @@ const AdvancedSearch = () => {
       }
     }
   }, [categoryFromUrl, categories, childCategories]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredProducts]);
 
   const handleCategoryChange = (genreName) => {
     setSelectedCategory(prevState =>
@@ -135,7 +139,9 @@ const AdvancedSearch = () => {
 
     if (priceRange.length > 0) {
       filtered = filtered.filter(product => {
-        const productPrice = parseInt(product.sale_price);
+        let maxDiscount = product.discounts.sort((a, b) => b.percent_value - a.percent_value)[0] || { percent_value: 0 };
+        let percent = maxDiscount.percent_value;
+        const productPrice = parseInt(product.sale_price) * (1 - percent);//*
         return priceRange.some(range => {
           const [min, max] = range.split('-').map(Number);
           return productPrice >= min && (!max || productPrice <= max);
@@ -150,12 +156,12 @@ const AdvancedSearch = () => {
     }
 
     setFilteredProducts(filtered);
-    
+
   };
 
   useEffect(() => {
     filterProducts();
-    
+
   }, [search, selectedCategory, selectedChildCategories, priceRange, selectedSupplier]);
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
