@@ -6,7 +6,7 @@ import LogoutButton from "../components/LogoutButton";
 
 export const PrivateRoute = () => {
   const { token, user, isLoading } = useAuth();
-  if (user && user.role.role_name === "Admin") {
+  if (user && user.role.role_name !== "Customer") {
     return <Outlet />;
   }
   if (isLoading) return <div>Loading...</div>;

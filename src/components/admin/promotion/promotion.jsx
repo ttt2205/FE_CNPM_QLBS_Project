@@ -253,15 +253,16 @@ function Promotion() {
                     <label htmlFor="promotionType" className="form-label">
                       Type
                     </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="promotionType"
+                    <select
+                      className="form-select"
                       value={item.type}
                       onChange={(e) =>
                         setItem({ ...item, type: e.target.value })
                       }
-                    />
+                    >
+                      <option value="Phan tram">Phan tram</option>
+                      <option value="Truc tiep">Truc tiep</option>
+                    </select>
                   </div>
                   <div className="mb-3">
                     <label htmlFor="promotionValue" className="form-label">
