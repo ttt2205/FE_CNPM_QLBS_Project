@@ -45,6 +45,8 @@ import OderConfirmation, {
   loader as oderConfirmationLoader,
 } from "components/admin/OderConfirmation";
 import Promotions from "components/admin/promotion";
+import ForgotPasswordForm from "./ForgotPasswordForm";
+import ResetPasswordForm from "./ResetPasswordForm";
 
 const router = createBrowserRouter([
   {
@@ -150,6 +152,14 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <RegisterForm />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPasswordForm />,
+      },
+      {
+        path: "/reset-password",
+        element: <ResetPasswordForm />,
       },
       {
         path: "/",
