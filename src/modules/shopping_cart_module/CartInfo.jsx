@@ -90,7 +90,8 @@ function CartInfo({
       }
       // Nếu sản phẩm đã có, tăng số lượng
       existingProduct.quantity = newQuantity;
-      existingProduct.total = newQuantity * existingProduct.salePrice;
+      existingProduct.total = newQuantity * (existingProduct.salePrice - existingProduct.salePrice * (existingProduct.discountValue / 100));
+
     }
     // Lưu giỏ hàng mới vào localStorage
     localStorage.setItem("cart", JSON.stringify(cart));

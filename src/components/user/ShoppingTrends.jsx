@@ -60,10 +60,10 @@ const ShoppingTrends = () => {
         <Col>
           <div>
             <Button className="m-2" onClick={() => handleGenreChange("all")}>Tất cả</Button>
-            <Button className="m-2" onClick={() => handleGenreChange("Fiction")}>Fiction</Button>
-            <Button className="m-2" onClick={() => handleGenreChange("Adventure")}>Adventure</Button>
-            <Button className="m-2" onClick={() => handleGenreChange("High School")}>
-              High School
+            <Button className="m-2" onClick={() => handleGenreChange("FICTION")}>FICTION</Button>
+            <Button className="m-2" onClick={() => handleGenreChange("Sách thiếu nhi")}>Sách thiếu nhi</Button>
+            <Button className="m-2" onClick={() => handleGenreChange("Văn học")}>
+            Văn học
             </Button>
           </div>
         </Col>
