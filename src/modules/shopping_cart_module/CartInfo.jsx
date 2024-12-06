@@ -90,8 +90,10 @@ function CartInfo({
       }
       // Nếu sản phẩm đã có, tăng số lượng
       existingProduct.quantity = newQuantity;
-      existingProduct.total = newQuantity * (existingProduct.salePrice - existingProduct.salePrice * (existingProduct.discountValue / 100));
-
+      existingProduct.total =
+        newQuantity *
+        (existingProduct.salePrice -
+          existingProduct.salePrice * (existingProduct.discountValue / 100));
     }
     // Lưu giỏ hàng mới vào localStorage
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -397,7 +399,11 @@ function CartInfo({
                       />
                     </div>
                     <div className="col-2 text-center d-flex align-items-center justify-content-center ">
-                      {formatCurrencyVND(cartItem.total)}
+                      {formatCurrencyVND(
+                        cartItem.quantity *
+                          (cartItem.salePrice -
+                            cartItem.salePrice * (cartItem.discountValue / 100))
+                      )}
                     </div>
                     <div className="col-1 p-0 m-0 d-flex align-items-center  justify-content-center">
                       <ModalComfirmRemoveItemFromCart
