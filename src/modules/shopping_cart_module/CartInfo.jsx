@@ -36,6 +36,9 @@ function CartInfo({
   const { user, token } = useAuth();
   const navigate = useNavigate();
   const [emailCustomer, setEmailCustomer] = useState("");
+  const [address, setAddress] = useState(
+    localStorage.getItem("addressIsChose")
+  );
 
   // Cập nhật email người dùng
   useEffect(() => {
@@ -55,7 +58,7 @@ function CartInfo({
   // Thay đổi total khi chọn sản phẩm thay đổi
   useEffect(() => {
     handleTotal(); // This will recalculate the total whenever the `checkBoxes` state changes
-  }, [checkBoxes, refreshKey]);
+  }, [checkBoxes, cartProducts]);
 
   const handleQuantityChange = (type, productId, count, setCount) => {
     if (type === "increment") {
@@ -87,10 +90,10 @@ function CartInfo({
       }
       // Nếu sản phẩm đã có, tăng số lượng
       existingProduct.quantity = newQuantity;
-      let discountValue = existingProduct.discountValue || 0;
-      existingProduct.total = parseInt(
-        newQuantity * existingProduct.salePrice * (1 - discountValue / 100)
-      );
+      existingProduct.total =
+        newQuantity *
+        (existingProduct.salePrice -
+          existingProduct.salePrice * (existingProduct.discountValue / 100));
     }
     // Lưu giỏ hàng mới vào localStorage
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -155,7 +158,7 @@ function CartInfo({
       }
       return totalPrice;
     }, 0);
-
+    console.log("newTotal", newTotal);
     handleChangeTotal(newTotal);
   };
 
@@ -215,14 +218,15 @@ function CartInfo({
   // Thực hiện xác nhận thanh toán
   const handleConfirmPayment = async () => {
     try {
-      console.log(">>> emailCustomer", emailCustomer);
-      let addressIsChose = localStorage.getItem("addressIsChose");
+      if (!address) {
+        return;
+      }
       const orders = {
         email: emailCustomer || "",
         order: {
           total_amount: parseInt(totalPromotion),
           status_id: 1,
-          address: addressIsChose,
+          address: address,
           billPromotion_id: null,
         },
         orderDetails: [],
@@ -288,6 +292,11 @@ function CartInfo({
     } catch (error) {
       console.log(">>> Error handleConfirmPayment", error);
     }
+  };
+
+  // Thay doi dia chi giao hang cua customer
+  const handleChangeAddress = (address) => {
+    setAddress(address);
   };
 
   return (
@@ -390,7 +399,11 @@ function CartInfo({
                       />
                     </div>
                     <div className="col-2 text-center d-flex align-items-center justify-content-center ">
-                      {formatCurrencyVND(cartItem.total)}
+                      {formatCurrencyVND(
+                        cartItem.quantity *
+                          (cartItem.salePrice -
+                            cartItem.salePrice * (cartItem.discountValue / 100))
+                      )}
                     </div>
                     <div className="col-1 p-0 m-0 d-flex align-items-center  justify-content-center">
                       <ModalComfirmRemoveItemFromCart
@@ -566,9 +579,11 @@ function CartInfo({
                 ) : (
                   <ModalNotice
                     header={"Thanh Toán"}
-                    content={"Xác nhận thanh toán!"}
+                    content={"Nhập địa chỉ giao hàng!"}
                     btnAction={"Xác nhận"}
                     handleAction={handleConfirmPayment}
+                    handleAddress={handleChangeAddress}
+                    address={address}
                     ref={modalThongBaoDangNhap}
                   />
                 )}

@@ -3,7 +3,7 @@ import banner2 from "assets/images/banner2.png";
 import banner3 from "assets/images/banner3.png";
 import banner4 from "assets/images/banner4.png";
 import boardgameImg from "assets/images/boardgame.png";
-import sgkImg from "assets/images/sgk.png";
+import sgkImg from "assets/images/anh1.webp";
 import vanhocImg from "assets/images/vanhoc.png";
 import thieunhiImg from "assets/images/thieunhi.png";
 import ngoaivanImg from "assets/images/ngoaivan.png";
@@ -48,28 +48,28 @@ export default function HomePage() {
       <div className="container mt-4">
         <h3>Danh mục sản phẩm</h3>
         <div className="row text-center product-category">
-          <div className="col" onClick={() => handleCategoryClick("Adventure")}>
-            <img src={boardgameImg} alt="Adventure" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>Adventure</p>
+          <div className="col" onClick={() => handleCategoryClick("Văn học")}>
+            <img src={boardgameImg} alt="Văn học" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>Văn học</p>
           </div>
           <div
             className="col"
-            onClick={() => handleCategoryClick("Primary School")}
+            onClick={() => handleCategoryClick("Tâm lí-Kĩ năng sống")}
           >
-            <img src={sgkImg} alt="Primary School" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>Primary School</p>
+            <img src={sgkImg} alt="Tâm lí-Kĩ năng sống" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>Tâm lí-Kĩ năng sống</p>
           </div>
-          <div className="col" onClick={() => handleCategoryClick("Secondary School")}>
-            <img src={vanhocImg} alt="Secondary School" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>Secondary School</p>
+          <div className="col" onClick={() => handleCategoryClick("Kinh tế")}>
+            <img src={vanhocImg} alt="Kinh tế" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>Kinh tế</p>
           </div>
-          <div className="col" onClick={() => handleCategoryClick("High School")}>
-            <img src={thieunhiImg} alt="High School" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>High School</p>
+          <div className="col" onClick={() => handleCategoryClick("Sách thiếu nhi")}>
+            <img src={thieunhiImg} alt="Sách thiếu nhi" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>Sách thiếu nhi</p>
           </div>
-          <div className="col" onClick={() => handleCategoryClick("Fiction")}>
-            <img src={ngoaivanImg} alt="Fiction" className="img-fluid" style={{ cursor: "pointer" }} />
-            <p>Fiction</p>
+          <div className="col" onClick={() => handleCategoryClick("FICTION")}>
+            <img src={ngoaivanImg} alt="FICTION" className="img-fluid" style={{ cursor: "pointer" }} />
+            <p>FICTION</p>
           </div>
         </div>
       </div>

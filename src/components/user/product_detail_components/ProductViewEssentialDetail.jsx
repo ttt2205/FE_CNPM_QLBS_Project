@@ -5,49 +5,66 @@ import {
   DetailProductInfo,
   ProductInfo,
 } from "./product_view_essential_detail";
-import { useAuth } from "context/AuthContext";
 
 function ProductViewEssentialDetail({
-  detailProduct,
+  detailProduct = {}, // Giá trị mặc định là một object rỗng
   count,
   handleQuantityChange,
   getDiscountValueLatest,
   handleChangeAddress,
 }) {
   const [productInfo, setProductInfo] = useState({});
-
   const [detailProductInfo, setDetailProductInfo] = useState({});
-
   const [descriptionProduct, setDescriptionProduct] = useState({});
-  // const {user} = useAuth();
 
   useEffect(() => {
-    const bestDiscount = getDiscountValueLatest(detailProduct.discounts);
+    // Kiểm tra dữ liệu và thiết lập giá trị mặc định an toàn
+    const stock = Array.isArray(detailProduct.stock) ? detailProduct.stock : [];
+    const authors = Array.isArray(detailProduct.authors)
+      ? detailProduct.authors.map((item) => item.name)
+      : ["Không có tác giả"];
+    const publisher = detailProduct.publisher?.name || "Không có nhà xuất bản";
+    const language = detailProduct.language?.language_name || "Không xác định";
+    const coverFormat = detailProduct.coverFormat?.name || "Không xác định";
+    const stockQuantity = detailProduct.stock_quantity || 0;
+    const salePrice = detailProduct.sale_price || 0;
+
+    const suplier = stock
+      .flatMap((item) =>
+        Array.isArray(item.goodsreceipts)
+          ? item.goodsreceipts.map((item1) => item1.provider?.name)
+          : []
+      )
+      .filter((value, index, self) => self.indexOf(value) === index);
+
+    const bestDiscount = getDiscountValueLatest(detailProduct.discounts || []);
+
     setProductInfo({
-      title: detailProduct.title,
-      publisher: detailProduct.publisher.name,
-      author: detailProduct.authors?.map((item) => item.name),
-      stock: detailProduct.stock_quantity,
-      salePrice: detailProduct.sale_price,
-      discountValue: bestDiscount.value,
+      title: detailProduct.title || "Sản phẩm không xác định",
+      suplier: suplier.length > 0 ? suplier : ["Không có nhà cung cấp"],
+      publisher,
+      author: authors,
+      stock: stockQuantity,
+      salePrice,
+      discountValue: bestDiscount?.value || 0,
     });
 
     setDetailProductInfo({
-      productCode: detailProduct.book_id,
-      suplier: detailProduct.receipts?.map(
-        (item, index) => item.providers.name
-      ),
-      author: detailProduct.authors?.map((item) => item.name),
-      publisher: detailProduct.publisher.name,
-      publisherYear: detailProduct.publication_year,
-      weight: detailProduct.weight,
-      size: detailProduct.size,
-      quantityOfPage: detailProduct.num_page,
+      productCode: detailProduct.book_id || "Không xác định",
+      suplier: suplier.length > 0 ? suplier : ["Không có nhà cung cấp"],
+      author: authors,
+      publisher,
+      publisherYear: detailProduct.publication_year || "Không xác định",
+      coverFormat,
+      language,
+      weight: detailProduct.weight || "Không xác định",
+      size: detailProduct.size || "Không xác định",
+      quantityOfPage: detailProduct.num_page || "Không xác định",
     });
 
     setDescriptionProduct({
-      title: detailProduct.title,
-      description: detailProduct.decription,
+      title: detailProduct.title || "Sản phẩm không xác định",
+      description: detailProduct.decription || "Không có mô tả",
     });
   }, [detailProduct]);
 

@@ -139,16 +139,19 @@ const AdvancedSearch = () => {
 
     if (priceRange.length > 0) {
       filtered = filtered.filter(product => {
-        let maxDiscount = product.discounts.sort((a, b) => b.percent_value - a.percent_value)[0] || { percent_value: 0 };
-        let percent = maxDiscount.percent_value;
-        const productPrice = parseInt(product.sale_price) * (1 - percent);//*
+        let maxDiscount = product.discounts
+          .sort((a, b) => b.percent_value - a.percent_value)[0] || { percent_value: 0 };
+        let percent = maxDiscount.percent_value / 100; // Chuyển phần trăm thành giá trị thập phân
+        const salePrice = parseFloat(product.sale_price || 0); // Chuyển giá về số thực
+        const productPrice = salePrice * (1 - percent); // Tính giá sau giảm giá
+    
         return priceRange.some(range => {
-          const [min, max] = range.split('-').map(Number);
-          return productPrice >= min && (!max || productPrice <= max);
+          const [min, max] = range.split('-').map(Number); // Tách khoảng giá
+          return productPrice >= min && (!max || productPrice <= max); // Kiểm tra khoảng giá
         });
       });
     }
-
+    
     if (selectedSupplier.length > 0) {
       filtered = filtered.filter(product =>
         selectedSupplier.includes(product.language.language_name)
