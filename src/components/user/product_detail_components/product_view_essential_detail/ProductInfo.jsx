@@ -12,52 +12,64 @@ function ProductInfo({ productInfo }) {
 
   return (
     <div className="product-infor-content">
+      {/* Tên sản phẩm */}
       <div className="name-product">
-        <h4>{productInfo.title}</h4>
+        <h4>{productInfo.title || "N/A"}</h4>
       </div>
+
+      {/* Nhà cung cấp và tác giả */}
       <div className="suplier-and-author">
         <div className="suplier">
           <p>
-            Suplier:
+            Suplier:{" "}
             <strong>
-              {productInfo?.suplier?.map(
-                (provider) =>
-                  provider.map((item, index) => (
-                    <span>
-                      {index !== provider.length - 1 ? `${item}-` : `${item}`}
+              {Array.isArray(productInfo.suplier) && productInfo.suplier.length > 0
+                ? productInfo.suplier.map((item, index) => (
+                    <span key={index}>
+                      {index !== productInfo.suplier.length - 1
+                        ? `${item}-`
+                        : `${item}`}
                     </span>
-                  )) || "N/A"
-              )}
+                  ))
+                : "N/A"}
             </strong>
           </p>
         </div>
         <div className="author">
           <p>
-            Author:
+            Author:{" "}
             <strong>
-              {productInfo.author?.map((item, index) => (
-                <span>
-                  {index !== productInfo.author.length - 1
-                    ? `${item}-`
-                    : `${item}`}
-                </span>
-              )) || "N/A"}
+              {Array.isArray(productInfo.author) && productInfo.author.length > 0
+                ? productInfo.author.map((item, index) => (
+                    <span key={index}>
+                      {index !== productInfo.author.length - 1
+                        ? `${item}-`
+                        : `${item}`}
+                    </span>
+                  ))
+                : "N/A"}
             </strong>
           </p>
         </div>
       </div>
+
+      {/* Nhà xuất bản */}
       <div className="publisher">
         <p>
           Publisher: <strong>{productInfo.publisher || "N/A"}</strong>
         </p>
       </div>
+
+      {/* Đánh giá và giảm giá */}
       <div className="vote-and-sale">
         <div className="vote">
-          <CiStar className="far fa-star rating-color" size={20}></CiStar>
-          <CiStar className="far fa-star rating-color" size={20}></CiStar>
-          <CiStar className="far fa-star rating-color" size={20}></CiStar>
-          <CiStar className="far fa-star rating-color" size={20}></CiStar>
-          <CiStar className="far fa-star rating-color" size={20}></CiStar>
+          {[...Array(5)].map((_, i) => (
+            <CiStar
+              key={i}
+              className="far fa-star rating-color"
+              size={20}
+            ></CiStar>
+          ))}
         </div>
         <div className="sale">
           <p>|</p>
@@ -66,24 +78,26 @@ function ProductInfo({ productInfo }) {
           </span>
         </div>
       </div>
+
+      {/* Giá và giá giảm */}
       <div className="price-and-discount">
         <div className="price-discount">
           <h2>
-            {productInfo.discountValue > 0
+            {productInfo.discountValue > 0 && productInfo.salePrice
               ? formatCurrencyVND(
                   Math.round(
-                    parseFloat(productInfo.salePrice, 10) *
-                      (100 - parseFloat(productInfo.discountValue, 10))
+                    parseFloat(productInfo.salePrice) *
+                      (100 - parseFloat(productInfo.discountValue))
                   ) / 100
                 )
-              : formatCurrencyVND(
-                  Math.round(parseFloat(productInfo.salePrice, 10))
-                )}
+              : productInfo.salePrice
+              ? formatCurrencyVND(Math.round(parseFloat(productInfo.salePrice)))
+              : "N/A"}
             &nbsp;
           </h2>
         </div>
         <div className="price-product">
-          {productInfo.discountValue > 0 ? (
+          {productInfo.discountValue > 0 && productInfo.salePrice ? (
             <p id="price">
               {formatCurrencyVND(productInfo.salePrice)}
               &nbsp;
@@ -99,6 +113,7 @@ function ProductInfo({ productInfo }) {
         ) : null}
       </div>
 
+      {/* Trạng thái kho hàng */}
       {productInfo.stock > 0 ? (
         <></>
       ) : (
@@ -109,5 +124,18 @@ function ProductInfo({ productInfo }) {
     </div>
   );
 }
+
+// Giá trị mặc định (đề phòng khi productInfo không được truyền hoặc thiếu dữ liệu)
+ProductInfo.defaultProps = {
+  productInfo: {
+    title: "N/A",
+    suplier: [],
+    author: [],
+    publisher: "N/A",
+    salePrice: 0,
+    discountValue: 0,
+    stock: 0,
+  },
+};
 
 export default ProductInfo;
