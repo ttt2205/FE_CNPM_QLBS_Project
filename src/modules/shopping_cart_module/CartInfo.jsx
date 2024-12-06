@@ -87,7 +87,10 @@ function CartInfo({
       }
       // Nếu sản phẩm đã có, tăng số lượng
       existingProduct.quantity = newQuantity;
-      existingProduct.total = newQuantity * existingProduct.salePrice;
+      let discountValue = existingProduct.discountValue || 0;
+      existingProduct.total = parseInt(
+        newQuantity * existingProduct.salePrice * (1 - discountValue / 100)
+      );
     }
     // Lưu giỏ hàng mới vào localStorage
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -146,7 +149,6 @@ function CartInfo({
   // Hàm tính total khi chọn sản phẩm
   const handleTotal = () => {
     const bookIsCheckBox = checkCheckBoxIsChecked();
-
     const newTotal = cartProducts.reduce((totalPrice, key) => {
       if (bookIsCheckBox.includes(key.productID)) {
         return totalPrice + key.total;
