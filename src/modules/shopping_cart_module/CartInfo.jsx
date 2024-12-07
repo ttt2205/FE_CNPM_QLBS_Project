@@ -36,9 +36,8 @@ function CartInfo({
   const { user, token } = useAuth();
   const navigate = useNavigate();
   const [emailCustomer, setEmailCustomer] = useState("");
-  const [address, setAddress] = useState(
-    localStorage.getItem("addressIsChose")
-  );
+  const [address, setAddress] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Cập nhật email người dùng
   useEffect(() => {
@@ -219,6 +218,7 @@ function CartInfo({
   const handleConfirmPayment = async () => {
     try {
       if (!address) {
+        setErrorMessage("Vui lòng điền địa chỉ nhận hàng!");
         return;
       }
       const orders = {
@@ -258,7 +258,11 @@ function CartInfo({
           orderDetail = {
             book_id: parseInt(item.productID),
             quantity: item.quantity,
-            price: item.salePrice,
+            price:
+              Math.round(
+                parseFloat(item.salePrice) *
+                  (100 - parseFloat(item.discountValue))
+              ) / 100,
             discount_id: item.discountId,
           };
           orders.orderDetails.push(orderDetail);
@@ -295,8 +299,20 @@ function CartInfo({
   };
 
   // Thay doi dia chi giao hang cua customer
-  const handleChangeAddress = (address) => {
-    setAddress(address);
+  const handleChangeAddress = ({ soNha, duong, phuong, quan, city }) => {
+    if (
+      !soNha.trim() ||
+      !duong.trim() ||
+      !phuong.trim() ||
+      !quan.trim() ||
+      !city.trim()
+    ) {
+      setErrorMessage("Vui lòng nhập đầy đủ địa chỉ!");
+      setAddress("");
+    } else {
+      setErrorMessage("");
+      setAddress(`${soNha}, ${duong}, Phường ${phuong}, Quận ${quan}, ${city}`);
+    }
   };
 
   return (
@@ -574,6 +590,9 @@ function CartInfo({
                     content={"Vui lòng đăng nhập để thanh toán!"}
                     btnAction={"Đăng nhập"}
                     handleAction={handleLoginUser}
+                    handleAddress={handleChangeAddress}
+                    address={address}
+                    errorMessage={errorMessage}
                     ref={modalThongBaoDangNhap}
                   />
                 ) : (
@@ -584,6 +603,7 @@ function CartInfo({
                     handleAction={handleConfirmPayment}
                     handleAddress={handleChangeAddress}
                     address={address}
+                    errorMessage={errorMessage}
                     ref={modalThongBaoDangNhap}
                   />
                 )}
