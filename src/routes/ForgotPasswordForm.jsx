@@ -28,7 +28,7 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
+    <div className="container-md" style={{ maxWidth: "400px", margin: "auto" }}>
       <h2>Quên mật khẩu</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">

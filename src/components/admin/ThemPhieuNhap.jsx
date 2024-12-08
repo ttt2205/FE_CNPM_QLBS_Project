@@ -107,8 +107,8 @@ const ThemPhieuNhap = () => {
         toast.error("Số lượng sản phẩm phải lớn hơn 0!");
         return false;
       }
-      if (item.price <= 0) {
-        toast.error("Giá nhập phải lớn hơn 0!");
+      if (item.price < 0) {
+        toast.error("Giá nhập phải lớn hơn bằng 0!");
         return false;
       }
     }

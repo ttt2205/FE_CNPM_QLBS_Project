@@ -93,10 +93,19 @@ function RegisterForm() {
   };
 
   return (
-    <div className="container mt-5 w-50">
+    <div
+      className="container"
+      style={{
+        maxWidth: "500px",
+        margin: "auto",
+        padding: "20px",
+        border: "1px solid #ccc",
+        borderRadius: "10px",
+      }}
+    >
       <h2 className="text-center">Đăng Ký Tài Khoản</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="firstname" className="form-label">
             Tên
           </label>
@@ -113,7 +122,7 @@ function RegisterForm() {
           )}
         </div>
 
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="lastname" className="form-label">
             Họ
           </label>
@@ -130,7 +139,7 @@ function RegisterForm() {
           )}
         </div>
 
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="phone_number" className="form-label">
             Số Điện Thoại
           </label>
@@ -147,7 +156,7 @@ function RegisterForm() {
           )}
         </div>
 
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="email" className="form-label">
             Email
           </label>
@@ -164,7 +173,7 @@ function RegisterForm() {
           )}
         </div>
 
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="password" className="form-label">
             Mật Khẩu
           </label>
@@ -181,7 +190,7 @@ function RegisterForm() {
           )}
         </div>
 
-        <div className="mb-3">
+        <div className="mb-2">
           <label htmlFor="confirmPassword" className="form-label">
             Xác Nhận Mật Khẩu
           </label>
@@ -198,7 +207,7 @@ function RegisterForm() {
           )}
         </div>
 
-        <div className="mb-3 form-check">
+        <div className="mb-2 form-check">
           <input
             type="checkbox"
             className="form-check-input"
