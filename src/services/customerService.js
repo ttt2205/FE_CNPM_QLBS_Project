@@ -29,3 +29,9 @@ export async function updateCustomerInfo(data, token) {
         }
     ));
 }
+
+export async function getDiscountBook() {
+    return (await axios.get(
+        `${process.env.REACT_APP_BACK_END_LOCALHOST}/api/customer/discount-book`,
+    ));
+}

@@ -24,7 +24,7 @@ function ProductViewEsstenialMedia({
       try {
         const ImageRespone = await getImagesForThumbnail(productID);
         const dataImages = chunksArray(ImageRespone.data.images, 4);
-  
+
         for (let i = 0; i < ImageRespone.data.images.length; i++) {
           if (ImageRespone.data.images[i].is_main === 1) {
             setImageCurrent(ImageRespone.data.images[i].url);
@@ -32,7 +32,7 @@ function ProductViewEsstenialMedia({
             break;
           }
         }
-  
+
         setImages(dataImages);
       } catch (error) {
         console.log("Fetching data thumbnail error = ", error);
@@ -108,6 +108,7 @@ function ProductViewEsstenialMedia({
     if (existingProduct) {
       // Nếu sản phẩm đã có, tăng số lượng
       existingProduct.quantity += infoProductCart.quantity;
+      existingProduct.total += infoProductCart.total;
     } else {
       // Nếu sản phẩm chưa có, thêm sản phẩm mới vào giỏ hàng
       cart.push(infoProductCart);
