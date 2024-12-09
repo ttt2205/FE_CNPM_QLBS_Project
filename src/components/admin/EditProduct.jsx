@@ -5,7 +5,7 @@ import {
   useNavigate,
   useSubmit,
 } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   getProductById,
   updateProduct,
@@ -30,15 +30,18 @@ export async function loader({ params }) {
 export async function action({ request, params }) {
   const formData = await request.formData();
   // Lấy tất cả các file từ input file (giả sử input có tên "images")
-  const newImages = formData.getAll("new_images"); // Thay "images" bằng tên của input file
-  const deletedImages = formData.getAll("deletedImages");
+  let deletedImages = formData.getAll("deletedImages");
+  deletedImages = JSON.parse(deletedImages[0] || "[]");
   const discountIds = formData.getAll("discount_id");
+  const authorIds = formData.getAll("author_id");
   const updates = Object.fromEntries(formData);
+  updates.deletedImages = deletedImages;
   updates.discount_id = discountIds;
-  console.log(updates);
-  // return null;
+  updates.author_id = authorIds;
+  console.log("submit edit: ", updates);
+
   try {
-    await updateProduct(params.productId, formData);
+    await updateProduct(params.productId, updates);
     toast.success("Update product success");
   } catch (error) {
     toast.error(error.response?.data?.message || error.message);
@@ -113,12 +116,16 @@ export default function EditProduct() {
       toast.error("Lỗi nhập liệu, vui lòng kiểm tra lại");
     } else {
       setErrors({});
-      submit(event.currentTarget, {
+      submit(formData, {
         method: "post",
         encType: "multipart/form-data",
       });
     }
   };
+
+  useEffect(() => {
+    console.log(deletedImages);
+  }, [deletedImages]);
 
   return (
     <Form method="post" onSubmit={handleSubmit} className="bold-label-form">
@@ -188,7 +195,7 @@ export default function EditProduct() {
               <select
                 className="form-select"
                 name="status_id"
-                defaultValue={product.book_id}
+                defaultValue={product.status_id}
               >
                 {allReferences.bookstatus.map((status) => (
                   <option key={status.id} value={status.id}>

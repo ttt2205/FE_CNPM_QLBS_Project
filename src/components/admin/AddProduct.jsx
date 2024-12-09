@@ -23,11 +23,13 @@ export async function loader({ params }) {
 
 export async function action({ request, params }) {
   const formData = await request.formData();
-  // Lấy tất cả các file từ input file (giả sử input có tên "images")
-  const newImages = formData.getAll("new_images"); // Thay "images" bằng tên của input file
-  console.log(newImages);
+  const authorIds = formData.getAll("author_id");
+  const discountIds = formData.getAll("discount_id");
+  const newImages = formData.getAll("new_images");
   const updates = Object.fromEntries(formData);
-  console.log(updates);
+  updates.author_id = authorIds;
+  updates.discount_id = discountIds;
+  console.log("submit add: ", updates);
   // return null;
   try {
     await createProduct(formData);

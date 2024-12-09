@@ -581,13 +581,13 @@ function CartInfo({
                   class="btn btn-danger w-100 mt-2 fs-5"
                   onClick={handleOpenModal}
                 >
-                  <strong>Thanh Toán</strong>
+                  <strong>Đặt Hàng</strong>
                 </button>
                 {/* THONG BAO CHO NGUOI DUNG DANG NHAP */}
                 {!user ? (
                   <ModalNotice
                     header={"Vui lòng đăng nhập"}
-                    content={"Vui lòng đăng nhập để thanh toán!"}
+                    content={"Vui lòng đăng nhập để thực hiện!"}
                     btnAction={"Đăng nhập"}
                     handleAction={handleLoginUser}
                     handleAddress={handleChangeAddress}
@@ -597,7 +597,7 @@ function CartInfo({
                   />
                 ) : (
                   <ModalNotice
-                    header={"Thanh Toán"}
+                    header={"Đặt Hàng"}
                     content={"Nhập địa chỉ giao hàng!"}
                     btnAction={"Xác nhận"}
                     handleAction={handleConfirmPayment}
@@ -747,7 +747,7 @@ function CartInfo({
                                     className="btn btn-primary m-0"
                                     style={{
                                       width: "80%",
-                                      fontSize: "0.2rem",
+                                      fontSize: "0.8rem",
                                       wordWrap: "break-word",
                                     }}
                                     href="/"

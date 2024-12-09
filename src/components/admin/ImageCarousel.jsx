@@ -20,6 +20,7 @@ export default function ImageCarousel({ product, setDeletedImages, errors }) {
     let length = images.length + fileList.length;
     if (index < images.length) {
       const newImages = images.filter((img, i) => i !== index);
+      console.log(images[index]);
       setDeletedImages((prevImages) => [...prevImages, images[index]]);
       setImages(newImages);
       if (index === mainIndex) {

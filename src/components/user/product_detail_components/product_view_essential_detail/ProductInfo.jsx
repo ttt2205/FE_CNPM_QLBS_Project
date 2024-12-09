@@ -13,8 +13,17 @@ function ProductInfo({ productInfo }) {
   return (
     <div className="product-infor-content">
       {/* Tên sản phẩm */}
-      <div className="name-product">
+      <div className="name-product d-inline-flex">
         <h4>{productInfo.title || "N/A"}</h4>
+        {productInfo.stock > 0 ? (
+          <div className="badge bg-success ms-1 d-flex">
+            <span className="align-self-center">Còn hàng</span>
+          </div>
+        ) : (
+          <div className="badge bg-danger ms-1 d-flex">
+            <span className="align-self-center">Hết hàng</span>
+          </div>
+        )}
       </div>
 
       {/* Nhà cung cấp và tác giả */}
@@ -23,7 +32,8 @@ function ProductInfo({ productInfo }) {
           <p>
             Suplier:{" "}
             <strong>
-              {Array.isArray(productInfo.suplier) && productInfo.suplier.length > 0
+              {Array.isArray(productInfo.suplier) &&
+              productInfo.suplier.length > 0
                 ? productInfo.suplier.map((item, index) => (
                     <span key={index}>
                       {index !== productInfo.suplier.length - 1
@@ -39,7 +49,8 @@ function ProductInfo({ productInfo }) {
           <p>
             Author:{" "}
             <strong>
-              {Array.isArray(productInfo.author) && productInfo.author.length > 0
+              {Array.isArray(productInfo.author) &&
+              productInfo.author.length > 0
                 ? productInfo.author.map((item, index) => (
                     <span key={index}>
                       {index !== productInfo.author.length - 1
