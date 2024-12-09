@@ -72,7 +72,10 @@ function ProductViewEssentialDetail({
     <div className="product-essential-content-detail-parent">
       <div className="product-essential-content-detail">
         <div id="product_infor" className="product-infor-container">
-          <ProductInfo productInfo={productInfo}></ProductInfo>
+          <ProductInfo
+            productInfo={productInfo}
+            detailProduct={detailProduct}
+          ></ProductInfo>
         </div>
         <div id="delivery_infor" className="delivery-infor-container">
           <DeliveryInfo

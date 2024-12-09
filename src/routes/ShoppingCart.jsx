@@ -55,7 +55,9 @@ function ShoppingCart() {
 
     // Tính toán lại tổng số tiền khi thực hiện áp dụng khuyến mãi đủ điều kiện
     if (promotionCurrent.isEligible) {
-      if (promotionCurrent.type === "PhanTram") {
+      if (
+        promotionCurrent?.type?.toLowerCase().replace(/\s+/g, "") === "phantram"
+      ) {
         setTotalPromotion((total * (100 - promotionCurrent.value)) / 100);
       } else {
         let tempTotal = total - promotionCurrent.value;

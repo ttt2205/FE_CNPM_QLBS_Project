@@ -172,15 +172,33 @@ function ProductViewEsstenialMedia({
                 id="btn-add-to-card"
                 className="btn-add-box"
                 type="button"
-                onClick={handleOnclickButtonAddToCard}
+                onClick={
+                  (detailProduct?.status_id ?? 2) === 1
+                    ? handleOnclickButtonAddToCard
+                    : undefined
+                }
+                style={
+                  (detailProduct?.status_id ?? 2) !== 1
+                    ? { color: "gray", border: "1px solid gray" }
+                    : {}
+                }
               >
                 <BsCart3 size={20}></BsCart3>
                 <span>Thêm vào giỏ hàng</span>
               </button>
               <Link
-                to="/cart"
+                to={(detailProduct?.status_id ?? 2) === 1 ? "/cart" : "#"}
                 id="btn-buy"
                 className="btn-add-box d-flex justify-content-center align-items-center text-decoration-none"
+                style={
+                  (detailProduct?.status_id ?? 2) !== 1
+                    ? {
+                        color: "white",
+                        border: "1px solid gray",
+                        background: "gray",
+                      }
+                    : {}
+                }
               >
                 Mua ngay
               </Link>

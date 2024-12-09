@@ -1,7 +1,7 @@
 import React from "react";
 import { CiStar } from "react-icons/ci";
 
-function ProductInfo({ productInfo }) {
+function ProductInfo({ productInfo, detailProduct }) {
   // Hàm định dạng tiền tệ Việt Nam
   function formatCurrencyVND(amount) {
     return new Intl.NumberFormat("vi-VN", {
@@ -125,7 +125,11 @@ function ProductInfo({ productInfo }) {
       </div>
 
       {/* Trạng thái kho hàng */}
-      {productInfo.stock > 0 ? (
+      {(detailProduct?.status_id ?? 2) !== 1 ? (
+        <div className="out-of-stock">
+          <p>Sản phẩm hiện tại chưa mở bán!</p>
+        </div>
+      ) : productInfo.stock > 0 ? (
         <></>
       ) : (
         <div className="out-of-stock">

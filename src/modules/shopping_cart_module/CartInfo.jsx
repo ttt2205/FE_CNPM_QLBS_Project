@@ -38,6 +38,13 @@ function CartInfo({
   const [emailCustomer, setEmailCustomer] = useState("");
   const [address, setAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [promotionIsChosen, setPromotionIsChosen] = useState(promotionCurrent);
+  const [selectedPromotionId, setSelectedPromotionId] = useState(
+    promotionCurrent.billPromotion_id
+  );
+  // Tim kiem promotions
+  const [promotionArrange, setPromotionArrange] = useState(promotions);
+  const [inputSearchPromotion, setInputSearchPromotion] = useState("");
 
   // Cập nhật email người dùng
   useEffect(() => {
@@ -296,6 +303,54 @@ function CartInfo({
     } catch (error) {
       console.log(">>> Error handleConfirmPayment", error);
     }
+  };
+
+  // debounce khi nguoi dung nhap tu khoa tim kiem
+  function debounce(func, delay) {
+    let timeoutId;
+
+    return function (...args) {
+      // Xóa timeout trước đó (nếu có)
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      // Đặt lại timeout mới
+      timeoutId = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
+
+  // Xu ly tim kiem promotion
+  const handleArrangeOrderFollowInputSearch = (searchQuery) => {
+    if (searchQuery.trim() === "") {
+      setPromotionArrange(promotions);
+    } else {
+      const filteredPromotions = promotions
+        .filter((promotion) => {
+          // Các điều kiện lọc
+          const byPromotionName = promotion.name.includes(searchQuery.trim());
+          const byPromotionConditional = promotion.conditional
+            ?.toString()
+            .includes(searchQuery.trim());
+
+          // Trả về true nếu thỏa bất kỳ điều kiện nào
+          return byPromotionName || byPromotionConditional;
+        }) // Ví dụ: lọc các order có status_id = 1
+        .map((promotion) => JSON.parse(JSON.stringify(promotion))); // Sao chép sâu từng đối tượng
+      setPromotionArrange(filteredPromotions);
+    }
+  };
+
+  // Xu ly debounce khi nguoi dung nhap tim kiem promotion
+  const handleInputSearch = debounce(handleArrangeOrderFollowInputSearch, 400);
+
+  // Change gia tri tim kiem khi nguoi dung nhap
+  const handleInputChange = (e) => {
+    let value = e.target.value;
+    setInputSearchPromotion(value); // Cập nhật state ngay lập tức để phản hồi UI
+    handleInputSearch(value); // Gọi debounce để trì hoãn logic tìm kiếm
   };
 
   // Thay doi dia chi giao hang cua customer
@@ -651,11 +706,17 @@ function CartInfo({
                 placeholder="Nhập tên khuyến mãi"
                 aria-label="Nhập tên khuyến mãi"
                 aria-describedby="button-addon2"
+                onChange={handleInputChange}
+                value={inputSearchPromotion}
               />
               <button
                 class="btn btn-outline-primary"
                 type="button"
                 id="button-addon2"
+                onClick={() => {
+                  setPromotionCurrent(promotionIsChosen);
+                  closeDetailPromotion();
+                }}
               >
                 Áp dụng
               </button>
@@ -667,14 +728,22 @@ function CartInfo({
             </p>
             <div className="promotion-items">
               {/* Promotion Items */}
-              {promotions.map((promotion) => {
+              {promotionArrange.map((promotion) => {
                 return (
                   <div
                     className="card mb-3 promotion-item"
-                    style={{ maxWidth: "100%" }}
-                    key={promotion.id}
+                    key={promotion.billPromotion_id}
+                    style={{
+                      maxWidth: "100%",
+                      border:
+                        selectedPromotionId === promotion.billPromotion_id
+                          ? "2px solid #007bff"
+                          : "1px solid transparent",
+                    }}
                     onClick={() => {
-                      setPromotionCurrent(promotion);
+                      setPromotionIsChosen(promotion);
+                      setSelectedPromotionId(promotion.billPromotion_id); // Lưu ID của phần tử
+                      console.log("promotion.id", promotion.billPromotion_id);
                     }}
                   >
                     <div className="row g-0">
