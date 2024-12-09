@@ -157,6 +157,12 @@ function Modal({ id, discount }) {
         }
       })
       .flat();
+    //them ca nhung the loai cha duoc chon
+    genreTree.forEach((genre) => {
+      if (genre.children.length > 0 && genre.isChecked) {
+        selectedGenres.push(genre.genre_id);
+      }
+    });
 
     try {
       applyDiscount(discount, selectedGenres);
@@ -260,6 +266,7 @@ function Modal({ id, discount }) {
             <button
               type="button"
               className="btn btn-primary"
+              data-bs-dismiss="modal"
               onClick={() => handleSubmit()}
             >
               Áp dụng

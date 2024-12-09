@@ -220,7 +220,7 @@ function Discounts() {
                   data-bs-target="#apDungKhuyenMaiModal"
                   onClick={() => setItem(item)}
                 >
-                  Áp dụng
+                  Áp dụng nhanh
                 </button>
               </td>
             </tr>
@@ -325,6 +325,7 @@ function Discounts() {
               <button
                 type="button"
                 className="btn btn-primary"
+                data-bs-dismiss="modal"
                 onClick={handleSubmit}
               >
                 Save

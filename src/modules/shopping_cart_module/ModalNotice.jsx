@@ -76,7 +76,7 @@ const ModalNotice = forwardRef(
           >
             {content}
           </div>
-          {header === "Thanh Toán" ? (
+          {header === "Đặt Hàng" ? (
             <>
               <div className="container w-100 mb-1">
                 <div className="row mb-2">
