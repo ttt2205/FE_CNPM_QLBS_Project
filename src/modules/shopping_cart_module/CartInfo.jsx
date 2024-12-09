@@ -374,7 +374,11 @@ function CartInfo({
                     <div className="col-6 p-0 m-0 d-flex align-items-center ">
                       <div className="product-item d-flex flex-row w-100 h-100 row">
                         <div className="col-4 item-img">
-                          <img src={cartItem.imageMain} alt="" />
+                          <a
+                            href={`/detail-product/${cartItem.productID}/detail-page`}
+                          >
+                            <img src={cartItem.imageMain} alt="" />
+                          </a>
                         </div>
                         <div className="item-info col-8">
                           <p className="item-name">{cartItem.title}</p>

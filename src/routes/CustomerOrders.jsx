@@ -5,6 +5,7 @@ import { useAuth } from "context/AuthContext";
 import { updateConfirm } from "services/orderConfirmationService";
 import { getDiscountBook } from "services/customerService";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const CustomerOrders = () => {
   const { user, isLoading } = useAuth();
@@ -23,10 +24,10 @@ const CustomerOrders = () => {
   // Dữ liệu mẫu: chi tiết sản phẩm của từng đơn hàng
   // const orderDetails = {
   //   101: [
-  //     { id: 1, productName: "Laptop", quantity: 1, price: 200, thanhTien: quantity * price, discountId: 0, salePrice: 0 },
-  //     { id: 2, productName: "Mouse", quantity: 1, price: 50, thanhTien: quantity * price, discountId: 0, salePrice: 0 },
+  //     { id: 1, productName: "Laptop", quantity: 1, price: 200, thanhTien: quantity * price, discountId: 0, salePrice: 0, isMainUrl: "linkanh" },
+  //     { id: 2, productName: "Mouse", quantity: 1, price: 50, thanhTien: quantity * price, discountId: 0, salePrice: 0, isMainUrl: "linkanh" },
   //   ],
-  //   102: [{ id: 3, productName: "Headphones", quantity: 1, price: 300, thanhTien: quantity * price, discountId: 0, salePrice: 0  }],
+  //   102: [{ id: 3, productName: "Headphones", quantity: 1, price: 300, thanhTien: quantity * price, discountId: 0, salePrice: 0, isMainUrl: "linkanh"  }],
   // };
 
   // Dữ liệu mẫu: danh sách discounts
@@ -145,6 +146,7 @@ const CustomerOrders = () => {
                   batche.orderdetails.final_price,
                 salePrice: batche.book.sale_price,
                 discountId: batche.orderdetails.discount_id,
+                isMainUrl: batche.book.image.url,
               }));
             });
             setOrderDetails(newOrderDetail);
@@ -283,26 +285,71 @@ const CustomerOrders = () => {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>Mã sản phẩm</th>
+                        {/* <th>Mã</th> */}
                         <th>Tên sản phẩm</th>
                         <th>Số lượng</th>
                         <th>Giá bán</th>
+                        <th>Giá đã giảm</th>
                         <th>Thành tiền</th>
-                        <th>Giá gốc</th>
-                        <th>Discount Name</th>
-                        <th>Discount Value</th>
+                        {/* <th>Discount Name</th>
+                        <th>Discount Value</th> */}
                       </tr>
                     </thead>
                     <tbody>
                       {orderDetails[selectedOrder].map((item) => (
                         <tr key={item.id}>
-                          <td>{item.id}</td>
-                          <td>{item.productName}</td>
-                          <td>{item.quantity}</td>
-                          <td>{formatCurrencyVND(item.price)}</td>
-                          <td>{formatCurrencyVND(item.thanhTien)}</td>
-                          <td>{formatCurrencyVND(item.salePrice)}</td>
+                          {/* <td>{item.id}</td> */}
                           <td>
+                            <div className="row d-flex h-100 w-100">
+                              <div
+                                className="col-4"
+                                style={{
+                                  objectFit: "fill",
+                                }}
+                              >
+                                <div className="h-100">
+                                  <a
+                                    href={`/detail-product/${item.id}/${item.productName}`}
+                                    style={{ height: "100%" }}
+                                  >
+                                    <img
+                                      src={`${process.env.REACT_APP_BACK_END_LOCALHOST}/img/${item.isMainUrl}`}
+                                      alt=""
+                                      style={{ width: "100%", height: "auto" }}
+                                    />
+                                  </a>
+                                </div>
+                              </div>
+                              <div className="col-8">{item.productName}</div>
+                            </div>
+                          </td>
+                          <td>{item.quantity}</td>
+                          <td>{formatCurrencyVND(item.salePrice)}</td>
+                          <td className="d-flex">
+                            {formatCurrencyVND(item.price)}
+                            {discountBook.find(
+                              (discount) =>
+                                item.discountId === discount.discountId
+                            ) ? (
+                              <div
+                                className="d-flex bg-danger text-white rounded-2 align-items-center"
+                                style={{ marginLeft: "10px", fontSize: "14px" }}
+                              >
+                                <p id="discountValue" className="m-0">
+                                  <strong>
+                                    -
+                                    {discountBook.find(
+                                      (discount) =>
+                                        item.discountId === discount.discountId
+                                    )?.discountValue || 0}
+                                    %
+                                  </strong>
+                                </p>
+                              </div>
+                            ) : null}
+                          </td>
+                          <td>{formatCurrencyVND(item.thanhTien)}</td>
+                          {/* <td>
                             {discountBook.find(
                               (discount) =>
                                 item.discountId === discount.discountId
@@ -314,7 +361,7 @@ const CustomerOrders = () => {
                                 item.discountId === discount.discountId
                             )?.discountValue || 0}
                             %
-                          </td>
+                          </td> */}
                         </tr>
                       ))}
                     </tbody>
@@ -328,7 +375,7 @@ const CustomerOrders = () => {
                   className="d-flex"
                   style={{ width: "90%", margin: "auto" }}
                 >
-                  <h4 className="text-danger">Tổng Tiền:&nbsp;</h4>
+                  <h4 className="text-danger">Tổng Tiền Chưa Giảm:&nbsp;</h4>
                   <h4>
                     {selectedOrder && orderDetails[selectedOrder]
                       ? formatCurrencyVND(
