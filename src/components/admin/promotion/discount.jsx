@@ -240,7 +240,9 @@ function Discounts() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="discountModalLabel">
-                {action === "new" ? "New" : "Edit"} Discount
+                {action === "new"
+                  ? "Create Discount"
+                  : `Edit Discount #${item.discount_id}`}
               </h5>
               <button
                 type="button"

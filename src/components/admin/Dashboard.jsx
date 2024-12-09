@@ -9,7 +9,7 @@ import UserProfile from "./UserProfile";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useAuth } from "../../context/AuthContext";
 
-const navs = [
+const allNavs = [
   {
     name: "Products",
     link: "products",
@@ -43,9 +43,20 @@ const navs = [
 ];
 
 export default function Root() {
-  const { logOut } = useAuth();
+  const { logOut, user } = useAuth();
   // const { contacts, q } = useLoaderData();
   const navigation = useNavigation(); // use to get location and state
+  let navs = [];
+  if (user.role.role_name === "Admin") {
+    //chi co nav account
+    navs.push({
+      name: "Accounts",
+      link: "accounts",
+      icon: <i className="fa-solid fa-user"></i>,
+    });
+  } else {
+    navs = allNavs.filter((nav) => nav.name !== "Accounts");
+  }
 
   // useEffect(() => {
   //   document.getElementById("q").value = q;

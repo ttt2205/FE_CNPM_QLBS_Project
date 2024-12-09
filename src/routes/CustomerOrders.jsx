@@ -5,7 +5,6 @@ import { useAuth } from "context/AuthContext";
 import { updateConfirm } from "services/orderConfirmationService";
 import { getDiscountBook } from "services/customerService";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 const CustomerOrders = () => {
   const { user, isLoading } = useAuth();
@@ -88,6 +87,7 @@ const CustomerOrders = () => {
             );
           };
           const res = await resOrder();
+          console.log("res.data", res.data);
           if (res.data.error === 0) {
             let { orders } = res.data.customer;
             orders = orders.sort((a, b) => b.order_id - a.order_id); // Sắp xếp theo id giảm dần
@@ -285,8 +285,8 @@ const CustomerOrders = () => {
                   <table className="table">
                     <thead>
                       <tr>
-                        {/* <th>Mã</th> */}
                         <th>Tên sản phẩm</th>
+                        <th>Hình ảnh</th>
                         <th>Số lượng</th>
                         <th>Giá bán</th>
                         <th>Giá đã giảm</th>
@@ -298,55 +298,51 @@ const CustomerOrders = () => {
                     <tbody>
                       {orderDetails[selectedOrder].map((item) => (
                         <tr key={item.id}>
-                          {/* <td>{item.id}</td> */}
                           <td>
-                            <div className="row d-flex h-100 w-100">
-                              <div
-                                className="col-4"
-                                style={{
-                                  objectFit: "fill",
-                                }}
-                              >
-                                <div className="h-100">
-                                  <a
-                                    href={`/detail-product/${item.id}/${item.productName}`}
-                                    style={{ height: "100%" }}
-                                  >
-                                    <img
-                                      src={`${process.env.REACT_APP_BACK_END_LOCALHOST}/img/${item.isMainUrl}`}
-                                      alt=""
-                                      style={{ width: "100%", height: "auto" }}
-                                    />
-                                  </a>
-                                </div>
-                              </div>
-                              <div className="col-8">{item.productName}</div>
-                            </div>
+                            <div>{item.productName}</div>
+                          </td>
+                          <td>
+                            <a
+                              href={`/detail-product/${item.id}/${item.productName}`}
+                              style={{
+                                display: "block",
+                                width: "60px",
+                                height: "60px",
+                                backgroundImage: `url('${process.env.REACT_APP_BACK_END_LOCALHOST}/img/${item.isMainUrl}')`,
+                                backgroundSize: "cover",
+                              }}
+                            ></a>
                           </td>
                           <td>{item.quantity}</td>
                           <td>{formatCurrencyVND(item.salePrice)}</td>
-                          <td className="d-flex">
-                            {formatCurrencyVND(item.price)}
-                            {discountBook.find(
-                              (discount) =>
-                                item.discountId === discount.discountId
-                            ) ? (
-                              <div
-                                className="d-flex bg-danger text-white rounded-2 align-items-center"
-                                style={{ marginLeft: "10px", fontSize: "14px" }}
-                              >
-                                <p id="discountValue" className="m-0">
-                                  <strong>
-                                    -
-                                    {discountBook.find(
-                                      (discount) =>
-                                        item.discountId === discount.discountId
-                                    )?.discountValue || 0}
-                                    %
-                                  </strong>
-                                </p>
-                              </div>
-                            ) : null}
+                          <td>
+                            <div className="d-flex">
+                              {formatCurrencyVND(item.price)}
+                              {discountBook.find(
+                                (discount) =>
+                                  item.discountId === discount.discountId
+                              ) ? (
+                                <div
+                                  className="d-flex bg-danger text-white rounded-2 align-items-center"
+                                  style={{
+                                    marginLeft: "10px",
+                                    fontSize: "14px",
+                                  }}
+                                >
+                                  <p id="discountValue" className="m-0">
+                                    <strong>
+                                      -
+                                      {discountBook.find(
+                                        (discount) =>
+                                          item.discountId ===
+                                          discount.discountId
+                                      )?.discountValue || 0}
+                                      %
+                                    </strong>
+                                  </p>
+                                </div>
+                              ) : null}
+                            </div>
                           </td>
                           <td>{formatCurrencyVND(item.thanhTien)}</td>
                           {/* <td>

@@ -223,7 +223,9 @@ function Promotion() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="promotionModalLabel">
-                {action === "new" ? "New" : "Edit"} Promotion
+                {action === "new"
+                  ? "Create Promotion"
+                  : `Edit Promotion #${item.billPromotion_id}`}
               </h5>
               <button
                 type="button"
