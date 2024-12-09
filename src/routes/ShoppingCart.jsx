@@ -13,6 +13,7 @@ function ShoppingCart() {
   const [cartProducts, setCartProducts] = useState([]);
   const [refreshKey, setRefreshKey] = useState(0);
   const [promotions, setPromotions] = useState([]);
+  const [promotionArrange, setPromotionArrange] = useState([]);
   const [promotionCurrent, setPromotionCurrent] = useState({});
   const [promotionIsEligible, setPromotionIsEligible] = useState(0);
   const [total, setTotal] = useState(0);
@@ -28,6 +29,7 @@ function ShoppingCart() {
           promotion.isEligible = false;
         });
         setPromotions(reponsePromotions.data.promotions);
+        setPromotionArrange(reponsePromotions.data.promotions);
         // setup promotion current với promotion đầu tiên trả về
         if (reponsePromotions.data.promotions.length > 0)
           setPromotionCurrent(reponsePromotions.data.promotions[0]);
@@ -45,14 +47,12 @@ function ShoppingCart() {
   }, []);
 
   useEffect(() => {
-    handlePromotionIsEligible(promotions, total);
     // Kiểm tra khuyến mãi đủ điều kiện khi total thay đổi
     let count = 0;
     promotions.forEach((promotion) => {
       if (promotion.isEligible === true) count++;
     });
     setPromotionIsEligible(count);
-
     // Tính toán lại tổng số tiền khi thực hiện áp dụng khuyến mãi đủ điều kiện
     if (promotionCurrent.isEligible) {
       if (
@@ -71,16 +71,25 @@ function ShoppingCart() {
         } else setTotalPromotion(total - promotionCurrent.value);
       }
     } else setTotalPromotion(total);
-  }, [total, promotionCurrent]);
+  }, [promotions, promotionCurrent]);
+
+  // setup laị promotions va promotionCurrent
+  useEffect(() => {
+    handlePromotionIsEligible(promotions, total);
+  }, [total]);
 
   // Kiểm tra khuyến mãi đủ điều kiện so với total
   const handlePromotionIsEligible = (promotionArr, total) => {
-    const newPromotionArr = [...promotionArr];
-    newPromotionArr.map((promotion) => {
-      if (promotion.conditional - total <= 0) promotion.isEligible = true;
-      else promotion.isEligible = false;
+    const updatedPromotions = promotionArr.map((promotion) => ({
+      ...promotion,
+      isEligible: promotion.conditional <= total,
+    }));
+    updatedPromotions.forEach((item) => {
+      if (item.billPromotion_id === promotionCurrent.billPromotion_id)
+        setPromotionCurrent(item);
     });
-    setPromotions(newPromotionArr);
+    setPromotions(updatedPromotions);
+    setPromotionArrange(updatedPromotions);
   };
 
   // Thay đổi total khi chọn product
@@ -136,6 +145,8 @@ function ShoppingCart() {
               promotionIsEligible={promotionIsEligible}
               total={total}
               totalPromotion={totalPromotion}
+              promotionArrange={promotionArrange}
+              setPromotionArrange={setPromotionArrange}
             />
           </div>
         </div>

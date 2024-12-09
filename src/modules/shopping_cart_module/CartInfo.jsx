@@ -22,6 +22,8 @@ function CartInfo({
   promotionIsEligible,
   total,
   totalPromotion,
+  promotionArrange,
+  setPromotionArrange,
 }) {
   // Tạo một ref để tham chiếu đến container khuyến mãi
   const detailPromotionContainerRef = useRef(null);
@@ -43,7 +45,6 @@ function CartInfo({
     promotionCurrent.billPromotion_id
   );
   // Tim kiem promotions
-  const [promotionArrange, setPromotionArrange] = useState(promotions);
   const [inputSearchPromotion, setInputSearchPromotion] = useState("");
 
   // Cập nhật email người dùng
@@ -164,7 +165,6 @@ function CartInfo({
       }
       return totalPrice;
     }, 0);
-    console.log("newTotal", newTotal);
     handleChangeTotal(newTotal);
   };
 
@@ -743,7 +743,6 @@ function CartInfo({
                     onClick={() => {
                       setPromotionIsChosen(promotion);
                       setSelectedPromotionId(promotion.billPromotion_id); // Lưu ID của phần tử
-                      console.log("promotion.id", promotion.billPromotion_id);
                     }}
                   >
                     <div className="row g-0">
