@@ -49,11 +49,7 @@ export default function Root() {
   let navs = [];
   if (user.role.role_name === "Admin") {
     //chi co nav account
-    navs.push({
-      name: "Accounts",
-      link: "accounts",
-      icon: <i className="fa-solid fa-user"></i>,
-    });
+    navs = allNavs;
   } else {
     navs = allNavs.filter((nav) => nav.name !== "Accounts");
   }

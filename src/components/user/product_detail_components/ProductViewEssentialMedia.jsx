@@ -188,6 +188,11 @@ function ProductViewEsstenialMedia({
               </button>
               <Link
                 to={(detailProduct?.status_id ?? 2) === 1 ? "/cart" : "#"}
+                onClick={
+                  (detailProduct?.status_id ?? 2) === 1
+                    ? handleOnclickButtonAddToCard
+                    : undefined
+                }
                 id="btn-buy"
                 className="btn-add-box d-flex justify-content-center align-items-center text-decoration-none"
                 style={
