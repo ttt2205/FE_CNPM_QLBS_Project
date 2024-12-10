@@ -117,6 +117,9 @@ function Discounts() {
   }, [needReload]);
 
   function handleSubmit() {
+    if (!validateForm()) {
+      return;
+    }
     if (action === "new") {
       //create item
       (async () => {
@@ -155,6 +158,30 @@ function Discounts() {
       })();
     };
   }
+
+  const validateForm = () => {
+    if (item.name === "") {
+      toast.error("Name is required");
+      return false;
+    }
+    if (item.percent_value === 0) {
+      toast.error("Percent value must be greater than 0");
+      return false;
+    }
+    if (item.start_at === null) {
+      toast.error("Start date is required");
+      return false;
+    }
+    if (item.end_at === null) {
+      toast.error("End date is required");
+      return false;
+    }
+    if (new Date(item.start_at) > new Date(item.end_at)) {
+      toast.error("Start date must be before end date");
+      return false;
+    }
+    return true;
+  };
 
   return (
     <>

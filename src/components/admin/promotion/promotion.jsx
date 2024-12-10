@@ -109,6 +109,9 @@ function Promotion() {
   }, [needReload]);
 
   function handleSubmit() {
+    if (!validateForm()) {
+      return;
+    }
     if (action === "new") {
       (async () => {
         try {
@@ -145,6 +148,38 @@ function Promotion() {
       })();
     };
   }
+
+  const validateForm = () => {
+    if (item.name === "") {
+      toast.error("Name is required");
+      return false;
+    }
+    if (item.type === "") {
+      toast.error("Type is required");
+      return false;
+    }
+    if (item.value === 0) {
+      toast.error("Value is required");
+      return false;
+    }
+    if (item.conditional === "") {
+      toast.error("Conditional is required");
+      return false;
+    }
+    if (item.start_at === "") {
+      toast.error("Start date is required");
+      return false;
+    }
+    if (item.end_at === "") {
+      toast.error("End date is required");
+      return false;
+    }
+    if (item.start_at > item.end_at) {
+      toast.error("Start date must be before end date");
+      return false;
+    }
+    return true;
+  };
 
   return (
     <>
